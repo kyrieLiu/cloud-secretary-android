@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 
 import com.luck.cloud.R;
+import com.pixplicity.sharp.Sharp;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,6 +32,9 @@ public class CustomTopView extends RelativeLayout {
     //右侧图标
     @Bind(R.id.iv_top_right_icon)
     ImageView mIvRightIcon;
+    //左侧图标
+    @Bind(R.id.iv_top_left_icon)
+    ImageView mIvIcon;
 
     public CustomTopView(Context context) {
         this(context, null);
@@ -48,22 +52,24 @@ public class CustomTopView extends RelativeLayout {
 
         String title = array.getString(R.styleable.CustomTopTitle_title);
         String rightMenu = array.getString(R.styleable.CustomTopTitle_right_menu);
-        Drawable icon = array.getDrawable(R.styleable.CustomTopTitle_right_icon);
+        Drawable rightIcon = array.getDrawable(R.styleable.CustomTopTitle_right_icon);
         int textSize = array.getDimensionPixelSize(R.styleable.CustomTopTitle_title_size, 0);
         boolean titleBold = array.getBoolean(R.styleable.CustomTopTitle_title_bold, false);
         array.recycle();
         mTvTitle.setText(title);
         if (textSize != 0) mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         mTvRightMenu.setText(rightMenu);
+        Sharp sharp= Sharp.loadResource(context.getResources(), R.raw.item_icon);
+        sharp.into(mIvIcon);
 //        if (titleBold) {
 //            TextPaint paint = mTvTitle.getPaint();
 //            paint.setFakeBoldText(true);
 //        }
 
 
-        if (icon != null) {
+        if (rightIcon != null) {
             mIvRightIcon.setVisibility(View.VISIBLE);
-            mIvRightIcon.setImageDrawable(icon);
+            mIvRightIcon.setImageDrawable(rightIcon);
         } else {
             mIvRightIcon.setVisibility(View.GONE);
         }

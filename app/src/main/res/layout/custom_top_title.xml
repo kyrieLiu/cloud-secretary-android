@@ -4,14 +4,18 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal">
-
+    <ImageView
+        android:id="@+id/iv_top_left_icon"
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_20"
+        android:src="@mipmap/left_title_icon" />
     <TextView
         android:id="@+id/tv_top_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/left_title_icon"
-        android:drawablePadding="@dimen/dp_10"
         android:textColor="@color/black"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:text="菜单"
         android:textSize="@dimen/sp_17" />
 
     <TextView

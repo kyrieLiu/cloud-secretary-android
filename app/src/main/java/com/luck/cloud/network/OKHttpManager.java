@@ -13,6 +13,7 @@ import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseListBean;
 import com.luck.cloud.config.AppConstants;
+import com.luck.cloud.function.login.LoginActivity;
 import com.luck.cloud.utils.JsonUtils;
 import com.luck.cloud.utils.LogUtil;
 import com.luck.cloud.utils.SpUtil;
@@ -239,6 +240,7 @@ public class OKHttpManager {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         //如果不是因取消请求导致的网络连接失败,可以对用户进行提示
+                        Log.d("tag","e==="+e);
                         if (!call.isCanceled()) {
                             //  网络请求失败
                             sendFailedStringCallback(500, AppConstants.HTTP_CONNECT_ERROR, AppConstants.HTTP_CONNECT_ERROR, resultCallback);
@@ -264,7 +266,7 @@ public class OKHttpManager {
                                     String code = jsonObject.getString("code");
                                     //token 过期,重新登录
                                     if (code.equals("401")) {
-                                        //LoginActivity.start(AppApplication.getInstance());
+                                        // LoginActivity.start(AppApplication.getInstance());
                                         return;
                                     }
                                 }

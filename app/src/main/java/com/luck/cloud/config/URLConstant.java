@@ -36,7 +36,7 @@ public class URLConstant {
     //首页待办事项列表
     public static final String WAIT_DONE_HOME = BASE_URL + AS_ASSETSAPI + "/api/task/appIndexList";
     //待办任务更多列表
-    public static final String WAIT_DONE_MORE = BASE_URL + AS_ASSETSAPI + "/api/task/listByPage";
+    public static final String WAIT_DONE_MORE = BASE_URL + "/station/info/page/1/10";
     //资产修缮列表
     public static final String ASSETS_REPAIR_LIST = BASE_URL + AS_ASSETSAPI + "/api/repairPlan/listRepairPlan";
     //修缮详情

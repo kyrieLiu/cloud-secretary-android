@@ -6,13 +6,16 @@
     android:gravity="center"
     android:orientation="vertical"
     android:background="@drawable/selector_fill_rectangle_blue_4"
-    android:paddingTop="@dimen/dp_45"
-    android:paddingBottom="@dimen/dp_45">
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="10dp"
+    android:paddingTop="@dimen/dp_20"
+    android:paddingBottom="@dimen/dp_20">
 
     <ImageView
         android:id="@+id/iv_item_menu_icon"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:scaleType="centerInside"
         android:src="@mipmap/ic_launcher_round" />
 
@@ -24,7 +27,6 @@
         android:layout_marginTop="5dp"
         android:gravity="center"
         android:singleLine="true"
-        android:textColor="@color/white"
         android:text="服务报修"
         android:textSize="14sp" />
 </LinearLayout>
