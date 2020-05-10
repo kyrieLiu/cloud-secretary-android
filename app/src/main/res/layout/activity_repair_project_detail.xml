@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".function.repair.activity.RepairProjectDetailActivity">
+
+    <include layout="@layout/layout_title"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray_light_color"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_20">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:title="修缮计划单详情"
+                    app:title_size="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_repair_plan_name"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="计划名称:" />
+
+                <TextView
+                    android:id="@+id/tv_repair_number"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="计划编号: " />
+
+                <TextView
+                    android:id="@+id/tv_repair_unit"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="经营单位: " />
+
+                <TextView
+                    android:id="@+id/tv_repair_project"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="所属项目: " />
+
+                <TextView
+                    android:id="@+id/tv_repair_type"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="修缮类别: " />
+
+                <TextView
+                    android:id="@+id/tv_repair_startTime"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="开始时间:" />
+
+                <TextView
+                    android:id="@+id/tv_repair_money"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="计划金额:" />
+
+                <TextView
+                    android:id="@+id/tv_repair_charge_person"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="责任人:" />
+
+                <TextView
+                    android:id="@+id/tv_repair_copy_person"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="抄送人:" />
+
+                <TextView
+                    android:id="@+id/tv_repair_preliminary_person"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="预审人:"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_repair_final_judgment_person"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="终审人:" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_20">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:title="修缮资产"
+                    app:title_bold="true" />
+
+                <com.jingkai.asset.widget.MeasureRecyclerView
+                    android:id="@+id/rv_repair_equipment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_20">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:title="修缮内容描述"
+                    app:title_bold="true" />
+
+                <TextView
+                    android:id="@+id/tv_repair_description_content"
+                    style="@style/text_15_wrap_black"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:letterSpacing="0.05"
+                    android:lineSpacingExtra="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_repair_detail_complete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_20"
+                android:visibility="gone">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:title="修缮完成情况"
+                    app:title_bold="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_constructionSide"
+                        style="@style/text_15_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="施工方" />
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_linkMan"
+                        style="@style/text_15_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="联系人"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_phone"
+                        style="@style/text_15_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="联系电话"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_money"
+                        style="@style/text_15_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="实际修缮金额" />
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_completeTime"
+                        style="@style/text_15_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="修缮完成时间" />
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_remark_title"
+                        style="@style/text_16_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="报审详情描述:"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_remark"
+                        style="@style/text_15_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text=""
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_repair_detail_file_title"
+                        style="@style/text_16_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="附件:" />
+
+                    <com.jingkai.asset.widget.MeasureRecyclerView
+                        android:id="@+id/mrv_repair_detail_file"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"></com.jingkai.asset.widget.MeasureRecyclerView>
+                    <TextView
+                        android:id="@+id/tv_repair_detail_settle_file_title"
+                        style="@style/text_16_wrap_black"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:text="附件:" />
+
+                    <com.jingkai.asset.widget.MeasureRecyclerView
+                        android:id="@+id/mrv_repair_detail_file_settle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"></com.jingkai.asset.widget.MeasureRecyclerView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_repair_detail_auditStatus_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_20"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_20">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    app:title="修缮状态"></com.jingkai.asset.widget.view.CustomTopView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_repair_detail_check_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"></android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_repair_detail_check_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_30"
+                android:visibility="gone">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:id="@+id/ctv_repair_project_process_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_50"
+                    android:gravity="center_vertical"
+                    app:right_icon="@mipmap/icon_right"
+                    app:right_menu="详情"
+                    app:title="操作过程"
+                    app:title_bold="true"></com.jingkai.asset.widget.view.CustomTopView>
+
+                <com.jingkai.asset.widget.MeasureRecyclerView
+                    android:id="@+id/rv_repair_detail_check_process"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></com.jingkai.asset.widget.MeasureRecyclerView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_repair_detail_acceptance_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_20"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_20"
+                android:visibility="gone">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    app:title="终审意见"></com.jingkai.asset.widget.view.CustomTopView>
+
+
+                <com.jingkai.asset.widget.MyEditText
+                    android:id="@+id/et_repair_acceptance_opinion"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_125"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:background="@drawable/shape_fill_rectangle_grey_4"
+                    android:gravity="top"
+                    android:hint="请输入您的意见，需要在255个字符内哦……"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_repair_detail_operate_parent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/bt_repair_acceptance_not_pass"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_fill_rectangle_blue_4"
+                    android:text="终审驳回"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16" />
+
+                <Button
+                    android:id="@+id/bt_repair_acceptance_pass"
+                    style="@style/button_style"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    android:text="终审通过" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_repair_detail_approval_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_20"
+                android:paddingRight="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_20"
+                android:visibility="gone">
+
+                <com.jingkai.asset.widget.view.CustomTopView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    app:title="修缮审批"></com.jingkai.asset.widget.view.CustomTopView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_repair_detail_operate_approval_parent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_55"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_15"
+                android:paddingRight="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/bt_repair_approval_not_pass"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_fill_rectangle_blue_4"
+                    android:text="作废"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16" />
+
+                <Button
+                    android:id="@+id/bt_repair_approval_pass"
+                    style="@style/button_style"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_weight="1"
+                    android:text="列入计划" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

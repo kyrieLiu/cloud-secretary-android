@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:padding="@dimen/dp_10"
+    android:gravity="center_vertical"
+    android:background="@drawable/selector_fill_rectangle_white_press"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_item_science_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="同期声:用力时代潮头,争做时代先锋"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/sp_18" />
+        <TextView
+            android:id="@+id/tv_item_science_content"
+            style="@style/text_14_wrap_gray"
+            android:layout_alignParentBottom="true"
+            android:text="学习强国,学习平台  2020-05-03" />
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_item_science"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/banner1"
+        android:scaleType="centerCrop" />
+</LinearLayout>
+
+

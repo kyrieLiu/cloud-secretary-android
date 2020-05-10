@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tv_dialog_select_photo_graph"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:background="@drawable/shape_fill_white_only_bottom_gray"
+            android:gravity="center"
+            android:text="拍照"
+            android:textColor="@color/main_text_color"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_dialog_select_album"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center"
+            android:text="从相册上传"
+            android:textColor="@color/main_text_color"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_10"
+            android:background="@color/gray_light_color"></View>
+
+        <TextView
+            android:id="@+id/tv_dialog_select_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/main_text_color"
+            android:textSize="16sp" />
+    </LinearLayout>
+</RelativeLayout>

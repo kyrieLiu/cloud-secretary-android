@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_item_repair_parocess_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view_repair_detail_point"
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="@dimen/dp_10"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/shape_circle_blue" />
+
+        <View
+            android:id="@+id/view_repair_process_right"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="7dp"
+            android:layout_toRightOf="@+id/view_repair_detail_point"
+            android:background="@color/gray_line_color" />
+
+        <View
+            android:id="@+id/view_repair_process_left"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/view_repair_detail_point"
+            android:background="@color/gray_line_color" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_repair_process_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="待反馈" />
+</LinearLayout>

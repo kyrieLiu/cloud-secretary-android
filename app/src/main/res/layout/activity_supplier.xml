@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".function.operation.activity.SupplierActivity">
+
+    <include layout="@layout/layout_title"></include>
+
+    <com.jingkai.asset.widget.view.LoadExceptionView
+        android:id="@+id/lev_supplier"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        ></com.jingkai.asset.widget.view.LoadExceptionView>
+
+    <ListView
+        android:id="@+id/lv_supplier_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:divider="@null"></ListView>
+
+</LinearLayout>

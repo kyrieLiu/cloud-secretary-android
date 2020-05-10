@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@mipmap/start_bg"
+   >
+   <!-- <com.youth.banner.Banner
+        android:id="@+id/banner"
+        app:indicator_drawable_selected="@drawable/shape_circle_white"
+        app:indicator_drawable_unselected="@drawable/shape_circle_grey"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:indicator_width="8dp"
+        app:indicator_height="8dp"
+        app:indicator_margin="8dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_guide_skip"
+        style="@style/text_16_wrap_black"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:text="跳过"
+        />-->
+
+
+
+</RelativeLayout>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/srl_home_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:srlAccentColor="@color/main_text_color"
+        app:srlEnableLoadMore="false"
+        app:srlEnablePreviewInEditMode="false"
+        app:srlPrimaryColor="@color/white">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+            <com.luck.cloud.widget.MyScrollView
+                android:id="@+id/my_scrollview_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_250">
+
+                        <com.youth.banner.Banner
+                            android:id="@+id/banner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:delay_time="3000"
+                            app:indicator_drawable_selected="@drawable/shape_circle_white"
+                            app:indicator_drawable_unselected="@drawable/shape_circle_grey"
+                            app:indicator_height="8dp"
+                            app:indicator_margin="8dp"
+                            app:indicator_width="8dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_home_menu"
+                            android:layout_width="@dimen/dp_40"
+                            android:layout_height="@dimen/dp_40"
+                            android:src="@mipmap/menus"
+                            android:layout_marginTop="20px"
+                            android:layout_marginLeft="20px"
+                            />
+
+                    </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_home_function_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_5"></androidx.recyclerview.widget.RecyclerView>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_home_wait_done_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/gray_light_color"
+                        android:orientation="vertical">
+
+
+                        <com.luck.cloud.widget.view.CustomTopView
+                            android:id="@+id/ll_home_wait_done_more"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_60"
+                            android:gravity="center_vertical"
+                            android:background="@color/gray_light_color"
+                            android:paddingLeft="@dimen/dp_10"
+                            android:paddingRight="@dimen/dp_10"
+                            app:right_icon="@mipmap/icon_right"
+                            app:right_menu="更多"
+                            app:title="待办事项"></com.luck.cloud.widget.view.CustomTopView>
+
+                        <com.luck.cloud.widget.view.LoadExceptionView
+                            android:id="@+id/view_wait_done_warn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"></com.luck.cloud.widget.view.LoadExceptionView>
+
+
+                        <com.luck.cloud.widget.MeasureRecyclerView
+                            android:id="@+id/rl_wait_done"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_10"
+                            android:layout_marginRight="@dimen/dp_10"
+                            android:layout_marginBottom="@dimen/dp_10"
+                            android:background="@drawable/shape_fill_rectangle_white_10"
+                            android:visibility="gone"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.luck.cloud.widget.MyScrollView>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <LinearLayout
+        android:id="@+id/left_draw"
+        android:layout_width="@dimen/dp_300"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_gravity="start"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:text="侧边栏"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

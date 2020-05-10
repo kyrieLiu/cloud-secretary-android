@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_50"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_item_share_filter_menu"
+        style="@style/text_14_wrap_black"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="全部" />
+
+    <View
+        android:id="@+id/view_share_filter_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_color"></View>
+
+</LinearLayout>

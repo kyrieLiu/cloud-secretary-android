@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:padding="@dimen/dp_15"
+        android:background="@drawable/shape_fill_rectangle_white_10">
+        
+        <TextView
+            android:id="@+id/tv_item_repair_plan_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019年"
+            android:textSize="@dimen/sp_18"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/main_text_color"
+            />
+
+        <TextView
+            android:id="@+id/tv_item_repair_plan_belongProject"
+            style="@style/text_14_wrap_gray"
+            android:text="所属项目"
+            android:layout_below="@id/tv_item_repair_plan_title"
+            android:layout_marginTop="@dimen/dp_10"
+            />
+
+        <TextView
+            android:id="@+id/tv_item_repair_plan_operationUnit"
+            style="@style/text_14_wrap_gray"
+            android:text="经营单位"
+            android:layout_below="@id/tv_item_repair_plan_belongProject"
+            android:layout_marginTop="@dimen/dp_10"
+            />
+
+        <TextView
+            android:id="@+id/tv_item_repair_plan_planTime"
+            style="@style/text_14_wrap_gray"
+            android:text="计划时间"
+            android:layout_below="@id/tv_item_repair_plan_operationUnit"
+            android:layout_marginTop="@dimen/dp_10"
+            />
+        <TextView
+            android:id="@+id/tv_item_repair_plan_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="储备中"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/tv_item_repair_plan_planTime"
+            android:textColor="@color/main_color"
+            />
+        
+    </RelativeLayout>
+
+</LinearLayout>

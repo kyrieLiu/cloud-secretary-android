@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view_item_tree_interval_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_10"
+            android:background="@color/gray_light_color"></View>
+
+        <View
+            android:id="@+id/view_item_tree_interval_1"
+            style="@style/line_type_full_long"></View>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_tree_company_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_tree_number"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@drawable/shape_circle_d6edff"
+            android:gravity="center"
+            android:text="6"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/sp_14" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_tree_number">
+
+            <ImageView
+                android:id="@+id/id_treenode_icon"
+                android:layout_width="@dimen/dp_8"
+                android:layout_height="@dimen/dp_8"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icoshow" />
+
+            <TextView
+                android:id="@+id/id_treenode_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_28"
+                android:text="北京某供应商"
+                android:textColor="@color/main_text_color"
+                android:layout_centerVertical="true"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

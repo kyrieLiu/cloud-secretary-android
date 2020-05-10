@@ -1,7 +1,46 @@
 <resources>
-    <string name="app_name">PictureSelector</string>
+    <string name="app_name">小云书记</string>
     <string name="app_drag_delete">拖动到此处删除</string>
     <string name="app_let_go_drag_delete">松手即可删除</string>
     <string name="app_wechat_send">发送</string>
     <string name="app_wechat_send_num">发送(%1$d/%2$d)</string>
+    <string name="listview_header_hint_normal">下拉刷新</string>
+    <string name="listview_header_hint_release">释放立即刷新</string>
+    <string name="listview_loading">正在加载...</string>
+    <string name="listview_header_last_time">上次更新时间：</string>
+    <string name="refreshing">正在刷新...</string>
+    <string name="refresh_done">刷新完成</string>
+    <string name="loading_done">加载完成</string>
+    <string name="nomore_loading">暂无数据</string>
+
+    <string name="viewpager_indicator">%1$d/%2$d</string>
+    <string name="folder_all">所有照片</string>
+    <string name="preview">预览</string>
+    <string name="msg_no_camera">没有系统相机</string>
+    <string name="msg_amount_limit">已经达到最高选择数量</string>
+
+    <string name="voice_permission_first_hint">请授予[录音]，[存储]权限，否则无法录音</string>
+
+    <string name="voice_permission_hint">软件的部分功能需要请求您的手机权限,请允许以下权限:\n
+        --麦克风/存储\n
+        请到 \"应用程序信息 -> 权限\" 中授予!
+    </string>
+    <string name="voice_play_first_hint">请授予[存储]权限，否则无法播放语音</string>
+    <string name="voice_play_hint">软件的部分功能需要请求您的手机权限,请允许以下权限:\n
+        --存储\n
+        请到 \"应用程序信息 -> 权限\" 中授予!
+    </string>
+    <string name="image_permission_first_hint">请授予[相机]，[存储]权限，否则无法选取图片</string>
+    <string name="image_permission_hint">软件的部分功能需要请求您的手机权限,请允许以下权限:\n
+        --相机/存储\n
+        请到 \"应用程序信息 -> 权限\" 中授予!
+    </string>
+    <string name="phone_permission_hint">软件的部分功能需要请求您的手机权限,请允许以下权限:\n
+        --电话/通讯录\n
+        请到 \"应用程序信息 -> 权限\" 中授予!
+    </string>
+    <string name="location_permission_hint">软件的部分功能需要请求您的手机权限,请允许以下权限:\n
+        --位置信息\n
+        请到 \"应用程序信息 -> 权限\" 中授予!
+    </string>
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lv_pop_share_file_list"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/dp_10"
+        android:background="@mipmap/shaixuan_bg"
+        android:paddingTop="@dimen/dp_18"
+        android:paddingBottom="@dimen/dp_20"></android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

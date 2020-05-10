@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="@dimen/dp_45">
+    <TextView
+        android:id="@+id/tv_item_select_garden_name"
+       style="@style/text_15_wrap_black"
+        android:text="经开壹中心"
+        android:layout_centerVertical="true"
+        />
+    <ImageView
+        android:id="@+id/iv_item_select_garden_check"
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_20"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_20"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_line_color"
+        android:layout_alignParentBottom="true"></View>
+</RelativeLayout>

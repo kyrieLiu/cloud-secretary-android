@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center"
+              android:background="@android:color/transparent"
+              android:orientation="horizontal"
+              android:paddingBottom="10dip"
+              android:paddingLeft="15dip"
+              android:paddingRight="15dip"
+              android:paddingTop="10dip">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+
+        <ProgressBar
+            android:id="@+id/pb_waiting_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:indeterminateDuration="900"
+            android:indeterminateDrawable="@drawable/rotate_loading_progressbar"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请稍后..."
+            android:layout_toRightOf="@+id/pb_waiting_progress"
+            android:layout_alignBottom="@+id/pb_waiting_progress"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:textColor="@color/gray_color"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

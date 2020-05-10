@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_30"
+        android:background="@drawable/shape_fill_rectangle_white_10"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_dialog_facility_close"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_5"
+            android:src="@mipmap/close_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="设备设施动态详情"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/sp_18"
+            />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_number"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="设备设施编号:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_classify"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="设备设施分类:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_name"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="设备设施名称:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_brand"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="品牌:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_location"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="位置:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_time"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="记录时间:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_executor"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="执行人:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_dynamic_type"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="动态类别:" />
+
+        <TextView
+            android:id="@+id/tv_dialog_facility_detail"
+            style="@style/text_14_wrap_black"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_30"
+            android:text="详情:" />
+    </LinearLayout>
+</RelativeLayout>

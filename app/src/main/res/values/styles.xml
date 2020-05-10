@@ -7,6 +7,14 @@
         <item name="colorPrimaryDark">@color/app_color_grey</item>
         <item name="colorAccent">@color/app_color_grey</item>
     </style>
+<!--    &lt;!&ndash; Base application theme. &ndash;&gt;
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        &lt;!&ndash; Customize your theme here. &ndash;&gt;
+        <item name="colorPrimary">@color/main_color</item>
+        <item name="colorPrimaryDark">@color/main_color</item>
+        <item name="colorAccent">@color/main_color</item>
+        <item name="windowNoTitle">true</item>
+    </style>-->
 
     <style name="BaseNoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar" />
 
@@ -170,6 +178,159 @@
         <item name="picture.crop.title.color">@color/app_color_black</item>
         <!--相册文件夹列表选中图标-->
         <item name="picture.folder_checked_dot">@drawable/picture_orange_oval</item>
+    </style>
+
+
+
+    <style name="text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="text_16_wrap_black" parent="text_style">
+        <item name="android:textColor">@color/main_text_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text_16_wrap_grey" parent="text_style">
+        <item name="android:textColor">@color/gray_text_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="text_14_wrap_black" parent="text_style">
+        <item name="android:textColor">@color/main_text_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text_12_wrap_black" parent="text_style">
+        <item name="android:textColor">@color/main_text_color</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="text_12_wrap_gray" parent="text_style">
+        <item name="android:textColor">@color/gray_text_color</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="text_14_wrap_gray" parent="text_style">
+        <item name="android:textColor">@color/gray_text_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text_15_wrap_black" parent="text_style">
+        <item name="android:textColor">@color/main_text_color</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <!--标题左边带竖直蓝色长条-->
+    <style name="text_title_17_wrap_black" parent="text_style">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/sp_17</item>
+        <item name="android:drawableLeft">@mipmap/left_title_icon</item>
+        <item name="android:drawablePadding">@dimen/dp_8</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="button_style" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/selector_fill_rectangle_blue_4</item>
+    </style>
+
+    <style name="custom_dialog_style" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+    </style>
+
+    <style name="Theme.Light.Dialog.Theme_Light_Dialog_Cus" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- 底端tab -->
+    <style name="tab">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@drawable/tab_text</item>
+    </style>
+
+
+    <style name="TabTextAppearence">
+        <item name="android:textSize">16sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="MarkTabLayoutStyle">
+        <item name="fTabGravity">fill</item>
+        <item name="fTabMode">fixed</item>
+        <item name="fTabIndicatorFullWidth">true</item>
+        <item name="android:background">@null</item>
+        <item name="fTabIconTint">@null</item>
+        <item name="fTabMaxWidth">@dimen/dp_260</item>
+        <item name="fTabIndicatorAnimationDuration">300</item>
+        <item name="fTabIndicatorColor">?attr/colorAccent</item>
+        <item name="fTabIndicatorGravity">bottom</item>
+        <item name="fTabIndicator">@drawable/shape_fill_rectangle_white_2</item>
+        <item name="fTabPaddingStart">12dp</item>
+        <item name="fTabPaddingEnd">12dp</item>
+        <item name="fTabRippleColor">?attr/colorControlHighlight</item>
+        <item name="fTabUnboundedRipple">false</item>
+    </style>
+
+
+    <style name="mark_tablayout_view_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="fTabIndicatorColor">@color/main_color</item>
+        <item name="fTabSelectedTextColor">@color/main_text_color</item>
+        <item name="fTabTextAppearance">@style/TabTextAppearence</item>
+        <item name="fTabTextColor">@color/main_text_color</item>
+        <item name="fTabIndicatorFullWidth">false</item>
+    </style>
+
+
+
+    <style name="line_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/gray_line_color</item>
+    </style>
+
+    <style name="linear_vertical_repair_process">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="line_type_full_long">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/gray_line_color</item>
+    </style>
+    <style name="ThemeCustomDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="CustomAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@mipmap/start_bg</item>
     </style>
 
 </resources>

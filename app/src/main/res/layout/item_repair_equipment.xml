@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_repair_assets_index"
+        style="@style/text_15_wrap_black"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_15"
+        android:text="序号:" />
+
+    <TextView
+        android:id="@+id/tv_repair_assets_name"
+        style="@style/text_15_wrap_black"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="资产名称:" />
+
+    <TextView
+        android:id="@+id/tv_repair_assets_classify"
+        style="@style/text_15_wrap_black"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="资产分类:" />
+
+    <TextView
+        android:id="@+id/tv_repair_location"
+        style="@style/text_15_wrap_black"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="资产位置: " />
+
+    <View
+        android:id="@+id/repair_equipment_item_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_10"
+        android:background="@color/gray_light_color" />
+</LinearLayout>

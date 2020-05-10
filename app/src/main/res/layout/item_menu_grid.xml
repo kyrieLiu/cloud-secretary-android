@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_grid_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/selector_fill_rectangle_blue_4"
+    android:paddingTop="@dimen/dp_45"
+    android:paddingBottom="@dimen/dp_45">
+
+    <ImageView
+        android:id="@+id/iv_item_menu_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_launcher_round" />
+
+
+    <TextView
+        android:id="@+id/tv_item_menu_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:text="服务报修"
+        android:textSize="14sp" />
+</LinearLayout>
+
