@@ -54,8 +54,7 @@
                             android:layout_height="@dimen/dp_35"
                             android:src="@mipmap/menus"
                             android:layout_marginTop="15dp"
-                            android:layout_marginLeft="15dp"
-                            />
+                            android:layout_marginStart="15dp" />
 
                     </RelativeLayout>
 
@@ -68,7 +67,7 @@
                         android:background="@color/white"
                         android:paddingTop="@dimen/dp_10"
                         android:paddingBottom="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_5"></androidx.recyclerview.widget.RecyclerView>
+                        android:layout_marginBottom="@dimen/dp_5"/>
 
 
                     <LinearLayout
@@ -90,13 +89,13 @@
                             android:paddingRight="@dimen/dp_10"
                             app:right_icon="@mipmap/icon_right"
                             app:right_menu="更多"
-                            app:title="最新动态"></com.luck.cloud.widget.view.CustomTopView>
+                            app:title="最新动态" />
 
                         <com.luck.cloud.widget.view.LoadExceptionView
                             android:id="@+id/view_wait_done_warn"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"></com.luck.cloud.widget.view.LoadExceptionView>
+                            android:visibility="gone" />
 
 
                         <com.luck.cloud.widget.MeasureRecyclerView
