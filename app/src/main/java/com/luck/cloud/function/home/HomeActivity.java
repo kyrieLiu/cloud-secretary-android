@@ -154,6 +154,35 @@ public class HomeActivity extends BaseActivity {
 
         GlideUtils.loadCircleImage(this,mIvHeadPicture,"");
 
+        Sharp sharp= Sharp.loadResource(getResources(), R.raw.drawer_menu);
+        sharp.setOnElementListener(new OnSvgElementListener() {
+            @Override
+            public void onSvgStart(@NonNull Canvas canvas, @Nullable RectF rectF) {
+
+            }
+
+            @Override
+            public void onSvgEnd(@NonNull Canvas canvas, @Nullable RectF rectF) {
+
+            }
+
+            @Override
+            public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
+                Random random = new Random();
+//                paint.setColor(Color.argb(255,random.nextInt(256),
+//                        random.nextInt(256), random.nextInt(256)));
+                paint.setColor(Color.parseColor("#1D569A"));
+                //int color=R.color.main_color;
+                return t;
+            }
+
+            @Override
+            public <T> void onSvgElementDrawn(@Nullable String s, @NonNull T t, @NonNull Canvas canvas, @Nullable Paint paint) {
+
+            }
+        });
+        sharp.into(mIvMenu);
+
 
     }
 
@@ -163,11 +192,14 @@ public class HomeActivity extends BaseActivity {
     private void initFunctionMenu() {
         String menus[] = {"小云学习", "小云科普", "第一书记","小云见证","小云实践","小云找专家"};
         int icons[] = {R.raw.study, R.raw.science, R.raw.first_secretary,R.raw.witness,R.raw.practice,R.raw.dingding};
+        int colors[] = {Color.rgb(253,67,78),Color.rgb(255,96,49),Color.rgb(255,152,82),
+                Color.rgb(0,132,245), Color.rgb(96,138,250),Color.rgb(160,118,250)};
         List<HomeMenuBean> list = new ArrayList<>();
         for (int i = 0; i < menus.length; i++) {
             HomeMenuBean model = new HomeMenuBean();
             model.setMenuName(menus[i]);
             model.setIconPath(icons[i]);
+            model.setColor(colors[i]);
             list.add(model);
         }
         HomeMenuAdapter adapter = new HomeMenuAdapter(list, this);

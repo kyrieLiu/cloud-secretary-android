@@ -6,6 +6,16 @@ package com.luck.cloud.function.home;
 public class HomeMenuBean {
     private String menuName;
     private int iconPath;
+    private int color;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
 
     public String getMenuName() {
         return menuName;

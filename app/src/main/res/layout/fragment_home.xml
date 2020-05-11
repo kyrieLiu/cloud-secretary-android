@@ -50,11 +50,11 @@
 
                         <ImageView
                             android:id="@+id/iv_home_menu"
-                            android:layout_width="@dimen/dp_40"
-                            android:layout_height="@dimen/dp_40"
+                            android:layout_width="@dimen/dp_28"
+                            android:layout_height="@dimen/dp_35"
                             android:src="@mipmap/menus"
-                            android:layout_marginTop="20px"
-                            android:layout_marginLeft="20px"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="15dp"
                             />
 
                     </RelativeLayout>
@@ -65,6 +65,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
+                        android:background="@color/white"
+                        android:paddingTop="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_10"
                         android:layout_marginBottom="@dimen/dp_5"></androidx.recyclerview.widget.RecyclerView>
 
 
@@ -72,20 +75,19 @@
                         android:id="@+id/ll_home_wait_done_parent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/gray_light_color"
+                        android:background="@color/white"
+                        android:layout_marginTop="@dimen/dp_5"
                         android:orientation="vertical">
 
 
                         <com.luck.cloud.widget.view.CustomTopView
                             android:id="@+id/ll_home_wait_done_more"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_60"
+                            android:layout_height="@dimen/dp_55"
                             android:gravity="center_vertical"
-                            android:background="@color/white"
+                            android:background="@drawable/shape_fill_white_only_bottom_gray"
                             android:paddingLeft="@dimen/dp_10"
                             android:paddingRight="@dimen/dp_10"
-                            android:layout_marginTop="@dimen/dp_10"
-                            android:layout_marginBottom="@dimen/dp_5"
                             app:right_icon="@mipmap/icon_right"
                             app:right_menu="更多"
                             app:title="最新动态"></com.luck.cloud.widget.view.CustomTopView>
@@ -101,10 +103,7 @@
                             android:id="@+id/rl_wait_done"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_10"
-                            android:layout_marginRight="@dimen/dp_10"
-                            android:layout_marginBottom="@dimen/dp_10"
-                            android:background="@drawable/shape_fill_rectangle_white_10" />
+                            android:layout_marginBottom="@dimen/dp_10" />
                     </LinearLayout>
 
                 </LinearLayout>

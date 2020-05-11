@@ -5,10 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -49,6 +51,8 @@ public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAda
         ImageView mIvIcon;
         @Bind(R.id.tv_item_menu_name)
         TextView mTvName;
+        @Bind(R.id.rv_menu_icon_bg)
+        RelativeLayout mRvBg;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -73,7 +77,7 @@ public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAda
                     Random random = new Random();
 //                paint.setColor(Color.argb(255,random.nextInt(256),
 //                        random.nextInt(256), random.nextInt(256)));
-                    paint.setColor(Color.parseColor("#1D569A"));
+                    paint.setColor(Color.parseColor("#ffffff"));
                     //int color=R.color.main_color;
                     return t;
                 }
@@ -84,7 +88,14 @@ public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAda
                 }
             });
             sharp.into(mIvIcon);
-           // mIvIcon.setImageResource(bean.getIconPath());
+
+            GradientDrawable drawable=new GradientDrawable();
+            drawable.setShape(GradientDrawable.RECTANGLE);
+            drawable.setGradientType(GradientDrawable.RECTANGLE);
+            drawable.setCornerRadius(80);
+            drawable.setColor(bean.getColor());
+            mRvBg.setBackground(drawable);
+
             mTvName.setText(bean.getMenuName());
         }
     }
