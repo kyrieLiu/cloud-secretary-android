@@ -30,6 +30,7 @@ import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
+import com.luck.cloud.common.activity.PropertyServiceStandardSearchActivity;
 import com.luck.cloud.common.entity.RequestBean;
 import com.luck.cloud.common.helper.CodePermissionHelper;
 import com.luck.cloud.common.helper.FileCommitModel;
@@ -103,12 +104,6 @@ public class HomeActivity extends BaseActivity {
     LoadExceptionView mViewWaitWarn;
     @Bind(R.id.iv_home_menu)
     ImageView mIvMenu;
-    @Bind(R.id.drawer_layout_home)
-    DrawerLayout drawerLayout;
-    @Bind(R.id.left_draw)
-    LinearLayout leftDraw;
-    @Bind(R.id.iv_head_picture)
-    ImageView mIvHeadPicture;
 
     private HomeWaitDoneAdapter<WaitDoneBean.ItemsBean> waitDoneAdapter;
 
@@ -152,7 +147,6 @@ public class HomeActivity extends BaseActivity {
             }
         });
 
-        GlideUtils.loadCircleImage(this,mIvHeadPicture,"");
 
         Sharp sharp= Sharp.loadResource(getResources(), R.raw.drawer_menu);
         sharp.setOnElementListener(new OnSvgElementListener() {
@@ -313,10 +307,10 @@ public class HomeActivity extends BaseActivity {
         }, this);
     }
 
-    @OnClick({R.id.iv_head_picture,R.id.iv_home_menu})
+    @OnClick({R.id.main_search,R.id.iv_home_menu})
     public void click(View view) {
         switch (view.getId()) {
-            case R.id.iv_head_picture:
+            case R.id.iv_home_menu:
 //                Intent intent=new Intent(this, MainActivity.class);
 //                startActivity(intent);
                selectPicture();
@@ -333,12 +327,9 @@ public class HomeActivity extends BaseActivity {
 //                });
                // requestData(1);
                 break;
-            case R.id.iv_home_menu:
-                if(drawerLayout.isDrawerOpen(leftDraw)){
-                    drawerLayout.closeDrawer(leftDraw);
-                }else{
-                    drawerLayout.openDrawer(leftDraw);
-                }
+            case R.id.main_search:
+                Intent intent=new Intent(this, PropertyServiceStandardSearchActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -428,14 +419,14 @@ public class HomeActivity extends BaseActivity {
                 .isPreviewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
                 //.cropCompressQuality(90)// 注：已废弃 改用cutOutQuality()
                 .cutOutQuality(90)// 裁剪输出质量 默认100
-                .minimumCompressSize(100)// 小于100kb的图片不压缩
+                .minimumCompressSize(100);// 小于100kb的图片不压缩
                 //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                 //.cropImageWideHigh()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                 //.rotateEnabled(false) // 裁剪是否可旋转图片
                 //.scaleEnabled(false)// 裁剪是否可放大缩小图片
                 //.videoQuality()// 视频录制质量 0 or 1
                 //.forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
-                .forResult(new MyResultCallback(mIvHeadPicture,getContext()));
+                // .forResult(new MyResultCallback(mIvHeadPicture,getContext()));
     }
     private void getDefaultStyle() {
         // 相册主题
