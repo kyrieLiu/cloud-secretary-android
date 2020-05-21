@@ -31,16 +31,19 @@ public class AppApplication extends Application implements IApp, CameraXConfig.P
     public void onCreate() {
         super.onCreate();
         instance = this;
-        closeAndroidPDialog();
-        /** PictureSelector日志管理配制开始 **/
+        // closeAndroidPDialog();
         // PictureSelector 绑定监听用户获取全局上下文或其他...
-        PictureAppMaster.getInstance().setApp(this);
-        // PictureSelector Crash日志监听
-        PictureSelectorCrashUtils.init((t, e) -> {
-            // Crash之后的一些操作可再此处理，没有就忽略...
-
-        });
-        /** PictureSelector日志管理配制结束 **/
+//        PictureAppMaster.getInstance().setApp(this);
+//        // PictureSelector Crash日志监听
+//        PictureSelectorCrashUtils.init((t, e) -> {
+//            // Crash之后的一些操作可再此处理，没有就忽略...
+//
+//        });
+//        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+//        SDKInitializer.initialize(this);
+//        //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
+//        //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
+//        SDKInitializer.setCoordType(CoordType.BD09LL);
 
     }
 

@@ -14,10 +14,37 @@ android {
         }
         multiDexEnabled true
     }
+    signingConfigs {
+        config {
+            keyAlias "cloud"
+            keyPassword "123456"
+            storeFile file("cloud.jks")
+            storePassword "123456"
+        }
+    }
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+//    }
+
     buildTypes {
         release {
+            buildConfigField "boolean", "LOG", "false"
             minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+
+        }
+
+        debug {
+            buildConfigField "boolean", "LOG", "true"
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.config
         }
     }
 
@@ -29,7 +56,12 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-
+    sourceSets{
+        main{
+            jniLibs.srcDir 'libs'
+            jni.srcDirs = []    //disable automatic ndk-build
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -60,4 +92,5 @@ dependencies {
     implementation files('libs/tbs_sdk_thirdapp.jar')
     implementation files('libs/poi-scratchpad-3.15.jar')
     implementation files('libs/poi-3.15.jar')
+    implementation files('libs/AMap_Location_V4.9.0_20200302.jar')
 }

@@ -1,5 +1,6 @@
 package com.luck.cloud.function.home;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,15 +12,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -27,6 +33,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.luck.cloud.GlideEngine;
 import com.luck.cloud.MainActivity;
 import com.luck.cloud.R;
@@ -86,6 +96,8 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import rx.functions.Action1;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 /**
  * Created by liuyin on 2019/2/21 14:00
  * <p>
@@ -109,8 +121,22 @@ public class HomeActivity extends BaseActivity {
     //待办事项请求返回数据提示
     @Bind(R.id.view_wait_done_warn)
     LoadExceptionView mViewWaitWarn;
+    @Bind(R.id.tv_address)
+    TextView tvAddress;
 
     private ScienceAdapter<SuperviseHandleBean.ItemsBean> waitDoneAdapter;
+
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+
+    private static final int BAIDU_READ_PHONE_STATE = 100;//定位权限请求
+    private static final int PRIVATE_CODE = 1315;//开启GPS权限
+
+    static final String[] LOCATIONGPS = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+    };
+    private LocationManager lm;
+
 
     @Override
     protected void back() {
@@ -149,7 +175,11 @@ public class HomeActivity extends BaseActivity {
                 requestWaitDone();
             }
         });
+
+       showGPSContacts();
+
     }
+
 
     /**
      * 初始化功能菜单
@@ -350,6 +380,79 @@ public class HomeActivity extends BaseActivity {
 
     public Context getContext() {
         return this;
+    }
+
+
+
+    /**
+     * 检测GPS、位置权限是否开启
+     */
+
+    public void showGPSContacts() {
+
+        //得到系统的位置服务，判断GPS是否激活
+        lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (ok) {//开了定位服务
+            if (Build.VERSION.SDK_INT >= 23) { //判断是否为android6.0系统版本，如果是，需要动态添加权限
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PERMISSION_GRANTED) {// 没有权限，申请权限。
+                    ActivityCompat.requestPermissions(this, LOCATIONGPS, BAIDU_READ_PHONE_STATE);
+                } else {
+                    startLocation();
+                }
+            } else {
+                startLocation();
+            }
+        } else {
+            Toast.makeText(this, "系统检测到未开启GPS定位服务,请开启", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(intent, PRIVATE_CODE);
+        }
+    }
+
+    /**
+     * Android6.0申请权限的回调方法
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+//             requestCode即所声明的权限获取码，在checkSelfPermission时传入
+            case BAIDU_READ_PHONE_STATE:
+                //如果用户取消，permissions可能为null.
+                if (grantResults[0] == PERMISSION_GRANTED && grantResults.length > 0) { //有权限
+                    startLocation();
+                } else {
+
+                    Toast.makeText(this, "你未开启定位权限!", Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void startLocation(){
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                tvAddress.setText(aMapLocation.getCity());
+            }
+        });
+        AMapLocationClientOption option = new AMapLocationClientOption();
+        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        if(null != mLocationClient){
+            mLocationClient.setLocationOption(option);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+        }
     }
 
     @Override
