@@ -32,7 +32,7 @@
 
         <activity
             android:name="com.luck.cloud.MainActivity"
-            android:screenOrientation="fullSensor" />
+            />
         <activity
             android:name="com.luck.cloud.PhotoFragmentActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
@@ -42,8 +42,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.luck.cloud.function.home.HomeActivity"
-            android:screenOrientation="fullSensor">
+            android:name="com.luck.cloud.function.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,6 +51,12 @@
         </activity>
         <activity android:name=".common.activity.PropertyServiceStandardSearchActivity" />
         <activity android:name=".function.office.OfficeActivity" />
+        <activity android:name=".function.mine.MineActivity">
+
+        </activity>
+        <activity android:name=".function.mine.PersonDataActivity">
+
+        </activity>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"

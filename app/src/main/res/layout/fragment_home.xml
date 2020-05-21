@@ -1,147 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/srl_home_refresh"
+<com.scwang.smartrefresh.layout.SmartRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/srl_home_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:srlAccentColor="@color/main_text_color"
+    app:srlEnableLoadMore="false"
+    app:srlEnablePreviewInEditMode="false"
+    app:srlPrimaryColor="@color/white">
+
+    <com.scwang.smartrefresh.layout.header.ClassicsHeader
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        app:srlAccentColor="@color/main_text_color"
-        app:srlEnableLoadMore="false"
-        app:srlEnablePreviewInEditMode="false"
-        app:srlPrimaryColor="@color/white">
+        android:layout_height="wrap_content" />
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        <com.luck.cloud.widget.MyScrollView
+            android:id="@+id/my_scrollview_home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <com.luck.cloud.widget.MyScrollView
-                android:id="@+id/my_scrollview_home"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:layout_height="wrap_content"
+                android:background="#F6F7F9"
+                android:orientation="vertical">
 
-                <LinearLayout
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#F6F7F9"
-                    android:orientation="vertical">
+                    android:layout_height="@dimen/dp_250">
 
+                    <com.youth.banner.Banner
+                        android:id="@+id/banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:delay_time="3000"
+                        app:indicator_drawable_selected="@drawable/shape_circle_white"
+                        app:indicator_drawable_unselected="@drawable/shape_circle_grey"
+                        app:indicator_height="8dp"
+                        app:indicator_margin="8dp"
+                        app:indicator_width="8dp" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_250">
-
-                        <com.youth.banner.Banner
-                            android:id="@+id/banner"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:delay_time="3000"
-                            app:indicator_drawable_selected="@drawable/shape_circle_white"
-                            app:indicator_drawable_unselected="@drawable/shape_circle_grey"
-                            app:indicator_height="8dp"
-                            app:indicator_margin="8dp"
-                            app:indicator_width="8dp" />
-
+                        android:layout_height="@dimen/dp_60"
+                        android:layout_marginTop="@dimen/dp_25">
+                        <TextView
+                            android:id="@+id/tv_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_centerVertical="true"
+                            android:text="通辽"
+                            android:textColor="@color/white"
+                            android:gravity="center_vertical"
+                            android:drawableStart="@mipmap/location"
+                            android:textSize="@dimen/sp_14" />
+                        <ImageView
+                            android:id="@+id/iv_home_mine"
+                            android:layout_width="@dimen/dp_35"
+                            android:layout_height="@dimen/dp_35"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_marginEnd="@dimen/dp_15"
+                            android:src="@mipmap/default_head_image" />
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_60"
-                            android:layout_marginTop="@dimen/dp_25">
+                            android:layout_height="@dimen/dp_30"
+                            android:layout_marginLeft="@dimen/dp_20"
+                            android:layout_marginRight="@dimen/dp_20"
+                            android:layout_toEndOf="@id/tv_address"
+                            android:layout_toStartOf="@id/iv_home_mine"
+                            android:background="@drawable/shape_stroke_rectangle_white_21"
+                            android:layout_centerVertical="true"
+                            tools:ignore="UselessParent">
+
                             <TextView
-                                android:id="@+id/tv_address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="20dp"
-                                android:layout_centerVertical="true"
-                                android:text="通辽"
-                                android:textColor="@color/white"
-                                android:gravity="center_vertical"
-                                android:drawableStart="@mipmap/location"
-                                android:textSize="@dimen/sp_14" />
-                            <ImageView
-                                android:id="@+id/iv_home_menu"
-                                android:layout_width="@dimen/dp_35"
-                                android:layout_height="@dimen/dp_35"
-                                android:layout_alignParentEnd="true"
-                                android:layout_marginTop="@dimen/dp_10"
-                                android:layout_marginEnd="@dimen/dp_15"
-                                android:src="@mipmap/default_head_image" />
-                            <RelativeLayout
+                                android:id="@+id/main_search"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/dp_30"
-                                android:layout_marginLeft="@dimen/dp_20"
-                                android:layout_marginRight="@dimen/dp_20"
-                                android:layout_toEndOf="@id/tv_address"
-                                android:layout_toStartOf="@id/iv_home_menu"
-                                android:background="@drawable/shape_stroke_rectangle_white_21"
-                                android:layout_centerVertical="true"
-                                tools:ignore="UselessParent">
-
-                                <TextView
-                                    android:id="@+id/main_search"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginStart="20dp"
-                                    android:text="搜索"
-                                    android:gravity="center_vertical"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/sp_14" />
-                            </RelativeLayout>
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="20dp"
+                                android:text="搜索"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp_14" />
                         </RelativeLayout>
-
                     </RelativeLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_home_function_menu"
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_home_function_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:layout_marginBottom="@dimen/dp_5"/>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_home_wait_done_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:orientation="vertical">
+
+
+                    <com.luck.cloud.widget.view.CustomTopView
+                        android:id="@+id/ll_home_wait_done_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_55"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/shape_fill_white_only_bottom_gray"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingRight="@dimen/dp_10"
+                        app:right_icon="@mipmap/icon_right"
+                        app:right_menu="更多"
+                        app:title="第一书记资讯" />
+
+                    <com.luck.cloud.widget.view.LoadExceptionView
+                        android:id="@+id/view_wait_done_warn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@color/white"
-                        android:paddingTop="@dimen/dp_10"
-                        android:paddingBottom="@dimen/dp_10"
-                        android:layout_marginBottom="@dimen/dp_5"/>
+                        android:visibility="gone" />
 
 
-                    <LinearLayout
-                        android:id="@+id/ll_home_wait_done_parent"
+                    <com.luck.cloud.widget.MeasureRecyclerView
+                        android:id="@+id/rl_wait_done"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/white"
-                        android:layout_marginTop="@dimen/dp_5"
-                        android:orientation="vertical">
-
-
-                        <com.luck.cloud.widget.view.CustomTopView
-                            android:id="@+id/ll_home_wait_done_more"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dp_55"
-                            android:gravity="center_vertical"
-                            android:background="@drawable/shape_fill_white_only_bottom_gray"
-                            android:paddingLeft="@dimen/dp_10"
-                            android:paddingRight="@dimen/dp_10"
-                            app:right_icon="@mipmap/icon_right"
-                            app:right_menu="更多"
-                            app:title="第一书记资讯" />
-
-                        <com.luck.cloud.widget.view.LoadExceptionView
-                            android:id="@+id/view_wait_done_warn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone" />
-
-
-                        <com.luck.cloud.widget.MeasureRecyclerView
-                            android:id="@+id/rl_wait_done"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/dp_10" />
-                    </LinearLayout>
-
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_10" />
                 </LinearLayout>
 
-            </com.luck.cloud.widget.MyScrollView>
+            </LinearLayout>
 
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </com.luck.cloud.widget.MyScrollView>
+
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

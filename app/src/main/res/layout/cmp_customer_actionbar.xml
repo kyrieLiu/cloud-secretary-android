@@ -24,7 +24,7 @@
 
     <Button
         android:id="@+id/commit"
-        android:background="@drawable/selector_fill_rectangle_green_2"
+        android:background="@drawable/selector_fill_rectangle_w_b"
         android:minHeight="1dp"
         android:minWidth="1dp"
         android:text="完成"

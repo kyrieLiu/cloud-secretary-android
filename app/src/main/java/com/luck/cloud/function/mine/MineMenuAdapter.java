@@ -1,4 +1,4 @@
-package com.luck.cloud.function.home;
+package com.luck.cloud.function.mine;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,14 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +18,7 @@ import androidx.annotation.Nullable;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
+import com.luck.cloud.function.home.HomeMenuBean;
 import com.pixplicity.sharp.OnSvgElementListener;
 import com.pixplicity.sharp.Sharp;
 
@@ -33,28 +31,29 @@ import butterknife.Bind;
  * Created by liuyin on 2019/2/21 14:00
  * 首页功能菜单
  */
-public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAdapter<T> {
+public class MineMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAdapter<T> {
 
-    public HomeMenuAdapter(List<T> list, Context context) {
+
+
+    public MineMenuAdapter(List<T> list, Context context) {
         super(list, context);
     }
 
     @Override
     public BaseViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_menu_grid, parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_mine_menu, parent, false);
         return new MyViewHolder(view);
     }
 
 
     class MyViewHolder extends BaseViewHolder<T> {
 
-        @Bind(R.id.iv_item_menu_icon)
-        ImageView mIvIcon;
-        @Bind(R.id.tv_item_menu_name)
-        TextView mTvName;
-        @Bind(R.id.rv_menu_icon_bg)
-        RelativeLayout mRvBg;
-
+        @Bind(R.id.iv_mine_menu_icon)
+        ImageView ivMineMenuIcon;
+        @Bind(R.id.tv_mine_menu_name)
+        TextView tvMineMenuName;
+        @Bind(R.id.iv_mine_menu_right)
+        ImageView ivRightIcon;
         public MyViewHolder(View itemView) {
             super(itemView);
         }
@@ -62,7 +61,8 @@ public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAda
         @SuppressLint("WrongConstant")
         @Override
         protected void bind(T bean, int position) {
-            Sharp sharp= Sharp.loadResource(context.getResources(), bean.getIconPath());
+
+            Sharp sharp= Sharp.loadResource(context.getResources(), R.raw.right_icon);
             sharp.setOnElementListener(new OnSvgElementListener() {
                 @Override
                 public void onSvgStart(@NonNull Canvas canvas, @Nullable RectF rectF) {
@@ -76,11 +76,7 @@ public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAda
 
                 @Override
                 public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
-                    Random random = new Random();
-//                paint.setColor(Color.argb(255,random.nextInt(256),
-//                        random.nextInt(256), random.nextInt(256)));
-                    paint.setColor(Color.parseColor("#ffffff"));
-                    //int color=R.color.main_color;
+                    paint.setColor(Color.parseColor("#DDDDDD"));
                     return t;
                 }
 
@@ -89,16 +85,10 @@ public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAda
 
                 }
             });
-            sharp.into(mIvIcon);
+            sharp.into(ivRightIcon);
 
-            GradientDrawable drawable=new GradientDrawable();
-            drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setGradientType(GradientDrawable.RECTANGLE);
-            drawable.setCornerRadius(80);
-            drawable.setColor(bean.getColor());
-            mRvBg.setBackground(drawable);
-
-            mTvName.setText(bean.getMenuName());
+            tvMineMenuName.setText(bean.getMenuName());
+            ivMineMenuIcon.setImageResource(bean.getIconPath());
         }
     }
 
