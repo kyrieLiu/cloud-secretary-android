@@ -1,12 +1,17 @@
 package com.luck.cloud.function.home;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +45,7 @@ import com.luck.cloud.config.RxConstant;
 import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.mine.HomeWaitDoneAdapter;
 import com.luck.cloud.function.mine.WaitDoneBean;
+import com.luck.cloud.function.office.OfficeActivity;
 import com.luck.cloud.manager.RxManager;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.GlideImageLoader;
@@ -102,15 +108,15 @@ public class HomeActivity extends BaseActivity {
     //待办事项请求返回数据提示
     @Bind(R.id.view_wait_done_warn)
     LoadExceptionView mViewWaitWarn;
-    @Bind(R.id.iv_home_menu)
-    ImageView mIvMenu;
 
-    private HomeWaitDoneAdapter<WaitDoneBean.ItemsBean> waitDoneAdapter;
+    @Bind(R.id.iv_home_menu)
+    ImageView mIvHeadPicture;
+
+    private ScienceAdapter<SuperviseHandleBean.ItemsBean> waitDoneAdapter;
 
 
     private PictureParameterStyle mPictureParameterStyle;
     private PictureCropParameterStyle mCropParameterStyle;
-    private PictureWindowAnimationStyle mWindowAnimationStyle;
 
 
     @Override
@@ -125,6 +131,12 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle bundle) {
+        //将导航栏设置为透明色
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     @Override
@@ -134,7 +146,7 @@ public class HomeActivity extends BaseActivity {
 
         initFunctionMenu();//初始化功能菜单
 
-        initWaitDoneList();//初始化列表
+        initInformations();//初始化列表
 
         getDefaultStyle();
 
@@ -146,45 +158,13 @@ public class HomeActivity extends BaseActivity {
                 requestWaitDone();
             }
         });
-
-
-        Sharp sharp= Sharp.loadResource(getResources(), R.raw.drawer_menu);
-        sharp.setOnElementListener(new OnSvgElementListener() {
-            @Override
-            public void onSvgStart(@NonNull Canvas canvas, @Nullable RectF rectF) {
-
-            }
-
-            @Override
-            public void onSvgEnd(@NonNull Canvas canvas, @Nullable RectF rectF) {
-
-            }
-
-            @Override
-            public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
-                Random random = new Random();
-//                paint.setColor(Color.argb(255,random.nextInt(256),
-//                        random.nextInt(256), random.nextInt(256)));
-                paint.setColor(Color.parseColor("#1D569A"));
-                //int color=R.color.main_color;
-                return t;
-            }
-
-            @Override
-            public <T> void onSvgElementDrawn(@Nullable String s, @NonNull T t, @NonNull Canvas canvas, @Nullable Paint paint) {
-
-            }
-        });
-        sharp.into(mIvMenu);
-
-
     }
 
     /**
      * 初始化功能菜单
      */
     private void initFunctionMenu() {
-        String menus[] = {"小云学习", "小云科普", "第一书记","小云见证","小云实践","小云找专家"};
+        String menus[] = {"小云办公", "小云见证", "小云科普","小云活动","小云学习","小云交流"};
         int icons[] = {R.raw.study, R.raw.science, R.raw.first_secretary,R.raw.witness,R.raw.practice,R.raw.dingding};
         int colors[] = {Color.rgb(253,67,78),Color.rgb(255,96,49),Color.rgb(255,152,82),
                 Color.rgb(0,132,245), Color.rgb(96,138,250),Color.rgb(160,118,250)};
@@ -204,12 +184,42 @@ public class HomeActivity extends BaseActivity {
         adapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent();
+                HomeMenuBean bean=list.get(position);
+                switch (bean.getMenuName()){
+                    case "小云交流":
+                        openDing("com.alibaba.android.rimet");
+                        break;
+                    default:
+                        Intent intent=new Intent(HomeActivity.this, OfficeActivity.class);
+                        startActivity(intent);
+                        break;
+                }
             }
         });
     }
 
-
+    private void openDing(String packageName) {
+        PackageManager packageManager = this.getPackageManager();
+        PackageInfo pi = null;
+        try {
+            pi = packageManager.getPackageInfo("com.alibaba.android.rimet", 0);
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+        resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        resolveIntent.setPackage(pi.packageName);
+        List<ResolveInfo> apps = packageManager.queryIntentActivities(resolveIntent, 0);
+        ResolveInfo resolveInfo = apps.iterator().next();
+        if (resolveInfo != null ) {
+            String className = resolveInfo.activityInfo.name;
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ComponentName cn = new ComponentName(packageName, className);
+            intent.setComponent(cn);
+            this.startActivity(intent);
+        }
+    }
 
     /**
      * 初始化banner图
@@ -249,8 +259,8 @@ public class HomeActivity extends BaseActivity {
     /**
      * 初始化列表
      */
-    private void initWaitDoneList() {
-        waitDoneAdapter = new HomeWaitDoneAdapter(this);
+    private void initInformations() {
+        waitDoneAdapter = new ScienceAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvWaitDone.setLayoutManager(layoutManager);
         mRvWaitDone.setAdapter(waitDoneAdapter);
@@ -263,9 +273,9 @@ public class HomeActivity extends BaseActivity {
         });
 
         // requestWaitDone();
-        List<WaitDoneBean.ItemsBean> list=new ArrayList<>();
+        List<SuperviseHandleBean.ItemsBean> list=new ArrayList<>();
         for (int i=0;i<10;i++){
-            WaitDoneBean.ItemsBean bean=new WaitDoneBean.ItemsBean();
+            SuperviseHandleBean.ItemsBean bean=new SuperviseHandleBean.ItemsBean();
             list.add(bean);
         }
         waitDoneAdapter.setList(list);
@@ -278,54 +288,40 @@ public class HomeActivity extends BaseActivity {
     private void requestWaitDone() {
         RequestBean requestBean = initRequestParams();
 
-        OKHttpManager.postJsonRequest(URLConstant.WAIT_DONE_HOME, requestBean, new OKHttpManager.ResultCallback<BaseBean<WaitDoneBean>>() {
-            @Override
-            public void onError(int code, String result, String message) {
-                if (refreshLayout.getState() == RefreshState.Refreshing) {
-                    refreshLayout.finishRefresh();
-                }
-                mViewWaitWarn.setVisibility(View.VISIBLE);
-                mViewWaitWarn.setExceptionMessage(AppConstants.HTTP_CONNECT_ERROR);
-            }
-
-            @Override
-            public void onResponse(BaseBean<WaitDoneBean> response) {
-                if (refreshLayout.getState() == RefreshState.Refreshing) {
-                    refreshLayout.finishRefresh();
-                }
-                final List<WaitDoneBean.ItemsBean> list = response.getBody().getItems();
-                if (list == null || list.size() == 0) {
-                    mViewWaitWarn.setVisibility(View.VISIBLE);
-                    mViewWaitWarn.setExceptionMessage("暂无待办事项");
-                    mRvWaitDone.setVisibility(View.GONE);
-                } else {
-                    mViewWaitWarn.setVisibility(View.GONE);
-                    mRvWaitDone.setVisibility(View.VISIBLE);
-                }
-                waitDoneAdapter.setList(list);
-            }
-        }, this);
+//        OKHttpManager.postJsonRequest(URLConstant.WAIT_DONE_HOME, requestBean, new OKHttpManager.ResultCallback<BaseBean<WaitDoneBean>>() {
+//            @Override
+//            public void onError(int code, String result, String message) {
+//                if (refreshLayout.getState() == RefreshState.Refreshing) {
+//                    refreshLayout.finishRefresh();
+//                }
+//                mViewWaitWarn.setVisibility(View.VISIBLE);
+//                mViewWaitWarn.setExceptionMessage(AppConstants.HTTP_CONNECT_ERROR);
+//            }
+//
+//            @Override
+//            public void onResponse(BaseBean<WaitDoneBean> response) {
+//                if (refreshLayout.getState() == RefreshState.Refreshing) {
+//                    refreshLayout.finishRefresh();
+//                }
+//                final List<WaitDoneBean.ItemsBean> list = response.getBody().getItems();
+//                if (list == null || list.size() == 0) {
+//                    mViewWaitWarn.setVisibility(View.VISIBLE);
+//                    mViewWaitWarn.setExceptionMessage("暂无待办事项");
+//                    mRvWaitDone.setVisibility(View.GONE);
+//                } else {
+//                    mViewWaitWarn.setVisibility(View.GONE);
+//                    mRvWaitDone.setVisibility(View.VISIBLE);
+//                }
+//                waitDoneAdapter.setList(list);
+//            }
+//        }, this);
     }
 
     @OnClick({R.id.main_search,R.id.iv_home_menu})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.iv_home_menu:
-//                Intent intent=new Intent(this, MainActivity.class);
-//                startActivity(intent);
                selectPicture();
-//                OKHttpManager.getAsyn("http://47.114.80.143/api/station/info/page/1/10", new OKHttpManager.ResultCallback<BaseBean>() {
-//                    @Override
-//                    public void onError(int code, String result, String message) {
-//                        Log.d("tag","h异常");
-//                    }
-//
-//                    @Override
-//                    public void onResponse(BaseBean response) {
-//                        Log.d("tag","返回");
-//                    }
-//                });
-               // requestData(1);
                 break;
             case R.id.main_search:
                 Intent intent=new Intent(this, PropertyServiceStandardSearchActivity.class);
@@ -370,7 +366,7 @@ public class HomeActivity extends BaseActivity {
                 .isPageStrategy(true)// 是否开启分页策略 & 每页多少条；默认开启
                 .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
                 .setPictureCropStyle(mCropParameterStyle)// 动态自定义裁剪主题
-                .setPictureWindowAnimationStyle(mWindowAnimationStyle)// 自定义相册启动退出动画
+                // .setPictureWindowAnimationStyle(mWindowAnimationStyle)// 自定义相册启动退出动画
                 .setRecyclerAnimationMode(AnimationType.DEFAULT_ANIMATION)// 列表动画效果
                 .isWithVideoImage(true)// 图片和视频是否可以同选,只在ofAll模式下有效
                 .isMaxSelectEnabledMask(true)// 选择数到了最大阀值列表是否启用蒙层效果
@@ -419,14 +415,14 @@ public class HomeActivity extends BaseActivity {
                 .isPreviewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
                 //.cropCompressQuality(90)// 注：已废弃 改用cutOutQuality()
                 .cutOutQuality(90)// 裁剪输出质量 默认100
-                .minimumCompressSize(100);// 小于100kb的图片不压缩
+                .minimumCompressSize(100)// 小于100kb的图片不压缩
                 //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                 //.cropImageWideHigh()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                 //.rotateEnabled(false) // 裁剪是否可旋转图片
                 //.scaleEnabled(false)// 裁剪是否可放大缩小图片
                 //.videoQuality()// 视频录制质量 0 or 1
                 //.forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
-                // .forResult(new MyResultCallback(mIvHeadPicture,getContext()));
+                 .forResult(new MyResultCallback(mIvHeadPicture,getContext()));
     }
     private void getDefaultStyle() {
         // 相册主题
@@ -535,12 +531,12 @@ public class HomeActivity extends BaseActivity {
             }
             Log.d("tag","图片==="+result);
             GlideUtils.loadCircleImage(context,mAdapterWeakReference.get(),result.get(0).getPath());
-            FileCommitModel commitModel = FileCommitModel.getInstance();
-            String path=result.get(0).getPath();
-            ArrayList<String> list=new ArrayList<>();
-            list.add(path);
-            SpUtil.setToken("r8rk/OxEOsLV5WOVp8VISVWN0La6wiDr82V1tyFJfiq6iaql2su/2dfUrWNo5oLzO8tBC9rlTZhytXmsAOGNjNke3c8ZkXs4cKSjdMtFJao=");
-            commitModel.commitComplaintData(list,"");
+//            FileCommitModel commitModel = FileCommitModel.getInstance();
+//            String path=result.get(0).getPath();
+//            ArrayList<String> list=new ArrayList<>();
+//            list.add(path);
+//            SpUtil.setToken("r8rk/OxEOsLV5WOVp8VISVWN0La6wiDr82V1tyFJfiq6iaql2su/2dfUrWNo5oLzO8tBC9rlTZhytXmsAOGNjNke3c8ZkXs4cKSjdMtFJao=");
+//            commitModel.commitComplaintData(list,"");
 //            OKHttpManager.getAsyn("http://47.114.80.143/api/station/info/page/1/10", new OKHttpManager.ResultCallback<BaseBean>() {
 //                @Override
 //                public void onError(int code, String result, String message) {

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_light_color"
-    android:orientation="vertical"
-    tools:context=".function.mine.collect.CollectActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,16 +39,17 @@
                 android:drawablePadding="@dimen/dp_10"
                 android:imeOptions="actionSearch"
                 android:hint="请输入关键字查询"
+                android:focusable="true"
                 android:singleLine="true" />
 
         </RelativeLayout>
     </LinearLayout>
 
 
-    <com.jingkai.asset.widget.xrecycler.XRecyclerView
+    <com.luck.cloud.widget.xrecycler.XRecyclerView
         android:id="@+id/rv_common_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.jingkai.asset.widget.xrecycler.XRecyclerView>
+        android:layout_height="match_parent"></com.luck.cloud.widget.xrecycler.XRecyclerView>
 
 
 </LinearLayout>
