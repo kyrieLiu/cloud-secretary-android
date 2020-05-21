@@ -127,11 +127,15 @@ public class PersonDataActivity extends BaseActivity {
         getDefaultStyle();
     }
 
-    @OnClick({R.id.ll_avatar})
+    @OnClick({R.id.ll_avatar,R.id.rl_personal_phone_parent})
     public void click(View view) {
         switch (view.getId()) {
             case R.id.ll_avatar:
                 selectPicture();
+                break;
+            case R.id.rl_personal_phone_parent:
+                Intent intent=new Intent(this,ModifyActivity.class);
+                startActivity(intent);
                 break;
         }
     }

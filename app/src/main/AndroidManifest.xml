@@ -57,6 +57,7 @@
         <activity android:name=".function.mine.PersonDataActivity">
 
         </activity>
+        <activity android:name=".common.activity.ModifyActivity" />
         <activity android:name=".function.mine.CollectActivity" />
         <provider
             android:name="androidx.core.content.FileProvider"

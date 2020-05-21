@@ -40,7 +40,7 @@ public class ModifyActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setTitle("修改姓名");
+        setTitle("修改手机号");
         rightVisible("保存");
     }
 
@@ -48,7 +48,7 @@ public class ModifyActivity extends BaseActivity {
     protected void loadData() {
         InputFilter[] addressFilter = {new InputFilter.LengthFilter(20)};
         mEtContent.setFilters(addressFilter);
-        mEtContent.setHint("请输入姓名");
+        mEtContent.setHint("请输入手机号");
     }
 
     @OnClick({R.id.tv_right, R.id.iv_modify_delete})
