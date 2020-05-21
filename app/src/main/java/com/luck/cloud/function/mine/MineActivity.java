@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.luck.cloud.MainActivity;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
@@ -92,9 +93,11 @@ public class MineActivity extends BaseActivity {
             public void onItemClick(View view, int position) {
                 HomeMenuBean bean=list.get(position);
                 switch (bean.getMenuName()){
-                    case "小云交流":
+                    case "":
                         break;
                     default:
+                        Intent intent=new Intent(MineActivity.this,CollectActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }

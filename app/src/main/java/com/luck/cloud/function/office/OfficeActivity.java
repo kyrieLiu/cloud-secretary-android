@@ -52,7 +52,7 @@ public class OfficeActivity extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
 
-        setTitle("我的收藏");
+        setTitle("小云办公");
 
 
     }
