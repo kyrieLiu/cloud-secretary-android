@@ -71,7 +71,6 @@ import com.yalantis.ucrop.model.CutInfo;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author：luck
@@ -483,7 +482,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                         }
                     });
         } else {
-            PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<List<LocalMediaFolder>>() {
+            PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<List<LocalMediaFolder>>() {
 
                 @Override
                 public List<LocalMediaFolder> doInBackground() {
@@ -559,7 +558,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
      */
     private void synchronousCover() {
         if (config.chooseMode == PictureMimeType.ofAll()) {
-            PictureThreadUtils.executeBySingle(new PictureThreadUtils.SimpleTask<Boolean>() {
+            PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<Boolean>() {
 
                 @Override
                 public Boolean doInBackground() {
@@ -776,16 +775,20 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
      * Preview
      */
     private void onPreview() {
-        List<LocalMedia> selectedImages = mAdapter.getSelectedData();
+        List<LocalMedia> selectedData = mAdapter.getSelectedData();
         List<LocalMedia> medias = new ArrayList<>();
-        int size = selectedImages.size();
+        int size = selectedData.size();
         for (int i = 0; i < size; i++) {
-            LocalMedia media = selectedImages.get(i);
+            LocalMedia media = selectedData.get(i);
             medias.add(media);
+        }
+        if (PictureSelectionConfig.onCustomImagePreviewCallback != null) {
+            PictureSelectionConfig.onCustomImagePreviewCallback.onCustomPreviewCallback(getContext(), selectedData, 0);
+            return;
         }
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(PictureConfig.EXTRA_PREVIEW_SELECT_LIST, (ArrayList<? extends Parcelable>) medias);
-        bundle.putParcelableArrayList(PictureConfig.EXTRA_SELECT_LIST, (ArrayList<? extends Parcelable>) selectedImages);
+        bundle.putParcelableArrayList(PictureConfig.EXTRA_SELECT_LIST, (ArrayList<? extends Parcelable>) selectedData);
         bundle.putBoolean(PictureConfig.EXTRA_BOTTOM_PREVIEW, true);
         bundle.putBoolean(PictureConfig.EXTRA_CHANGE_ORIGINAL, config.isCheckOriginalImage);
         bundle.putBoolean(PictureConfig.EXTRA_SHOW_CAMERA, mAdapter.isShowCamera());
@@ -1306,11 +1309,11 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
     /**
      * preview image and video
      *
-     * @param previewImages
+     * @param previewData
      * @param position
      */
-    public void startPreview(List<LocalMedia> previewImages, int position) {
-        LocalMedia media = previewImages.get(position);
+    public void startPreview(List<LocalMedia> previewData, int position) {
+        LocalMedia media = previewData.get(position);
         String mimeType = media.getMimeType();
         Bundle bundle = new Bundle();
         List<LocalMedia> result = new ArrayList<>();
@@ -1337,8 +1340,12 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             }
         } else {
             // image
+            if (PictureSelectionConfig.onCustomImagePreviewCallback != null) {
+                PictureSelectionConfig.onCustomImagePreviewCallback.onCustomPreviewCallback(getContext(), previewData, position);
+                return;
+            }
             List<LocalMedia> selectedData = mAdapter.getSelectedData();
-            ImagesObservable.getInstance().savePreviewMediaData(new ArrayList<>(previewImages));
+            ImagesObservable.getInstance().savePreviewMediaData(new ArrayList<>(previewData));
             bundle.putParcelableArrayList(PictureConfig.EXTRA_SELECT_LIST, (ArrayList<? extends Parcelable>) selectedData);
             bundle.putInt(PictureConfig.EXTRA_POSITION, position);
             bundle.putBoolean(PictureConfig.EXTRA_CHANGE_ORIGINAL, config.isCheckOriginalImage);
@@ -1562,7 +1569,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             return;
         }
         showPleaseDialog();
-        PictureThreadUtils.executeBySingle(new PictureThreadUtils.SimpleTask<LocalMedia>() {
+        PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<LocalMedia>() {
 
             @Override
             public LocalMedia doInBackground() {
@@ -1620,7 +1627,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     long bucketId = MediaUtils.getCameraFirstBucketId(getContext());
                     media.setBucketId(bucketId);
                     // The width and height of the image are reversed if there is rotation information
-                    MediaUtils.setOrientationSynchronous(getContext(), media);
+                    MediaUtils.setOrientationSynchronous(getContext(), media, config.isAndroidQChangeWH, config.isAndroidQChangeVideoWH);
                 }
                 return media;
             }
@@ -1839,20 +1846,19 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                 config.originalPath = media.getPath();
                 media.setCutPath(cutPath);
                 media.setChooseModel(config.chooseMode);
-                if (TextUtils.isEmpty(cutPath)) {
-                    if (SdkVersionUtils.checkedAndroid_Q()
-                            && PictureMimeType.isContent(media.getPath())) {
-                        String path = PictureFileUtils.getPath(this, Uri.parse(media.getPath()));
-                        media.setSize(!TextUtils.isEmpty(path) ? new File(path).length() : 0);
-                        media.setAndroidQToPath(cutPath);
+                boolean isCutPathEmpty = !TextUtils.isEmpty(cutPath);
+                if (SdkVersionUtils.checkedAndroid_Q()
+                        && PictureMimeType.isContent(media.getPath())) {
+                    if (isCutPathEmpty) {
+                        media.setSize(new File(cutPath).length());
                     } else {
-                        media.setSize(new File(media.getPath()).length());
+                        media.setSize(!TextUtils.isEmpty(media.getRealPath()) ? new File(media.getRealPath()).length() : 0);
                     }
-                    media.setCut(false);
+                    media.setAndroidQToPath(cutPath);
                 } else {
-                    media.setSize(new File(cutPath).length());
-                    media.setCut(true);
+                    media.setSize(isCutPathEmpty ? new File(cutPath).length() : 0);
                 }
+                media.setCut(isCutPathEmpty);
                 result.add(media);
                 handlerResult(result);
             } else {
@@ -1862,18 +1868,19 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     config.originalPath = media.getPath();
                     media.setCutPath(cutPath);
                     media.setChooseModel(config.chooseMode);
-                    if (TextUtils.isEmpty(cutPath)) {
-                        if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(media.getPath())) {
-                            String path = PictureFileUtils.getPath(this, Uri.parse(media.getPath()));
-                            media.setSize(!TextUtils.isEmpty(path) ? new File(path).length() : 0);
-                            media.setAndroidQToPath(cutPath);
+                    boolean isCutPathEmpty = !TextUtils.isEmpty(cutPath);
+                    if (SdkVersionUtils.checkedAndroid_Q()
+                            && PictureMimeType.isContent(media.getPath())) {
+                        if (isCutPathEmpty) {
+                            media.setSize(new File(cutPath).length());
                         } else {
-                            media.setSize(new File(media.getPath()).length());
+                            media.setSize(!TextUtils.isEmpty(media.getRealPath()) ? new File(media.getRealPath()).length() : 0);
                         }
+                        media.setAndroidQToPath(cutPath);
                     } else {
-                        media.setSize(new File(cutPath).length());
+                        media.setSize(isCutPathEmpty ? new File(cutPath).length() : 0);
                     }
-                    media.setCut(!TextUtils.isEmpty(cutPath));
+                    media.setCut(isCutPathEmpty);
                     result.add(media);
                     handlerResult(result);
                 }
@@ -1937,8 +1944,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
                     media.setSize(new File(c.getCutPath()).length());
                 } else {
                     if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(c.getPath())) {
-                        String path = PictureFileUtils.getPath(this, Uri.parse(c.getPath()));
-                        media.setSize(!TextUtils.isEmpty(path) ? new File(path).length() : 0);
+                        media.setSize(!TextUtils.isEmpty(c.getRealPath()) ? new File(c.getRealPath()).length() : 0);
                     } else {
                         media.setSize(new File(c.getPath()).length());
                     }
@@ -2054,7 +2060,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
             allFolder.setImageNum(isAddSameImp(totalNum) ? allFolder.getImageNum() : allFolder.getImageNum() + 1);
 
             // Camera
-            LocalMediaFolder cameraFolder = getImageFolder(media.getPath(), folderWindow.getFolderData());
+            LocalMediaFolder cameraFolder = getImageFolder(media.getPath(), media.getRealPath(), folderWindow.getFolderData());
             if (cameraFolder != null) {
                 cameraFolder.setImageNum(isAddSameImp(totalNum) ? cameraFolder.getImageNum() : cameraFolder.getImageNum() + 1);
                 if (!isAddSameImp(totalNum)) {
@@ -2087,8 +2093,7 @@ public class PictureSelectorActivity extends PictureBaseActivity implements View
      * @param imageFolders
      */
     private void updateMediaFolder(List<LocalMediaFolder> imageFolders, LocalMedia media) {
-        File imageFile = new File(PictureMimeType.isContent(media.getPath())
-                ? Objects.requireNonNull(PictureFileUtils.getPath(getContext(), Uri.parse(media.getPath()))) : media.getPath());
+        File imageFile = new File(media.getRealPath());
         File folderFile = imageFile.getParentFile();
         if (folderFile == null) {
             return;

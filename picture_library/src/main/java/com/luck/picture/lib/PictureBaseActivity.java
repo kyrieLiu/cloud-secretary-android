@@ -39,6 +39,7 @@ import com.luck.picture.lib.thread.PictureThreadUtils;
 import com.luck.picture.lib.tools.AndroidQTransformUtils;
 import com.luck.picture.lib.tools.AttrsUtils;
 import com.luck.picture.lib.tools.DateUtils;
+import com.luck.picture.lib.tools.DoubleUtils;
 import com.luck.picture.lib.tools.MediaUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
@@ -306,14 +307,18 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
      * loading dialog
      */
     protected void showPleaseDialog() {
-        if (!isFinishing()) {
-            if (mLoadingDialog == null) {
-                mLoadingDialog = new PictureLoadingDialog(getContext());
+        try {
+            if (!isFinishing()) {
+                if (mLoadingDialog == null) {
+                    mLoadingDialog = new PictureLoadingDialog(getContext());
+                }
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+                mLoadingDialog.show();
             }
-            if (mLoadingDialog.isShowing()) {
-                mLoadingDialog.dismiss();
-            }
-            mLoadingDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -342,7 +347,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
         showPleaseDialog();
         if (PictureSelectionConfig.cacheResourcesEngine != null) {
             // 在Android 10上通过图片加载引擎的缓存来获得沙盒内的图片
-            PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<List<LocalMedia>>() {
+            PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<List<LocalMedia>>() {
 
                 @Override
                 public List<LocalMedia> doInBackground() {
@@ -352,7 +357,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
                         if (media == null) {
                             continue;
                         }
-                        if (!PictureMimeType.isHttp(media.getPath())) {
+                        if (!PictureMimeType.isHasHttp(media.getPath())) {
                             String cachePath = PictureSelectionConfig.cacheResourcesEngine.onCachePath(getContext(), media.getPath());
                             media.setAndroidQToPath(cachePath);
                         }
@@ -377,7 +382,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
      */
     private void compressToLuban(List<LocalMedia> result) {
         if (config.synOrAsy) {
-            PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<List<File>>() {
+            PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<List<File>>() {
 
                 @Override
                 public List<File> doInBackground() throws Exception {
@@ -443,13 +448,16 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
         if (files.size() == size) {
             for (int i = 0, j = size; i < j; i++) {
                 File file = files.get(i);
+                if (file == null) {
+                    continue;
+                }
                 String path = file.getAbsolutePath();
                 LocalMedia image = images.get(i);
-                boolean http = PictureMimeType.isHttp(path);
+                boolean http = PictureMimeType.isHasHttp(path);
                 boolean flag = !TextUtils.isEmpty(path) && http;
                 boolean isHasVideo = PictureMimeType.isHasVideo(image.getMimeType());
                 image.setCompressed(!isHasVideo && !flag);
-                image.setCompressPath(isHasVideo || flag ? "" : path);
+                image.setCompressPath(isHasVideo || flag ? null : path);
                 if (isAndroidQ) {
                     image.setAndroidQToPath(image.getCompressPath());
                 }
@@ -465,13 +473,16 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
      * @param mimeType
      */
     protected void startCrop(String originalPath, String mimeType) {
+        if (DoubleUtils.isFastDoubleClick()) {
+            return;
+        }
         if (TextUtils.isEmpty(originalPath)) {
             ToastUtils.s(this, getString(R.string.picture_not_crop_data));
             return;
         }
         UCrop.Options options = basicOptions();
         if (PictureSelectionConfig.cacheResourcesEngine != null) {
-            PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<String>() {
+            PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<String>() {
                 @Override
                 public String doInBackground() {
                     return PictureSelectionConfig.cacheResourcesEngine.onCachePath(getContext(), originalPath);
@@ -496,7 +507,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
      * @param options
      */
     private void startSingleCropActivity(String originalPath, String cachePath, String mimeType, UCrop.Options options) {
-        boolean isHttp = PictureMimeType.isHttp(originalPath);
+        boolean isHttp = PictureMimeType.isHasHttp(originalPath);
         String suffix = mimeType.replace("image/", ".");
         File file = new File(PictureFileUtils.getDiskCacheDir(getContext()),
                 TextUtils.isEmpty(config.renameCropFileName) ? DateUtils.getCreateFileName("IMG_CROP_") + suffix : config.renameCropFileName);
@@ -520,6 +531,9 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
     private int index = 0;
 
     protected void startCrop(ArrayList<CutInfo> list) {
+        if (DoubleUtils.isFastDoubleClick()) {
+            return;
+        }
         if (list == null || list.size() == 0) {
             ToastUtils.s(this, getString(R.string.picture_not_crop_data));
             return;
@@ -542,7 +556,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
         }
 
         if (PictureSelectionConfig.cacheResourcesEngine != null) {
-            PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<List<CutInfo>>() {
+            PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<List<CutInfo>>() {
 
                 @Override
                 public List<CutInfo> doInBackground() {
@@ -559,14 +573,14 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(List<CutInfo> list) {
                     if (index < size) {
-                        startMultipleCropActivity(list.get(index), options);
+                        startMultipleCropActivity(list.get(index), size, options);
                     }
                 }
             });
 
         } else {
             if (index < size) {
-                startMultipleCropActivity(list.get(index), options);
+                startMultipleCropActivity(list.get(index), size, options);
             }
         }
     }
@@ -577,10 +591,10 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
      * @param cutInfo
      * @param options
      */
-    private void startMultipleCropActivity(CutInfo cutInfo, UCrop.Options options) {
+    private void startMultipleCropActivity(CutInfo cutInfo, int count, UCrop.Options options) {
         String path = cutInfo.getPath();
         String mimeType = cutInfo.getMimeType();
-        boolean isHttp = PictureMimeType.isHttp(path);
+        boolean isHttp = PictureMimeType.isHasHttp(path);
         Uri uri;
         if (!TextUtils.isEmpty(cutInfo.getAndroidQToPath())) {
             uri = Uri.fromFile(new File(cutInfo.getAndroidQToPath()));
@@ -590,7 +604,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
         String suffix = mimeType.replace("image/", ".");
         File file = new File(PictureFileUtils.getDiskCacheDir(this),
                 TextUtils.isEmpty(config.renameCropFileName) ? DateUtils.getCreateFileName("IMG_CROP_")
-                        + suffix : config.camera ? config.renameCropFileName : StringUtils.rename(config.renameCropFileName));
+                        + suffix : config.camera || count == 1 ? config.renameCropFileName : StringUtils.rename(config.renameCropFileName));
         UCrop.of(uri, Uri.fromFile(file))
                 .withOptions(options)
                 .startAnimationMultipleCropActivity(this, config.windowAnimationStyle != null
@@ -722,8 +736,8 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
      * @param imageFolders
      * @return
      */
-    protected LocalMediaFolder getImageFolder(String path, List<LocalMediaFolder> imageFolders) {
-        File imageFile = new File(PictureMimeType.isContent(path) ? Objects.requireNonNull(PictureFileUtils.getPath(getContext(), Uri.parse(path))) : path);
+    protected LocalMediaFolder getImageFolder(String path, String realPath, List<LocalMediaFolder> imageFolders) {
+        File imageFile = new File(PictureMimeType.isContent(path) ? realPath : path);
         File folderFile = imageFile.getParentFile();
         for (LocalMediaFolder folder : imageFolders) {
             if (folderFile != null && folder.getName().equals(folderFile.getName())) {
@@ -778,7 +792,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
      * @param images
      */
     private void onResultToAndroidAsy(List<LocalMedia> images) {
-        PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<List<LocalMedia>>() {
+        PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<List<LocalMedia>>() {
             @Override
             public List<LocalMedia> doInBackground() {
                 int size = images.size();
@@ -791,7 +805,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
                             && !media.isCompressed()
                             && TextUtils.isEmpty(media.getAndroidQToPath());
                     if (isCopyAndroidQToPath && PictureMimeType.isContent(media.getPath())) {
-                        if (!PictureMimeType.isHttp(media.getPath())) {
+                        if (!PictureMimeType.isHasHttp(media.getPath())) {
                             String AndroidQToPath = AndroidQTransformUtils.copyPathToAndroidQ(getContext(),
                                     media.getPath(), media.getWidth(), media.getHeight(), media.getMimeType(), config.cameraFileName);
                             media.setAndroidQToPath(AndroidQToPath);
@@ -857,9 +871,11 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (mLoadingDialog != null) {
+            mLoadingDialog.dismiss();
+            mLoadingDialog = null;
+        }
         super.onDestroy();
-        dismissDialog();
-        mLoadingDialog = null;
     }
 
 
@@ -979,6 +995,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
             if (config.isCameraAroundState) {
                 cameraIntent.putExtra(PictureConfig.CAMERA_FACING, PictureConfig.CAMERA_BEFORE);
             }
+            cameraIntent.putExtra(PictureConfig.EXTRA_QUICK_CAPTURE, config.isQuickCapture);
             cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
             cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, config.videoQuality);
             startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
@@ -1008,8 +1025,7 @@ public abstract class PictureBaseActivity extends AppCompatActivity {
         if (config != null) {
             PictureSelectionConfig.destroy();
             LocalMediaPageLoader.setInstanceNull();
-            PictureThreadUtils.cancel(PictureThreadUtils.getCachedPool());
-            PictureThreadUtils.cancel(PictureThreadUtils.getSinglePool());
+            PictureThreadUtils.cancel(PictureThreadUtils.getIoPool());
         }
     }
 

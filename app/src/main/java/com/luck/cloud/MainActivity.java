@@ -30,6 +30,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.luck.cloud.adapter.GridImageAdapter;
+import com.luck.cloud.listener.DragListener;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.animators.AnimationType;
 import com.luck.picture.lib.broadcast.BroadcastAction;
@@ -41,6 +43,7 @@ import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.language.LanguageConfig;
 import com.luck.picture.lib.listener.OnCustomCameraInterfaceListener;
+import com.luck.picture.lib.listener.OnCustomImagePreviewCallback;
 import com.luck.picture.lib.listener.OnResultCallbackListener;
 import com.luck.picture.lib.listener.OnVideoSelectedPlayCallback;
 import com.luck.picture.lib.permissions.PermissionChecker;
@@ -49,10 +52,9 @@ import com.luck.picture.lib.style.PictureParameterStyle;
 import com.luck.picture.lib.style.PictureWindowAnimationStyle;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.picture.lib.tools.ScreenUtils;
+import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.ValueOf;
-import com.luck.cloud.adapter.GridImageAdapter;
-import com.luck.cloud.listener.DragListener;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -442,13 +444,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .minSelectNum(1)// 最小选择数量
                         .maxVideoSelectNum(1) // 视频最大选择数量
                         //.minVideoSelectNum(1)// 视频最小选择数量
+                        //.closeAndroidQChangeVideoWH(!SdkVersionUtils.checkedAndroid_Q())// 关闭在AndroidQ下获取图片或视频宽高相反自动转换
                         .imageSpanCount(4)// 每行显示个数
                         .isReturnEmpty(false)// 未选择数据时点击按钮是否可以返回
+                        .closeAndroidQChangeWH(true)//如果图片有旋转角度则对换宽高,默认为true
+                        .closeAndroidQChangeVideoWH(!SdkVersionUtils.checkedAndroid_Q())// 如果视频有旋转角度则对换宽高,默认为false
                         //.isAndroidQTransform(false)// 是否需要处理Android Q 拷贝至应用沙盒的操作，只针对compress(false); && .isEnableCrop(false);有效,默认处理
                         .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)// 设置相册Activity方向，不设置默认使用系统
                         .isOriginalImageControl(cb_original.isChecked())// 是否显示原图控制按钮，如果设置为true则用户可以自由选择是否使用原图，压缩、裁剪功能将会失效
                         //.bindCustomPlayVideoCallback(new MyVideoSelectedPlayCallback(getContext()))// 自定义视频播放回调控制，用户可以使用自己的视频播放界面
-                        //.bindCustomCameraInterfaceListener(new MyPictureSelectorInterfaceListener())// 提供给用户的一些额外的自定义操作回调
+                        //.bindCustomPreviewCallback(new MyCustomPreviewInterfaceListener())// 自定义图片预览回调接口
+                        //.bindCustomCameraInterfaceListener(new MyCustomCameraInterfaceListener())// 提供给用户的一些额外的自定义操作回调
                         //.cameraFileName(System.currentTimeMillis() +".jpg")    // 重命名拍照文件名、如果是相册拍照则内部会自动拼上当前时间戳防止重复，注意这个只在使用相机时可以使用，如果使用相机又开启了压缩或裁剪 需要配合压缩和裁剪文件名api
                         //.renameCompressFile(System.currentTimeMillis() +".jpg")// 重命名压缩文件名、 如果是多张压缩则内部会自动拼上当前时间戳防止重复
                         //.renameCropFileName(System.currentTimeMillis() + ".jpg")// 重命名裁剪文件名、 如果是多张裁剪则内部会自动拼上当前时间戳防止重复
@@ -478,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .isGif(cb_isGif.isChecked())// 是否显示gif图片
                         .freeStyleCropEnabled(cb_styleCrop.isChecked())// 裁剪框是否可拖拽
                         .circleDimmedLayer(cb_crop_circular.isChecked())// 是否圆形裁剪
-                        //.setCircleDimmedColor(ContextCompat.getColor(getContext(), R.color.app_color_white))// 设置圆形裁剪背景色值
+                        //.setCropDimmedColor(ContextCompat.getColor(getContext(), R.color.app_color_white))// 设置裁剪背景色值
                         //.setCircleDimmedBorderColor(ContextCompat.getColor(getApplicationContext(), R.color.app_color_white))// 设置圆形裁剪边框色值
                         //.setCircleStrokeWidth(3)// 设置圆形裁剪边框粗细
                         .showCropFrame(cb_showCropFrame.isChecked())// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
@@ -489,10 +495,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //.videoMinSecond(10)// 查询多少秒以内的视频
                         //.videoMaxSecond(15)// 查询多少秒以内的视频
                         //.recordVideoSecond(10)//录制视频秒数 默认60s
-                        .isPreviewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
+                        //.isPreviewEggs(true)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
                         //.cropCompressQuality(90)// 注：已废弃 改用cutOutQuality()
                         .cutOutQuality(90)// 裁剪输出质量 默认100
-                        .minimumCompressSize(100)// 小于100kb的图片不压缩
+                        .minimumCompressSize(100)// 小于多少kb的图片不压缩
                         //.cropWH()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                         //.cropImageWideHigh()// 裁剪宽高比，设置如果大于图片本身宽高则无效
                         //.rotateEnabled(false) // 裁剪是否可旋转图片
@@ -514,6 +520,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //.setOutputCameraPath()// 自定义相机输出目录，只针对Android Q以下，例如 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) +  File.separator + "Camera" + File.separator;
                         .minSelectNum(1)// 最小选择数量
                         //.querySpecifiedFormatSuffix(PictureMimeType.ofPNG())// 查询指定后缀格式资源
+                        .closeAndroidQChangeWH(true)//如果图片有旋转角度则对换宽高，默认为true
+                        .closeAndroidQChangeVideoWH(!SdkVersionUtils.checkedAndroid_Q())// 如果视频有旋转角度则对换宽高，默认false
                         .selectionMode(cb_choose_mode.isChecked() ?
                                 PictureConfig.MULTIPLE : PictureConfig.SINGLE)// 多选 or 单选
                         //.cameraFileName(System.currentTimeMillis() + ".jpg")// 使用相机时保存至本地的文件名称,注意这个只在拍照时可以使用
@@ -541,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .showCropGrid(cb_showCropGrid.isChecked())// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
                         .isOpenClickSound(cb_voice.isChecked())// 是否开启点击声音
                         .selectionData(mAdapter.getData())// 是否传入已选图片
-                        .isPreviewEggs(false)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
+                        //.isPreviewEggs(true)// 预览图片时 是否增强左右滑动图片体验(图片滑动一半即可看到上一张是否选中)
                         //.cropCompressQuality(90)// 废弃 改用cutOutQuality()
                         .cutOutQuality(90)// 裁剪输出质量 默认100
                         .minimumCompressSize(100)// 小于100kb的图片不压缩
@@ -597,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 自定义播放逻辑处理，用户可以自己实现播放界面
      */
-    private static class MyVideoSelectedPlayCallback implements OnVideoSelectedPlayCallback {
+    private static class MyVideoSelectedPlayCallback implements OnVideoSelectedPlayCallback<LocalMedia> {
         private WeakReference<Context> mContextWeakReference;
         private Context context;
 
@@ -616,17 +624,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
+     * 自定义预览图片接口
+     */
+    private static class MyCustomPreviewInterfaceListener implements OnCustomImagePreviewCallback<LocalMedia> {
+
+        @Override
+        public void onCustomPreviewCallback(Context context, List<LocalMedia> previewData, int currentPosition) {
+            // TODO context特指PictureSelectorActivity
+            if (previewData != null && previewData.size() > 0) {
+                LocalMedia currentLocalMedia = previewData.get(currentPosition);
+                if (currentLocalMedia != null) {
+
+                }
+            }
+        }
+    }
+
+    /**
      * PictureSelector自定义的一些回调接口
      */
-    private static class MyPictureSelectorInterfaceListener implements OnCustomCameraInterfaceListener {
+    private static class MyCustomCameraInterfaceListener implements OnCustomCameraInterfaceListener {
 
         @Override
         public void onCameraClick(Context context, PictureSelectionConfig config, int type) {
             // TODO  必须使用context.startActivityForResult(activity.class,PictureConfig.REQUEST_CAMERA);
-
+            // TODO  为防止拍照内存不足导致Activity被回收的情况，最好把config类通过bundle.putParcelable(PictureConfig.EXTRA_CONFIG,config);传入到用户自定义相机页面,拍照成功后在.setResult()带回来
             // TODO 注意:使用自定义相机时，需要设置PictureSelectionConfig ${config.cameraPath#config.cameraMimeType}
             //  1、config.cameraPath (文件输出路径)
             //  2、config.cameraMimeType (PictureMimeType.ofImage() or ofVideo)
+
             switch (type) {
                 case PictureConfig.TYPE_IMAGE:
                     // 拍照
@@ -856,6 +882,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mPictureParameterStyle.pictureStatusBarColor = Color.parseColor("#393a3e");
         // 相册列表标题栏背景色
         mPictureParameterStyle.pictureTitleBarBackgroundColor = Color.parseColor("#393a3e");
+        // 相册父容器背景色
+        mPictureParameterStyle.pictureContainerBackgroundColor = ContextCompat.getColor(getContext(), R.color.app_color_black);
         // 相册列表标题栏右侧上拉箭头
         mPictureParameterStyle.pictureTitleUpResId = R.drawable.picture_icon_arrow_up;
         // 相册列表标题栏右侧下拉箭头

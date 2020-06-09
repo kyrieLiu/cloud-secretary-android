@@ -207,22 +207,19 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                 contentHolder.btnCheck.setOnClickListener(v -> {
                     if (config.isMaxSelectEnabledMask) {
                         if (!contentHolder.tvCheck.isSelected() && getSelectedSize() >= config.maxSelectNum) {
-                            showPromptDialog(context.getString(R.string.picture_message_max_num, config.maxSelectNum));
+                            String msg = StringUtils.getMsg(context, config.chooseMode == PictureMimeType.ofAll() ? null : image.getMimeType(), config.maxSelectNum);
+                            showPromptDialog(msg);
                             return;
                         }
                     }
                     // If the original path does not exist or the path does exist but the file does not exist
-                    String newPath = SdkVersionUtils.checkedAndroid_Q()
-                            ? PictureFileUtils.getPath(context, Uri.parse(path)) : path;
+                    String newPath = image.getRealPath();
                     if (!TextUtils.isEmpty(newPath) && !new File(newPath).exists()) {
                         ToastUtils.s(context, PictureMimeType.s(context, mimeType));
                         return;
                     }
-                    if (SdkVersionUtils.checkedAndroid_Q()) {
-                        image.setRealPath(newPath);
-                    }
                     // The width and height of the image are reversed if there is rotation information
-                    MediaUtils.setOrientationAsynchronous(context, image, null);
+                    MediaUtils.setOrientationAsynchronous(context, image, config.isAndroidQChangeWH, config.isAndroidQChangeVideoWH, null);
                     changeCheckboxState(contentHolder, image);
                 });
             }
@@ -233,8 +230,7 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 }
                 // If the original path does not exist or the path does exist but the file does not exist
-                String newPath = SdkVersionUtils.checkedAndroid_Q()
-                        ? PictureFileUtils.getPath(context, Uri.parse(path)) : path;
+                String newPath = image.getRealPath();
                 if (!TextUtils.isEmpty(newPath) && !new File(newPath).exists()) {
                     ToastUtils.s(context, PictureMimeType.s(context, mimeType));
                     return;
@@ -243,11 +239,8 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                 if (index == -1) {
                     return;
                 }
-                if (SdkVersionUtils.checkedAndroid_Q()) {
-                    image.setRealPath(newPath);
-                }
                 // The width and height of the image are reversed if there is rotation information
-                MediaUtils.setOrientationAsynchronous(context, image, null);
+                MediaUtils.setOrientationAsynchronous(context, image, config.isAndroidQChangeWH, config.isAndroidQChangeVideoWH, null);
                 boolean eqResult =
                         PictureMimeType.isHasImage(mimeType) && config.enablePreview
                                 || PictureMimeType.isHasVideo(mimeType) && (config.enPreviewVideo

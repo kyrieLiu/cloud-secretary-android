@@ -246,52 +246,14 @@ public final class LocalMediaPageLoader {
      * @return
      */
     public void loadPageMediaData(long bucketId, int page, int limit, int pageSize, OnQueryDataResultListener listener) {
-        PictureThreadUtils.executeBySingle(new PictureThreadUtils.SimpleTask<MediaData>() {
+        PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<MediaData>() {
 
             @Override
             public MediaData doInBackground() {
                 Cursor data = null;
                 try {
-                    //String orderBy = page == -1 ? MediaStore.Files.FileColumns._ID + " DESC" : MediaStore.Files.FileColumns._ID + " DESC limit " + limit + " offset " + (page - 1) * pageSize;
-                    String orderBy="_id DESC limit 60 offset 0";
-                    Uri QUERY = MediaStore.Files.getContentUri("external");
-//                     String[] PROJECTION= {
-//                            MediaStore.Files.FileColumns._ID,
-//                            MediaStore.MediaColumns.DATA,
-//                            MediaStore.MediaColumns.MIME_TYPE,
-//                            MediaStore.MediaColumns.WIDTH,
-//                            MediaStore.MediaColumns.HEIGHT,
-//                            MediaStore.MediaColumns.SIZE,
-//                            MediaStore.MediaColumns.DISPLAY_NAME,
-//                            COLUMN_BUCKET_ID};
-                    String[] PROJECTION= {
-                            MediaStore.Files.FileColumns._ID,
-                            MediaStore.MediaColumns.DATA,
-                            MediaStore.MediaColumns.MIME_TYPE,
-                            MediaStore.MediaColumns.WIDTH,
-                            MediaStore.MediaColumns.HEIGHT,
-                            MediaStore.MediaColumns.DURATION,
-                            MediaStore.MediaColumns.SIZE,
-                            MediaStore.MediaColumns.BUCKET_DISPLAY_NAME,
-                            MediaStore.MediaColumns.DISPLAY_NAME,
-                            "bucket_id"};
-
-                     String select="(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
-                             + (" AND " + MediaStore.MediaColumns.MIME_TYPE + "!='image/gif' AND mime_type!='image/*'")
-                             + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? AND 0 < duration and duration <= 9223372036854775807" +
-                             ") AND " + MediaStore.MediaColumns.SIZE + ">0";
-                     String[]  args=new String[]{
-                             String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-                             String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-                     };
-
-                     Log.d("tag","select=="+select);
-                     Log.d("tag","args=="+args);
-                     Log.d("tag","orderBy=="+orderBy);
-                     Log.d("tag","config.isGif=="+NOT_GIF);
-                     Log.d("tag","getDurationCondition(0,0) =="+getDurationCondition(0,0) );
-
-                    data = mContext.getContentResolver().query(QUERY, PROJECTION, select, args, orderBy);
+                    String orderBy = page == -1 ? MediaStore.Files.FileColumns._ID + " DESC" : MediaStore.Files.FileColumns._ID + " DESC limit " + limit + " offset " + (page - 1) * pageSize;
+                    data = mContext.getContentResolver().query(QUERY_URI, PROJECTION_PAGE, getPageSelection(bucketId), getPageSelectionArgs(bucketId), orderBy);
                     if (data != null) {
                         List<LocalMedia> result = new ArrayList<>();
                         if (data.getCount() > 0) {
@@ -300,12 +262,13 @@ public final class LocalMediaPageLoader {
                                 long id = data.getLong
                                         (data.getColumnIndexOrThrow(PROJECTION_PAGE[0]));
 
-                                String url = SdkVersionUtils.checkedAndroid_Q() ? getRealPathAndroid_Q(id) : data.getString
+                                String absolutePath = data.getString
                                         (data.getColumnIndexOrThrow(PROJECTION_PAGE[1]));
 
+                                String url = SdkVersionUtils.checkedAndroid_Q() ? getRealPathAndroid_Q(id) : absolutePath;
+
                                 if (config.isFilterInvalidFile) {
-                                    boolean isFileExists = PictureFileUtils.isFileExists(mContext, url);
-                                    if (!isFileExists) {
+                                    if (!PictureFileUtils.isFileExists(absolutePath)) {
                                         continue;
                                     }
                                 }
@@ -317,7 +280,6 @@ public final class LocalMediaPageLoader {
                                 // which makes it impossible to distinguish the specific type, such as mi 8,9,10 and other models
                                 if (mimeType.endsWith("image/*")) {
                                     if (PictureMimeType.isContent(url)) {
-                                        String absolutePath = PictureFileUtils.getPath(mContext, Uri.parse(url));
                                         mimeType = PictureMimeType.getImageMimeType(absolutePath);
                                     } else {
                                         mimeType = PictureMimeType.getImageMimeType(url);
@@ -329,8 +291,6 @@ public final class LocalMediaPageLoader {
                                         }
                                     }
                                 }
-                                String path = data.getString(data.getColumnIndex(MediaStore.Images.Media.DATA));
-                                Log.d("tag","path==="+path);
                                 int width = data.getInt
                                         (data.getColumnIndexOrThrow(PROJECTION_PAGE[3]));
 
@@ -378,7 +338,8 @@ public final class LocalMediaPageLoader {
                                 }
 
                                 LocalMedia image = new LocalMedia
-                                        (id, url, fileName, folderName, duration, config.chooseMode, mimeType, width, height, size, bucket_id);
+                                        (id, url, absolutePath, fileName, folderName, duration, config.chooseMode, mimeType, width, height, size, bucket_id);
+
                                 result.add(image);
 
                             } while (data.moveToNext());
@@ -412,7 +373,7 @@ public final class LocalMediaPageLoader {
      * @param listener
      */
     public void loadAllMedia(OnQueryDataResultListener listener) {
-        PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<List<LocalMediaFolder>>() {
+        PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<List<LocalMediaFolder>>() {
             @Override
             public List<LocalMediaFolder> doInBackground() {
                 Cursor data = mContext.getContentResolver().query(QUERY_URI,
@@ -543,6 +504,7 @@ public final class LocalMediaPageLoader {
 
     private String getPageSelection(long bucketId) {
         String durationCondition = getDurationCondition(0, 0);
+        boolean isSpecifiedFormat = !TextUtils.isEmpty(config.specifiedFormat);
         switch (config.chooseMode) {
             case PictureConfig.TYPE_ALL:
                 if (bucketId == -1) {
@@ -557,14 +519,24 @@ public final class LocalMediaPageLoader {
                         + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? AND " + durationCondition + ") AND " + COLUMN_BUCKET_ID + "=? AND " + MediaStore.MediaColumns.SIZE + ">0";
 
             case PictureConfig.TYPE_IMAGE:
+                // Gets the image of the specified type
                 if (bucketId == -1) {
                     // ofAll
+                    if (isSpecifiedFormat) {
+                        return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+                                + (config.isGif ? "" : " AND " + MediaStore.MediaColumns.MIME_TYPE + NOT_GIF + " AND " + MediaStore.MediaColumns.MIME_TYPE + "='" + config.specifiedFormat + "'")
+                                + ") AND " + MediaStore.MediaColumns.SIZE + ">0";
+                    }
                     return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                             + (config.isGif ? "" : " AND " + MediaStore.MediaColumns.MIME_TYPE + NOT_GIF)
                             + ") AND " + MediaStore.MediaColumns.SIZE + ">0";
-
                 }
                 // Gets the specified album directory
+                if (isSpecifiedFormat) {
+                    return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
+                            + (config.isGif ? "" : " AND " + MediaStore.MediaColumns.MIME_TYPE + NOT_GIF + " AND " + MediaStore.MediaColumns.MIME_TYPE + "='" + config.specifiedFormat + "'")
+                            + ") AND " + COLUMN_BUCKET_ID + "=? AND " + MediaStore.MediaColumns.SIZE + ">0";
+                }
                 return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=?"
                         + (config.isGif ? "" : " AND " + MediaStore.MediaColumns.MIME_TYPE + NOT_GIF)
                         + ") AND " + COLUMN_BUCKET_ID + "=? AND " + MediaStore.MediaColumns.SIZE + ">0";
@@ -572,9 +544,15 @@ public final class LocalMediaPageLoader {
             case PictureConfig.TYPE_AUDIO:
                 if (bucketId == -1) {
                     // ofAll
+                    if (isSpecifiedFormat) {
+                        return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? AND " + MediaStore.MediaColumns.MIME_TYPE + "='" + config.specifiedFormat + "'" + " AND " + durationCondition + ") AND " + MediaStore.MediaColumns.SIZE + ">0";
+                    }
                     return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? AND " + durationCondition + ") AND " + MediaStore.MediaColumns.SIZE + ">0";
                 }
                 // Gets the specified album directory
+                if (isSpecifiedFormat) {
+                    return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? AND " + MediaStore.MediaColumns.MIME_TYPE + "='" + config.specifiedFormat + "'" + " AND " + durationCondition + ") AND " + COLUMN_BUCKET_ID + "=? AND " + MediaStore.MediaColumns.SIZE + ">0";
+                }
                 return "(" + MediaStore.Files.FileColumns.MEDIA_TYPE + "=? AND " + durationCondition + ") AND " + COLUMN_BUCKET_ID + "=? AND " + MediaStore.MediaColumns.SIZE + ">0";
         }
         return null;

@@ -310,12 +310,12 @@ public class MediaUtils {
         try {
             //selection: 指定查询条件
             String absolutePath = PictureFileUtils.getDCIMCameraPath();
-            String ORDER_BY = MediaStore.Files.FileColumns._ID + " DESC";
+            String orderBy = MediaStore.Files.FileColumns._ID + " DESC limit 1 offset 0";
             String selection = MediaStore.Images.Media.DATA + " like ?";
             //定义selectionArgs：
             String[] selectionArgs = {absolutePath + "%"};
             data = context.getApplicationContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null,
-                    selection, selectionArgs, ORDER_BY);
+                    selection, selectionArgs, orderBy);
             if (data != null && data.getCount() > 0 && data.moveToFirst()) {
                 int id = data.getInt(data.getColumnIndex(MediaStore.Images.Media._ID));
                 long date = data.getLong(data.getColumnIndex(MediaStore.Images.Media.DATE_ADDED));
@@ -345,12 +345,12 @@ public class MediaUtils {
         try {
             String absolutePath = PictureFileUtils.getDCIMCameraPath();
             //selection: 指定查询条件
-            String ORDER_BY = MediaStore.Files.FileColumns._ID + " DESC";
             String selection = MediaStore.Files.FileColumns.DATA + " like ?";
             //定义selectionArgs：
             String[] selectionArgs = {absolutePath + "%"};
+            String orderBy = MediaStore.Files.FileColumns._ID + " DESC limit 1 offset 0";
             data = context.getApplicationContext().getContentResolver().query(MediaStore.Files.getContentUri("external"), null,
-                    selection, selectionArgs, ORDER_BY);
+                    selection, selectionArgs, orderBy);
             if (data != null && data.getCount() > 0 && data.moveToFirst()) {
                 return data.getLong(data.getColumnIndex("bucket_id"));
             }
@@ -479,18 +479,33 @@ public class MediaUtils {
      *
      * @param context
      * @param media
+     * @param isAndroidQChangeWH
      * @param listener
      * @return
      */
     public static void setOrientationAsynchronous(Context context, LocalMedia media,
+                                                  boolean isAndroidQChangeWH,
+                                                  boolean isAndroidQChangeVideoWH,
                                                   OnCallbackListener<LocalMedia> listener) {
+        if (PictureMimeType.isHasImage(media.getMimeType())) {
+            if (!isAndroidQChangeWH) {
+                return;
+            }
+        }
+
+        if (PictureMimeType.isHasVideo(media.getMimeType())) {
+            if (!isAndroidQChangeVideoWH) {
+                return;
+            }
+        }
+
         if (media.getOrientation() != -1) {
             if (listener != null) {
                 listener.onCall(media);
             }
             return;
         }
-        PictureThreadUtils.executeByCached(new PictureThreadUtils.SimpleTask<Integer>() {
+        PictureThreadUtils.executeByIo(new PictureThreadUtils.SimpleTask<Integer>() {
 
             @Override
             public Integer doInBackground() {
@@ -529,9 +544,22 @@ public class MediaUtils {
      *
      * @param context
      * @param media
+     * @param isAndroidQChangeWH
      * @return
      */
-    public static void setOrientationSynchronous(Context context, LocalMedia media) {
+    public static void setOrientationSynchronous(Context context, LocalMedia media,
+                                                 boolean isAndroidQChangeWH,
+                                                 boolean isAndroidQChangeVideoWH) {
+        if (PictureMimeType.isHasImage(media.getMimeType())) {
+            if (!isAndroidQChangeWH) {
+                return;
+            }
+        }
+        if (PictureMimeType.isHasVideo(media.getMimeType())) {
+            if (!isAndroidQChangeVideoWH) {
+                return;
+            }
+        }
         // 如果有旋转信息图片宽高则是相反
         int orientation = 0;
         if (PictureMimeType.isHasImage(media.getMimeType())) {
