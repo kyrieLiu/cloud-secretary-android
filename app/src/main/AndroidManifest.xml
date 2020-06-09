@@ -50,11 +50,7 @@
         <activity
             android:name="com.luck.cloud.MainActivity"
             >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.luck.cloud.PhotoFragmentActivity"
@@ -66,7 +62,11 @@
             android:screenOrientation="fullSensor" />
         <activity
             android:name="com.luck.cloud.function.home.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".common.activity.PropertyServiceStandardSearchActivity" />
         <activity android:name=".function.office.OfficeActivity" />
