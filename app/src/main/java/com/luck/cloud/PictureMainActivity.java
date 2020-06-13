@@ -67,9 +67,9 @@ import java.util.List;
  * @描述: Demo
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+public class PictureMainActivity extends AppCompatActivity implements View.OnClickListener,
         RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener {
-    private final static String TAG = MainActivity.class.getSimpleName();
+    private final static String TAG = PictureMainActivity.class.getSimpleName();
     private GridImageAdapter mAdapter;
     private int maxSelectNum = 9;
     private TextView tv_select_num;
@@ -191,14 +191,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (mediaType) {
                     case PictureConfig.TYPE_VIDEO:
                         // 预览视频
-                        PictureSelector.create(MainActivity.this)
+                        PictureSelector.create(PictureMainActivity.this)
                                 .themeStyle(R.style.picture_default_style)
                                 .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
                                 .externalPictureVideo(TextUtils.isEmpty(media.getAndroidQToPath()) ? media.getPath() : media.getAndroidQToPath());
                         break;
                     case PictureConfig.TYPE_AUDIO:
                         // 预览音频
-                        PictureSelector.create(MainActivity.this)
+                        PictureSelector.create(PictureMainActivity.this)
                                 .externalPictureAudio(PictureMimeType.isContent(media.getPath()) ? media.getAndroidQToPath() : media.getPath());
                         break;
                     default:
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                        PictureWindowAnimationStyle animationStyle = new PictureWindowAnimationStyle();
 //                        animationStyle.activityPreviewEnterAnimation = R.anim.picture_anim_up_in;
 //                        animationStyle.activityPreviewExitAnimation = R.anim.picture_anim_down_out;
-                        PictureSelector.create(MainActivity.this)
+                        PictureSelector.create(PictureMainActivity.this)
                                 .themeStyle(R.style.picture_default_style) // xml设置主题
                                 .setPictureStyle(mPictureParameterStyle)// 动态自定义相册主题
                                 //.setPictureWindowAnimationStyle(animationStyle)// 自定义页面启动动画
@@ -422,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             boolean mode = cb_mode.isChecked();
             if (mode) {
                 // 进入相册 以下是例子：不需要的api可以不写
-                PictureSelector.create(MainActivity.this)
+                PictureSelector.create(PictureMainActivity.this)
                         .openGallery(chooseMode)// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
                         .imageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
                         .theme(themeId)// 主题样式设置 具体参考 values/styles   用法：R.style.picture.white.style v2.3.3后 建议使用setPictureStyle()动态方式
@@ -508,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .forResult(new MyResultCallback(mAdapter));
             } else {
                 // 单独拍照
-                PictureSelector.create(MainActivity.this)
+                PictureSelector.create(PictureMainActivity.this)
                         .openCamera(chooseMode)// 单独拍照，也可录像或也可音频 看你传入的类型是图片or视频
                         .theme(themeId)// 主题样式设置 具体参考 values/styles
                         .imageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
@@ -1350,7 +1350,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                         PictureFileUtils.deleteCacheDirFile(getContext(), PictureMimeType.ofImage());
                     } else {
-                        Toast.makeText(MainActivity.this,
+                        Toast.makeText(PictureMainActivity.this,
                                 getString(R.string.picture_jurisdiction), Toast.LENGTH_SHORT).show();
                     }
                 }

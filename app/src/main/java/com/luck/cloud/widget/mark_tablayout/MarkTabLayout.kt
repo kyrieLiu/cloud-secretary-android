@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.app.ActionBar
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.TypedArray
@@ -14,16 +15,6 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.os.Build
-import android.support.annotation.*
-import android.support.design.widget.TabLayout
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.util.Pools
-import android.support.v4.view.*
-import android.support.v4.view.ViewPager.*
-import android.support.v4.view.animation.FastOutSlowInInterpolator
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.app.ActionBar
-import android.support.v7.content.res.AppCompatResources
 import android.text.Layout
 import android.text.TextUtils
 import android.util.AttributeSet
@@ -32,8 +23,21 @@ import android.view.*
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.*
+import androidx.annotation.*
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.util.Pools
+import androidx.core.view.GravityCompat
+import androidx.core.view.PointerIconCompat
+import androidx.core.view.ViewCompat
+import androidx.core.widget.TextViewCompat
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.*
 import com.boda.xinyuan.widgets.mark_tablayout.MarkTab
-import com.jingkai.asset.R
+import com.google.android.material.tabs.TabLayout
+import com.luck.cloud.R
 import java.lang.ref.WeakReference
 import kotlin.math.max
 import kotlin.math.min
@@ -197,10 +201,10 @@ class MarkTabLayout(ctx: Context, attrs: AttributeSet) : HorizontalScrollView(ct
 
         tabTextAppearance = a.getResourceId(R.styleable.MarkTabLayout_fTabTextAppearance, R.style.TabTextAppearence)
 
-        val ta = context.obtainStyledAttributes(tabTextAppearance, android.support.v7.appcompat.R.styleable.TextAppearance)
+        val ta = context.obtainStyledAttributes(tabTextAppearance, R.styleable.TextAppearance)
         try {
-            tabTextSize = ta.getDimensionPixelSize(android.support.v7.appcompat.R.styleable.TextAppearance_android_textSize, 0).toFloat()
-            tabTextColors = getColorStateList(context, ta, android.support.v7.appcompat.R.styleable.TextAppearance_android_textColor)
+            tabTextSize = ta.getDimensionPixelSize(R.styleable.TextAppearance_android_textSize, 0).toFloat()
+            tabTextColors = getColorStateList(context, ta, R.styleable.TextAppearance_android_textColor)
         } finally {
             ta.recycle()
         }

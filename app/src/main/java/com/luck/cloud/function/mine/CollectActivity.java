@@ -7,18 +7,13 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
-import com.luck.cloud.MainActivity;
+import com.luck.cloud.PictureMainActivity;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
-import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
-import com.luck.cloud.common.entity.RequestBean;
 import com.luck.cloud.config.RxConstant;
-import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.manager.RxManager;
-import com.luck.cloud.network.OKHttpManager;
-import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
@@ -78,7 +73,7 @@ public class CollectActivity extends BaseActivity {
         waitDoneAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent=new Intent(CollectActivity.this,MainActivity.class);
+                Intent intent=new Intent(CollectActivity.this, PictureMainActivity.class);
                 startActivity(intent);
             }
         });

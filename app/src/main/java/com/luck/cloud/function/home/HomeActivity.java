@@ -4,31 +4,22 @@ import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,65 +28,38 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.luck.cloud.GlideEngine;
-import com.luck.cloud.MainActivity;
 import com.luck.cloud.R;
-import com.luck.cloud.adapter.GridImageAdapter;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.common.activity.PropertyServiceStandardSearchActivity;
 import com.luck.cloud.common.entity.RequestBean;
-import com.luck.cloud.common.helper.CodePermissionHelper;
-import com.luck.cloud.common.helper.FileCommitModel;
-import com.luck.cloud.common.helper.PermissionCode;
-import com.luck.cloud.config.AppConstants;
-import com.luck.cloud.config.RxConstant;
 import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.mine.HomeWaitDoneAdapter;
 import com.luck.cloud.function.mine.MineActivity;
 import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.function.office.OfficeActivity;
-import com.luck.cloud.manager.RxManager;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.GlideImageLoader;
-import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.ToastUtil;
-import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.MeasureRecyclerView;
-import com.luck.cloud.widget.MyScrollView;
 import com.luck.cloud.widget.view.LoadExceptionView;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.animators.AnimationType;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.config.PictureMimeType;
-import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.listener.OnResultCallbackListener;
-import com.luck.picture.lib.style.PictureCropParameterStyle;
-import com.luck.picture.lib.style.PictureParameterStyle;
-import com.luck.picture.lib.style.PictureWindowAnimationStyle;
-import com.pixplicity.sharp.OnSvgElementListener;
-import com.pixplicity.sharp.Sharp;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import rx.functions.Action1;
 
+import static android.content.Context.LOCATION_SERVICE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
@@ -103,7 +67,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
  * <p>
  * Describe 首页
  */
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseFragment {
     //功能菜单列表
     @Bind(R.id.rv_home_function_menu)
     RecyclerView mRvMenu;
@@ -139,24 +103,15 @@ public class HomeActivity extends BaseActivity {
 
 
     @Override
-    protected void back() {
-        finish();
-    }
-
-    @Override
-    protected int getContentViewId() {
+    protected int getContentId() {
         return R.layout.fragment_home;
     }
 
     @Override
     protected void initView(Bundle bundle) {
-        //将导航栏设置为透明色
-        if (Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+
     }
+
 
     @Override
     protected void loadData() {
@@ -197,8 +152,8 @@ public class HomeActivity extends BaseActivity {
             model.setColor(colors[i]);
             list.add(model);
         }
-        HomeMenuAdapter adapter = new HomeMenuAdapter(list, this);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        HomeMenuAdapter adapter = new HomeMenuAdapter(list, getContext());
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         mRvMenu.setLayoutManager(layoutManager);
         mRvMenu.setAdapter(adapter);
 
@@ -211,7 +166,7 @@ public class HomeActivity extends BaseActivity {
                         openDing("com.alibaba.android.rimet");
                         break;
                     default:
-                        Intent intent=new Intent(HomeActivity.this, OfficeActivity.class);
+                        Intent intent=new Intent(getContext(), OfficeActivity.class);
                         startActivity(intent);
                         break;
                 }
@@ -220,7 +175,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void openDing(String packageName) {
-        PackageManager packageManager = this.getPackageManager();
+        PackageManager packageManager = getActivity().getPackageManager();
         PackageInfo pi = null;
         try {
             pi = packageManager.getPackageInfo("com.alibaba.android.rimet", 0);
@@ -281,8 +236,8 @@ public class HomeActivity extends BaseActivity {
      * 初始化列表
      */
     private void initInformations() {
-        waitDoneAdapter = new ScienceAdapter(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        waitDoneAdapter = new ScienceAdapter(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRvWaitDone.setLayoutManager(layoutManager);
         mRvWaitDone.setAdapter(waitDoneAdapter);
         mRvWaitDone.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
@@ -343,11 +298,11 @@ public class HomeActivity extends BaseActivity {
         Intent intent=new Intent();
         switch (view.getId()) {
             case R.id.iv_home_mine:
-              intent.setClass(this, MineActivity.class);
+              intent.setClass(getContext(), MineActivity.class);
               startActivity(intent);
                 break;
             case R.id.main_search:
-                intent.setClass(this, PropertyServiceStandardSearchActivity.class);
+                intent.setClass(getContext(), PropertyServiceStandardSearchActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -378,11 +333,6 @@ public class HomeActivity extends BaseActivity {
     }
 
 
-    public Context getContext() {
-        return this;
-    }
-
-
 
     /**
      * 检测GPS、位置权限是否开启
@@ -391,13 +341,13 @@ public class HomeActivity extends BaseActivity {
     public void showGPSContacts() {
 
         //得到系统的位置服务，判断GPS是否激活
-        lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        lm = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
         boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (ok) {//开了定位服务
             if (Build.VERSION.SDK_INT >= 23) { //判断是否为android6.0系统版本，如果是，需要动态添加权限
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                         != PERMISSION_GRANTED) {// 没有权限，申请权限。
-                    ActivityCompat.requestPermissions(this, LOCATIONGPS, BAIDU_READ_PHONE_STATE);
+                    ActivityCompat.requestPermissions(getActivity(), LOCATIONGPS, BAIDU_READ_PHONE_STATE);
                 } else {
                     startLocation();
                 }
@@ -405,7 +355,7 @@ public class HomeActivity extends BaseActivity {
                 startLocation();
             }
         } else {
-            Toast.makeText(this, "系统检测到未开启GPS定位服务,请开启", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "系统检测到未开启GPS定位服务,请开启", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent();
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivityForResult(intent, PRIVATE_CODE);
@@ -426,7 +376,7 @@ public class HomeActivity extends BaseActivity {
                     startLocation();
                 } else {
 
-                    Toast.makeText(this, "你未开启定位权限!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "你未开启定位权限!", Toast.LENGTH_SHORT).show();
 
                 }
                 break;
@@ -437,7 +387,7 @@ public class HomeActivity extends BaseActivity {
 
     private void startLocation(){
         //初始化定位
-        mLocationClient = new AMapLocationClient(getApplicationContext());
+        mLocationClient = new AMapLocationClient(getActivity().getApplicationContext());
         //设置定位回调监听
         mLocationClient.setLocationListener(new AMapLocationListener() {
             @Override

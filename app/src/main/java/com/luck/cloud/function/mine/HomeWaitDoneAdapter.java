@@ -1,23 +1,16 @@
 package com.luck.cloud.function.mine;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 
-import com.luck.cloud.MainActivity;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
 
 import java.util.List;
-
-import butterknife.Bind;
 
 /**
  * Created by liuyin on 2019/2/27 15:19

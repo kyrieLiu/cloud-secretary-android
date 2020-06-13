@@ -5,8 +5,8 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.jingkai.asset.widget.xrecycler.XRecyclerView
+    <com.luck.cloud.widget.xrecycler.XRecyclerView
         android:id="@+id/xrv_common_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.jingkai.asset.widget.xrecycler.XRecyclerView>
+        android:layout_height="wrap_content"></com.luck.cloud.widget.xrecycler.XRecyclerView>
 </LinearLayout>

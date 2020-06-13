@@ -48,7 +48,7 @@
             android:value="2.1" />
 
         <activity
-            android:name="com.luck.cloud.MainActivity"
+            android:name="com.luck.cloud.PictureMainActivity"
             >
 
         </activity>
@@ -61,7 +61,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="com.luck.cloud.function.home.HomeActivity">
+            android:name="com.luck.cloud.function.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

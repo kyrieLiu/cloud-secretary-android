@@ -3,7 +3,6 @@ package com.luck.cloud.function.login;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,9 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.luck.cloud.MainActivity;
+import com.luck.cloud.PictureMainActivity;
 import com.luck.cloud.R;
 import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseActivity;
@@ -137,7 +134,7 @@ public class LoginActivity extends BaseActivity {
         params.put("imageCode", "HACD");
 //        params.put("os", 2);
 //        params.put("idEntity", 2);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, PictureMainActivity.class);
         startActivity(intent);
         finish();
       /*  showRDialog();
@@ -174,7 +171,7 @@ public class LoginActivity extends BaseActivity {
         //存储权限CODE
         SpUtil.setPermissionCode(loginBean.getApiResource());
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, PictureMainActivity.class);
         startActivity(intent);
         finish();
     }

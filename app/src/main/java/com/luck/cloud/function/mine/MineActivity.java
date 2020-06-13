@@ -12,18 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.luck.cloud.MainActivity;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
-import com.luck.cloud.common.activity.PropertyServiceStandardSearchActivity;
-import com.luck.cloud.function.home.HomeActivity;
-import com.luck.cloud.function.home.HomeMenuAdapter;
 import com.luck.cloud.function.home.HomeMenuBean;
-import com.luck.cloud.function.office.OfficeActivity;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.pixplicity.sharp.OnSvgElementListener;
 import com.pixplicity.sharp.Sharp;
@@ -33,7 +27,6 @@ import java.util.List;
 import java.util.Random;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MineActivity extends BaseActivity {
