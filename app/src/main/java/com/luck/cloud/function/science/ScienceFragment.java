@@ -36,8 +36,6 @@ public class ScienceFragment extends BaseFragment {
     @Bind(R.id.vp_science_management)
     ViewPager mViewPager;
 
-    private RecommendFragment recommandFragment;
-
     private List<GardenInfoBean.ItemsBean> gardenList;
 
     private Context context;
@@ -111,15 +109,19 @@ public class ScienceFragment extends BaseFragment {
     private void setPageData(int id) {
         List<String> titleList = new ArrayList<>();
         List<Fragment> fragmentList = new ArrayList<>();
-        titleList.add("推荐");
-        titleList.add("要闻");
-        titleList.add("乡村振兴");
-        fragmentList.add(new RecommendFragment());
-        fragmentList.add(new RecommendFragment());
-        fragmentList.add(new RecommendFragment());
+        titleList.add("植物");
+        titleList.add("动物");
+        titleList.add("蒙医药");
+        titleList.add("种植技术");
+        titleList.add("农业前沿");
+        titleList.add("农药");
+        for (int i=0;i<titleList.size();i++){
+            fragmentList.add(new RecommendFragment());
+        }
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getContext(), getChildFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);
+        mMtlManagement.setTabMode(TabLayout.MODE_SCROLLABLE);
         mMtlManagement.setupWithViewPager(mViewPager);
 
     }

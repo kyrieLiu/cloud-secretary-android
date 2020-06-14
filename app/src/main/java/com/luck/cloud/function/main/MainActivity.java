@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -15,7 +14,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
-import com.luck.cloud.function.home.HomeActivity;
+import com.luck.cloud.function.home.HomeFragment;
+import com.luck.cloud.function.mine.MineFragment;
 import com.luck.cloud.function.science.ScienceFragment;
 import com.luck.cloud.manager.ActivitiesManager;
 
@@ -81,19 +81,15 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void loadData() {
         mFragments = new ArrayList<>();
-        //科普
-        HomeActivity scienceFragment = new HomeActivity();
-        mFragments.add(scienceFragment);
+        //首页
+        HomeFragment homeFragment = new HomeFragment();
+        mFragments.add(homeFragment);
 
-        //展示
+        //小云见证
         ScienceFragment showFragment = new ScienceFragment();
         mFragments.add(showFragment);
         //活动
-        ScienceFragment activeFragment = new ScienceFragment();
-        mFragments.add(activeFragment);
-
-        //我的
-        ScienceFragment mineFragment = new ScienceFragment();
+        MineFragment mineFragment = new MineFragment();
         mFragments.add(mineFragment);
 
         //开启事务

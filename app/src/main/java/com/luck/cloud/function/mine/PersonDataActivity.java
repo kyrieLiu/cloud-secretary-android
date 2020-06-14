@@ -1,38 +1,23 @@
 package com.luck.cloud.function.mine;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
 import com.luck.cloud.GlideEngine;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
-import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.common.activity.ModifyActivity;
 import com.luck.cloud.common.helper.FileCommitModel;
-import com.luck.cloud.config.AppConstants;
-import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.home.HomeActivity;
-import com.luck.cloud.manager.RxManager;
-import com.luck.cloud.network.OKHttpManager;
-import com.luck.cloud.utils.PermissionHelper;
-import com.luck.cloud.utils.SpUtil;
-import com.luck.cloud.utils.ToastUtil;
-import com.luck.cloud.utils.view.GlideCircleTransUtils;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.animators.AnimationType;
@@ -44,12 +29,10 @@ import com.luck.picture.lib.style.PictureCropParameterStyle;
 import com.luck.picture.lib.style.PictureParameterStyle;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import okhttp3.Request;
 
 /**
  * 个人资料

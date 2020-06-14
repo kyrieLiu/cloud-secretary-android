@@ -2,7 +2,6 @@ package com.luck.cloud.function.home;
 
 import android.Manifest;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -29,14 +28,12 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.luck.cloud.R;
-import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.common.activity.PropertyServiceStandardSearchActivity;
 import com.luck.cloud.common.entity.RequestBean;
 import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.mine.MineActivity;
 import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.function.office.OfficeActivity;
 import com.luck.cloud.network.OKHttpManager;
@@ -67,7 +64,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
  * <p>
  * Describe 首页
  */
-public class HomeActivity extends BaseFragment {
+public class HomeFragment extends BaseFragment {
     //功能菜单列表
     @Bind(R.id.rv_home_function_menu)
     RecyclerView mRvMenu;
@@ -140,7 +137,7 @@ public class HomeActivity extends BaseFragment {
      * 初始化功能菜单
      */
     private void initFunctionMenu() {
-        String menus[] = {"小云办公", "小云见证", "小云科普","小云活动","小云学习","小云交流"};
+        String menus[] = {"小云办公","小云学习", "小云科普","小云活动"};
         int icons[] = {R.raw.study, R.raw.science, R.raw.first_secretary,R.raw.witness,R.raw.practice,R.raw.dingding};
         int colors[] = {Color.rgb(253,67,78),Color.rgb(255,96,49),Color.rgb(255,152,82),
                 Color.rgb(0,132,245), Color.rgb(96,138,250),Color.rgb(160,118,250)};
@@ -153,7 +150,7 @@ public class HomeActivity extends BaseFragment {
             list.add(model);
         }
         HomeMenuAdapter adapter = new HomeMenuAdapter(list, getContext());
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 4);
         mRvMenu.setLayoutManager(layoutManager);
         mRvMenu.setAdapter(adapter);
 
@@ -293,14 +290,14 @@ public class HomeActivity extends BaseFragment {
 //        }, this);
     }
 
-    @OnClick({R.id.main_search,R.id.iv_home_mine})
+    @OnClick({R.id.main_search})
     public void click(View view) {
         Intent intent=new Intent();
         switch (view.getId()) {
-            case R.id.iv_home_mine:
-              intent.setClass(getContext(), MineActivity.class);
-              startActivity(intent);
-                break;
+//            case R.id.iv_home_mine:
+//              intent.setClass(getContext(), MineActivity.class);
+//              startActivity(intent);
+//                break;
             case R.id.main_search:
                 intent.setClass(getContext(), PropertyServiceStandardSearchActivity.class);
                 startActivity(intent);
