@@ -1,6 +1,10 @@
 package com.luck.cloud.function.mine;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -81,7 +85,8 @@ public class MineFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 HomeMenuBean bean = list.get(position);
                 switch (bean.getMenuName()) {
-                    case "":
+                    case "钉钉交流":
+                        openDing("com.alibaba.android.rimet");
                         break;
                     default:
                         Intent intent = new Intent(getContext(), CollectActivity.class);
@@ -90,6 +95,29 @@ public class MineFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    private void openDing(String packageName) {
+        PackageManager packageManager = getActivity().getPackageManager();
+        PackageInfo pi = null;
+        try {
+            pi = packageManager.getPackageInfo("com.alibaba.android.rimet", 0);
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
+        resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        resolveIntent.setPackage(pi.packageName);
+        List<ResolveInfo> apps = packageManager.queryIntentActivities(resolveIntent, 0);
+        ResolveInfo resolveInfo = apps.iterator().next();
+        if (resolveInfo != null ) {
+            String className = resolveInfo.activityInfo.name;
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ComponentName cn = new ComponentName(packageName, className);
+            intent.setComponent(cn);
+            this.startActivity(intent);
+        }
     }
 
     private void setPersonRightIcon() {
