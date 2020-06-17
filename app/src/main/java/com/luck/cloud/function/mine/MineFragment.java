@@ -109,7 +109,7 @@ public class MineFragment extends BaseFragment {
         resolveIntent.setPackage(pi.packageName);
         List<ResolveInfo> apps = packageManager.queryIntentActivities(resolveIntent, 0);
         ResolveInfo resolveInfo = apps.iterator().next();
-        if (resolveInfo != null ) {
+        if (resolveInfo != null) {
             String className = resolveInfo.activityInfo.name;
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);

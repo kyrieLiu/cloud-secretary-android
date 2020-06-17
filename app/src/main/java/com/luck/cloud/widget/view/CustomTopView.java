@@ -59,8 +59,8 @@ public class CustomTopView extends RelativeLayout {
         mTvTitle.setText(title);
         if (textSize != 0) mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
         mTvRightMenu.setText(rightMenu);
-        Sharp sharp= Sharp.loadResource(context.getResources(), R.raw.item_icon);
-        sharp.into(mIvIcon);
+//        Sharp sharp= Sharp.loadResource(context.getResources(), R.raw.item_icon);
+//        sharp.into(mIvIcon);
 //        if (titleBold) {
 //            TextPaint paint = mTvTitle.getPaint();
 //            paint.setFakeBoldText(true);

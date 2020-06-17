@@ -2,42 +2,50 @@ package com.luck.cloud.function.office;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
-import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
-import com.luck.cloud.callback.OnRecyclerLoadingListener;
-import com.luck.cloud.common.entity.RequestBean;
-import com.luck.cloud.config.RxConstant;
-import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.home.ScienceAdapter;
 import com.luck.cloud.function.home.SuperviseHandleBean;
-import com.luck.cloud.function.mine.HomeWaitDoneAdapter;
-import com.luck.cloud.function.mine.WaitDoneBean;
-import com.luck.cloud.manager.RxManager;
-import com.luck.cloud.network.OKHttpManager;
-import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
+import com.luck.cloud.widget.MeasureRecyclerView;
+import com.luck.cloud.widget.view.LoadExceptionView;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
-import com.luck.cloud.widget.xrecycler.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.functions.Action1;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class OfficeActivity extends BaseActivity {
 
-    @Bind(R.id.rv_common_list)
-    XRecyclerView mRvList;
-    private RxManager rxManager;
 
-    private ScienceAdapter<SuperviseHandleBean.ItemsBean> waitDoneAdapter;
+    @Bind(R.id.iv_office_head)
+    ImageView iveHead;
+    @Bind(R.id.tv_office_username)
+    TextView tvUsername;
+    @Bind(R.id.tv_office_performance)
+    TextView tvPerformance;
+    @Bind(R.id.rl_wait_done)
+    MeasureRecyclerView rlWaitDone;
+    @Bind(R.id.view_wait_done_warn)
+    LoadExceptionView viewWaitDoneWarn;
+    @Bind(R.id.ll_home_wait_done_parent)
+    LinearLayout llHomeWaitDoneParent;
+    @Bind(R.id.tv_office_village)
+    TextView tvVillage;
+    @Bind(R.id.tv_office_poverty)
+    TextView tvPoverty;
+
+    private ArrangeAdapter<SuperviseHandleBean.ItemsBean> arrangeAdapter;
 
     @Override
     protected void back() {
@@ -46,7 +54,7 @@ public class OfficeActivity extends BaseActivity {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.common_activity_list;
+        return R.layout.activity_office;
     }
 
     @Override
@@ -59,89 +67,46 @@ public class OfficeActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+        initArrange();
+    }
 
-        mRvList.setLoadingListener(new OnRecyclerLoadingListener() {
-
-            @Override
-            public void onRefresh() {
-                requestData(1);
-            }
-
-            @Override
-            public void onLoadMore(int reqPage) {
-                requestData(reqPage);
-            }
-        });
-        waitDoneAdapter = new ScienceAdapter(this);
+    /**
+     * 初始化列表
+     */
+    private void initArrange() {
+        arrangeAdapter = new ArrangeAdapter<>(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRvList.setLayoutManager(layoutManager);
-        mRvList.setAdapter(waitDoneAdapter);
-        mRvList.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
-        waitDoneAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
+        rlWaitDone.setLayoutManager(layoutManager);
+        rlWaitDone.setAdapter(arrangeAdapter);
+        rlWaitDone.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
+        arrangeAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
+
             }
         });
-        mRvList.refresh();
 
-        //观察督查督办验收和修缮审核
-        initObserver();
-    }
-
-    /**
-     * 观察督查督办验收和修缮审核
-     */
-    private void initObserver() {
-        rxManager = new RxManager();
-        rxManager.on(RxConstant.RX_SUPERVISE_ACCEPT, new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                requestData(1);
-            }
-        });
-        rxManager.on(RxConstant.RX_REPAIR_CHECK, new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                requestData(1);
-            }
-        });
-    }
-
-    /**
-     * 请求待办事项列表数据
-     *
-     * @param page
-     */
-    private void requestData(final int page) {
+        // requestWaitDone();
         List<SuperviseHandleBean.ItemsBean> list = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            list.add(new SuperviseHandleBean.ItemsBean());
+        for (int i = 0; i < 3; i++) {
+            SuperviseHandleBean.ItemsBean bean = new SuperviseHandleBean.ItemsBean();
+            list.add(bean);
         }
-        waitDoneAdapter.setSuccessReqList(list, 13, page, mRvList,"暂无推荐内容");
-//        final RequestBean request = initRequestParams();
-//        request.getPageable().setCurrent(page);
-//        showRDialog();
-//        OKHttpManager.postJsonRequest(URLConstant.WAIT_DONE_MORE, request, new OKHttpManager.ResultCallback<BaseBean<WaitDoneBean>>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                hideRDialog();
-//                ToastUtil.toastShortCenter(message);
-//                waitDoneAdapter.setErrorReqList(message, mRvList);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean<WaitDoneBean> response) {
-//                hideRDialog();
-//                final List<WaitDoneBean.ItemsBean> list = response.getData().getItems();
-//                waitDoneAdapter.setSuccessReqList(list, request.getPageable().getSize(), page, mRvList, "暂无待办事项");
-//            }
-//        }, this);
+        arrangeAdapter.setList(list);
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        rxManager.clear();
-        rxManager = null;
+    @OnClick({R.id.ll_office_clock, R.id.ll_office_form, R.id.ll_office_notice, R.id.ll_office_document})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.ll_office_clock:
+                break;
+            case R.id.ll_office_form:
+                break;
+            case R.id.ll_office_notice:
+                break;
+            case R.id.ll_office_document:
+                break;
+        }
     }
 }

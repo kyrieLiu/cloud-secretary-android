@@ -158,14 +158,16 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 HomeMenuBean bean=list.get(position);
+                Intent intent=new Intent();
                 switch (bean.getMenuName()){
-                    case "小云交流":
-                        openDing("com.alibaba.android.rimet");
-                        break;
-                    default:
-                        Intent intent=new Intent(getContext(), OfficeActivity.class);
+                    case "小云办公":
+                        intent.setClass(getContext(),OfficeActivity.class);
                         startActivity(intent);
                         break;
+//                    default:
+//                        intent.setClass(getContext(), OfficeActivity.class);
+//                        startActivity(intent);
+//                        break;
                 }
             }
         });
