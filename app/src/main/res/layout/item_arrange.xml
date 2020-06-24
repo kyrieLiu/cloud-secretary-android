@@ -23,7 +23,7 @@
             android:maxLines="2"
             android:text="慰问内蒙古通辽市甘旗卡镇退休干部"
             android:textColor="@color/main_text_color"
-            android:textSize="@dimen/sp_17" />
+            android:textSize="@dimen/sp_16" />
         <TextView
             android:id="@+id/tv_arrange_content"
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:maxLines="1"
             android:text="星期二下午 15:00"
             android:textColor="@color/main_text_color"
-            android:textSize="@dimen/sp_15" />
+            android:textSize="@dimen/sp_14" />
         <TextView
             android:id="@+id/tv_item_science_content"
             style="@style/text_14_wrap_gray"
@@ -40,8 +40,9 @@
             android:text="15分钟前" />
     </LinearLayout>
     <RelativeLayout
-        android:layout_width="@dimen/dp_60"
-        android:layout_height="@dimen/dp_30"
+        android:id="@+id/arrange_level"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_25"
         android:layout_marginStart="@dimen/dp_10"
         android:background="@color/main_color">
         <TextView

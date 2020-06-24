@@ -1,10 +1,15 @@
 package com.luck.cloud.function.office;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
@@ -33,8 +38,8 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
     }
 
     class ViewHolder extends BaseViewHolder<T> {
-//        @Bind(R.id.tv_item_supervise_handle_title)
-//        TextView mTvTitle;
+        @Bind(R.id.arrange_level)
+        RelativeLayout rlLevel;
 //        @Bind(R.id.tv_item_supervise_handle_belongProject)
 //        TextView mTvBelongProject;
 //        @Bind(R.id.tv_item_supervise_handle_operationUnit)
@@ -49,8 +54,15 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
             //util=ViewUtil.getViewUtil();
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         protected void bind(T bean, int position) {
+            GradientDrawable drawable=new GradientDrawable();
+            drawable.setShape(GradientDrawable.RECTANGLE);
+            drawable.setGradientType(GradientDrawable.RECTANGLE);
+            drawable.setCornerRadius(5);
+            drawable.setColor(Color.parseColor("#1FA2DB"));
+            rlLevel.setBackground(drawable);
 //            mTvTitle.setText(bean.getMissionName());
 //            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
 //            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());

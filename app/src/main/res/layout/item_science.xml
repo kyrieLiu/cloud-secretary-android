@@ -23,7 +23,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="同期声:用力时代潮头,争做时代先锋"
             android:textColor="@color/main_text_color"
-            android:textSize="@dimen/sp_18" />
+            android:textSize="@dimen/sp_16" />
         <TextView
             android:id="@+id/tv_item_science_content"
             style="@style/text_14_wrap_gray"
@@ -32,8 +32,8 @@
     </RelativeLayout>
     <ImageView
         android:id="@+id/iv_item_science"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
+        android:layout_width="130dp"
+        android:layout_height="90dp"
         android:src="@mipmap/banner1"
         android:scaleType="centerCrop" />
 </LinearLayout>

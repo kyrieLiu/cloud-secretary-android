@@ -33,6 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".function.study.StudyActivity">
+
+        </activity>
+        <activity android:name=".common.activity.WebActivity" />
         <activity android:name=".function.office.notice.NoticeActivity">
 
         </activity>

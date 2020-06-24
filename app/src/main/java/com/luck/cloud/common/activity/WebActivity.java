@@ -8,14 +8,15 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.CookieSyncManager;
+
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+
 import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 
@@ -27,6 +28,7 @@ import com.luck.cloud.function.login.LoginActivity;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.io.File;
 
@@ -95,9 +97,9 @@ public class WebActivity extends BaseActivity {
 //                "女，那地方，你的，父母，小丑女，没出息女，模拟现场，门店，电脑发的，烦恼歌带你飞，等你再放开你的身份，给你的，父母给你，的麻烦你" +
 //                "给，sdmfnsdjfngjksdnfjndfgjnsdjfs.dj,fng,sdjfn的扣分监考老师电饭锅水电费能够理解对方了第三方机构开始的返回给会计师对高房价是" +
 //                "的分开管理<img src=\"http://wgzx.test.jingcaiwang.cn/group1/M00/00/68/rBMBOF0J-8WABHG6AAGBabvhhYo556.png\" title=\" 000.png\" alt=\" 000.png\" style=\"white-space: normal;\"/></p>";
-        String html = ViewUtil.getViewUtil().getHtmlData(Temporary.webContent);
-        webView.loadData(html, "text/html;charset=utf-8","utf-8");
-        //webView.loadUrl(webUrl);
+        //String html = ViewUtil.getViewUtil().getHtmlData(Temporary.webContent);
+        //webView.loadData(html, "text/html;charset=utf-8","utf-8");
+        webView.loadUrl("https://www.baidu.com/");
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();
     }
