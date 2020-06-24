@@ -43,6 +43,8 @@ public class MainActivity extends BaseActivity {
 
     private int mIndex;
 
+    private HomeFragment homeFragment;
+
 
     @Override
     protected void back() {
@@ -82,7 +84,7 @@ public class MainActivity extends BaseActivity {
     protected void loadData() {
         mFragments = new ArrayList<>();
         //首页
-        HomeFragment homeFragment = new HomeFragment();
+        homeFragment = new HomeFragment();
         mFragments.add(homeFragment);
 
         //小云见证
@@ -142,4 +144,9 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        homeFragment=null;
+    }
 }
