@@ -296,7 +296,7 @@ public class PersonDataActivity extends BaseActivity {
 //                mAdapterWeakReference.get().setList(result);
 //                mAdapterWeakReference.get().notifyDataSetChanged();
             }
-            Log.d("tag","图片==="+result);
+            Log.d("tag","图片==="+result.get(0).getPath());
             GlideUtils.loadCircleImage(context,mAdapterWeakReference.get(),result.get(0).getPath());
 //            FileCommitModel commitModel = FileCommitModel.getInstance();
 //            String path=result.get(0).getPath();

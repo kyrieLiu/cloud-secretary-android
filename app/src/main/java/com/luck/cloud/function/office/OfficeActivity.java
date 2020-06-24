@@ -1,23 +1,35 @@
 package com.luck.cloud.function.office;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.luck.cloud.BuildConfig;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.function.home.ScienceAdapter;
 import com.luck.cloud.function.home.SuperviseHandleBean;
+import com.luck.cloud.function.office.clock.ClockInActivity;
+import com.luck.cloud.function.office.files.MySharedFilesActivity;
+import com.luck.cloud.function.office.notice.NoticeActivity;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.luck.cloud.widget.view.LoadExceptionView;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,15 +110,46 @@ public class OfficeActivity extends BaseActivity {
 
     @OnClick({R.id.ll_office_clock, R.id.ll_office_form, R.id.ll_office_notice, R.id.ll_office_document})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.ll_office_clock:
+                intent.setClass(this, ClockInActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_office_form:
+                File file = new File(Environment.getExternalStorageDirectory(),"");
+//                if (!file.exists()) {
+//                    file.mkdirs();
+//                }
+//                File targetFile = new File(file, "新元社区APP隐私政策1.docx");
+                Log.d("tag",file.getName());
+                openFile(this,file);
                 break;
             case R.id.ll_office_notice:
+                intent.setClass(this, NoticeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.ll_office_document:
+                intent.setClass(this, MySharedFilesActivity.class);
+                startActivity(intent);
                 break;
         }
+    }
+
+    public static void openFile(Context context, File file) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //intent.addCategory(Intent.CATEGORY_DEFAULT);
+//        Uri uriForFile;
+//        if (Build.VERSION.SDK_INT > 23) {
+//            //Android 7.0之后
+//            uriForFile = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+//            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);//给目标文件临时授权
+//        } else {
+//            uriForFile = Uri.fromFile(file);
+//        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//系统会检查当前所有已创建的Task中是否有该要启动的Activity的Task;
+        // 若有，则在该Task上创建Activity；若没有则新建具有该Activity属性的Task，并在该新建的Task上创建Activity。
+        intent.setDataAndType(null, "application/msword");
+        context.startActivity(intent);
     }
 }

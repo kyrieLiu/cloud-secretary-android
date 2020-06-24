@@ -38,6 +38,7 @@ import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.function.office.OfficeActivity;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.GlideImageLoader;
+import com.luck.cloud.utils.PermissionHelper;
 import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.MeasureRecyclerView;
@@ -90,7 +91,7 @@ public class HomeFragment extends BaseFragment {
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
 
-    private static final int BAIDU_READ_PHONE_STATE = 100;//定位权限请求
+    private static final int LOCATION_READ_PHONE_STATE = 100;//定位权限请求
     private static final int PRIVATE_CODE = 1315;//开启GPS权限
 
     static final String[] LOCATIONGPS = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -346,7 +347,7 @@ public class HomeFragment extends BaseFragment {
             if (Build.VERSION.SDK_INT >= 23) { //判断是否为android6.0系统版本，如果是，需要动态添加权限
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                         != PERMISSION_GRANTED) {// 没有权限，申请权限。
-                    ActivityCompat.requestPermissions(getActivity(), LOCATIONGPS, BAIDU_READ_PHONE_STATE);
+                    ActivityCompat.requestPermissions(getActivity(), LOCATIONGPS, LOCATION_READ_PHONE_STATE);
                 } else {
                     startLocation();
                 }
@@ -369,7 +370,7 @@ public class HomeFragment extends BaseFragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
 //             requestCode即所声明的权限获取码，在checkSelfPermission时传入
-            case BAIDU_READ_PHONE_STATE:
+            case LOCATION_READ_PHONE_STATE:
                 //如果用户取消，permissions可能为null.
                 if (grantResults[0] == PERMISSION_GRANTED && grantResults.length > 0) { //有权限
                     startLocation();
