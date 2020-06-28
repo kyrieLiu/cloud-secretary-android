@@ -201,6 +201,8 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void clickWhich(ArticleListBean bean) {
                 if (bean != null) {
+                    Intent intent = new Intent(getContext(), WebActivity.class);
+                    getContext().startActivity(intent);
                 }
             }
         });

@@ -16,7 +16,7 @@ import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.function.home.HomeFragment;
 import com.luck.cloud.function.mine.MineFragment;
-import com.luck.cloud.function.science.ScienceFragment;
+import com.luck.cloud.function.science.WitnessFragment;
 import com.luck.cloud.manager.ActivitiesManager;
 
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity {
         mFragments.add(homeFragment);
 
         //小云见证
-        ScienceFragment showFragment = new ScienceFragment();
+        WitnessFragment showFragment = new WitnessFragment();
         mFragments.add(showFragment);
         //活动
         MineFragment mineFragment = new MineFragment();

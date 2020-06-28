@@ -92,7 +92,7 @@ public class PersonDataActivity extends BaseActivity {
 
     @Override
     protected void back() {
-            finish();
+        finish();
     }
 
     @Override

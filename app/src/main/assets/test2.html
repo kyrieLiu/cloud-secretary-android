@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+  <body>
+    <input type="file"
+           accept="image/*"
+           id="inputimg"/>
+    <img id="image" style="width: 300px; height: 300px;">
+  </body>
+
+  <script type="text/javascript">
+
+    var input = document.getElementById("inputimg");
+    var image = document.getElementById("image");
+    input.onchange = function () {
+       var file = this.files[0];
+       var url = URL.createObjectURL(file);
+       image.src=url;
+    }
+
+  </script>
+
+</html>
