@@ -10,10 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.utils.PermissionHelper;
@@ -32,7 +28,6 @@ public class ClockInActivity extends BaseActivity {
     RelativeLayout rlClockIn;
     private PermissionHelper mHelper;
 
-    public AMapLocationClient mLocationClient = null;
 
     @Override
     protected void back() {
@@ -64,7 +59,6 @@ public class ClockInActivity extends BaseActivity {
                 new PermissionHelper.PermissionListener() {
                     @Override
                     public void doAfterGrand(String... permission) {
-                        startLocation();
                     }
 
                     @Override
@@ -81,25 +75,6 @@ public class ClockInActivity extends BaseActivity {
             mHelper.handleRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void startLocation() {
-        //初始化定位
-        mLocationClient = new AMapLocationClient(this);
-        //设置定位回调监听
-        mLocationClient.setLocationListener(new AMapLocationListener() {
-            @Override
-            public void onLocationChanged(AMapLocation aMapLocation) {
-                Log.d("tag", "位置" + aMapLocation.getCity());
-            }
-        });
-        AMapLocationClientOption option = new AMapLocationClientOption();
-        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-        if (null != mLocationClient) {
-            mLocationClient.setLocationOption(option);
-            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-            mLocationClient.stopLocation();
-            mLocationClient.startLocation();
-        }
-    }
 
 
     @OnClick(R.id.rl_clock_in)

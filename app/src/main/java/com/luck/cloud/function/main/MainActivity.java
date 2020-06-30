@@ -1,17 +1,25 @@
 package com.luck.cloud.function.main;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.function.home.HomeFragment;
@@ -45,6 +53,28 @@ public class MainActivity extends BaseActivity {
 
     private HomeFragment homeFragment;
 
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
+
+    public class MyLocationListener extends BDAbstractLocationListener{
+        @Override
+        public void onReceiveLocation(BDLocation location){
+            Log.d("tag","百度地图定位"+location.getCity());
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取经纬度相关（常用）的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+
+            double latitude = location.getLatitude();    //获取纬度信息
+            double longitude = location.getLongitude();    //获取经度信息
+            float radius = location.getRadius();    //获取定位精度，默认值为0.0f
+
+            String coorType = location.getCoorType();
+            //获取经纬度坐标类型，以LocationClientOption中设置过的坐标类型为准
+
+            int errorCode = location.getLocType();
+            //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
+        }
+    }
 
     @Override
     protected void back() {
@@ -63,6 +93,23 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+
+//        mLocationClient = new LocationClient(getApplicationContext());
+//        //声明LocationClient类
+//        mLocationClient.registerLocationListener(myListener);
+//
+//        LocationClientOption option = new LocationClientOption();
+//
+//        option.setIsNeedAddress(true);
+////可选，是否需要地址信息，默认为不需要，即参数为false
+////如果开发者需要获得当前点的地址信息，此处必须为true
+//
+//        option.setNeedNewVersionRgc(true);
+////可选，设置是否需要最新版本的地址信息。默认需要，即参数为true
+//
+//        mLocationClient.setLocOption(option);
+//
+//        mLocationClient.start();
 
 //
 //        if (!SpUtil.getIsLogin()) {
@@ -143,6 +190,18 @@ public class MainActivity extends BaseActivity {
         mIndex = index;
 
     }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        Log.d("tag","定位权限回调");
+//    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.d("tag","定位权限回调");
+//    }
 
     @Override
     protected void onDestroy() {

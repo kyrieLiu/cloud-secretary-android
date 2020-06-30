@@ -25,10 +25,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.luck.cloud.R;
 import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseBean;
@@ -39,6 +39,7 @@ import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.common.entity.RequestBean;
 import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.main.MainActivity;
 import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.function.office.OfficeActivity;
 import com.luck.cloud.function.office.clock.ClockInActivity;
@@ -98,8 +99,6 @@ public class HomeFragment extends BaseFragment {
 
     private ScienceAdapter<SuperviseHandleBean.ItemsBean> waitDoneAdapter;
 
-    //声明AMapLocationClient类对象
-    public AMapLocationClient mLocationClient = null;
 
     private static final int LOCATION_READ_PHONE_STATE = 100;//定位权限请求
     private static final int PRIVATE_CODE = 1315;//开启GPS权限
@@ -152,7 +151,7 @@ public class HomeFragment extends BaseFragment {
      * 初始化功能菜单
      */
     private void initFunctionMenu() {
-        String menus[] = {"小云办公", "小云学习", "小云科普", "小云活动"};
+        String menus[] = {"小云办公", "小云学习", "小云活动", "小云科普"};
         int icons[] = {R.raw.study, R.raw.science, R.raw.first_secretary, R.raw.witness, R.raw.practice, R.raw.dingding};
         int colors[] = {Color.rgb(253, 67, 78), Color.rgb(255, 96, 49), Color.rgb(255, 152, 82),
                 Color.rgb(0, 132, 245), Color.rgb(96, 138, 250), Color.rgb(160, 118, 250)};
@@ -206,29 +205,6 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    private void openDing(String packageName) {
-        PackageManager packageManager = getActivity().getPackageManager();
-        PackageInfo pi = null;
-        try {
-            pi = packageManager.getPackageInfo("com.alibaba.android.rimet", 0);
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
-        resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        resolveIntent.setPackage(pi.packageName);
-        List<ResolveInfo> apps = packageManager.queryIntentActivities(resolveIntent, 0);
-        ResolveInfo resolveInfo = apps.iterator().next();
-        if (resolveInfo != null) {
-            String className = resolveInfo.activityInfo.name;
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ComponentName cn = new ComponentName(packageName, className);
-            intent.setComponent(cn);
-            this.startActivity(intent);
-        }
     }
 
     /**
@@ -379,52 +355,6 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-//    /**
-//     * 请求内存卡读写权限
-//     */
-//    private void requestPermission() {
-//        mHelper = new PermissionHelper(this);
-//        mHelper.requestPermissions(getResources().getString(R.string.image_permission_first_hint),
-//                new PermissionHelper.PermissionListener() {
-//                    @Override
-//                    public void doAfterGrand(String... permission) {
-//                        //startLocation();
-//                    }
-//
-//                    @Override
-//                    public void doAfterDenied(String... permission) {
-//                        mHelper.againWarnRequestPermission(getResources().getString(R.string.image_permission_hint), AppApplication.getInstance());
-//                    }
-//                }, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
-//    }
-//
-//    //授权回调
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        if (mHelper != null)
-//            mHelper.handleRequestPermissionsResult(requestCode, permissions, grantResults);
-//    }
-//
-//    private void startLocation() {
-//        //初始化定位
-//        mLocationClient = new AMapLocationClient(AppApplication.getInstance());
-//        //设置定位回调监听
-//        mLocationClient.setLocationListener(new AMapLocationListener() {
-//            @Override
-//            public void onLocationChanged(AMapLocation aMapLocation) {
-//                tvAddress.setText(aMapLocation.getCity());
-//            }
-//        });
-//        AMapLocationClientOption option = new AMapLocationClientOption();
-//        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-//        if (null != mLocationClient) {
-//            mLocationClient.setLocationOption(option);
-//            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-//            mLocationClient.stopLocation();
-//            mLocationClient.startLocation();
-//        }
-//    }
-
     /**
      * 检测GPS、位置权限是否开启
      */
@@ -438,7 +368,8 @@ public class HomeFragment extends BaseFragment {
             if (Build.VERSION.SDK_INT >= 23) { //判断是否为android6.0系统版本，如果是，需要动态添加权限
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                         != PERMISSION_GRANTED) {// 没有权限，申请权限。
-                    ActivityCompat.requestPermissions(getActivity(), LOCATIONGPS, LOCATION_READ_PHONE_STATE);
+                    //ActivityCompat.requestPermissions(getActivity(), LOCATIONGPS, LOCATION_READ_PHONE_STATE);
+                    requestPermissions( LOCATIONGPS, LOCATION_READ_PHONE_STATE);
                 } else {
                     startLocation();
                 }
@@ -466,7 +397,6 @@ public class HomeFragment extends BaseFragment {
                 if (grantResults[0] == PERMISSION_GRANTED && grantResults.length > 0) { //有权限
                     startLocation();
                 } else {
-
                     Toast.makeText(getContext(), "你未开启定位权限!", Toast.LENGTH_SHORT).show();
 
                 }
@@ -476,48 +406,35 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-//    public AMapLocationClientOption mLocationOption=null;
-//
-//    private void startLocation(){
-//        mLocationClient = new AMapLocationClient(AppApplication.getInstance());
-//        mLocationOption = new AMapLocationClientOption();
-////设置返回地址信息，默认为true
-//        mLocationOption.setNeedAddress(true);
-////设置定位监听
-//        mLocationClient.setLocationListener(new AMapLocationListener() {
-//            @Override
-//            public void onLocationChanged(AMapLocation aMapLocation) {
-//                Log.d("tag","定位成功"+aMapLocation.getCity());
-//                tvAddress.setText(aMapLocation.getCity());
-//            }
-//        });
-////设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-//        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-////设置定位间隔,单位毫秒,默认为2000ms
-//       // mLocationOption.setInterval(2000);
-////设置定位参数
-//        mLocationClient.setLocationOption(mLocationOption);
-//        mLocationClient.startLocation();
-//    }
+    public LocationClient mLocationClient = null;
+    private MyLocationListener myListener = new MyLocationListener();
 
-    private void startLocation() {
-//        //初始化定位
-        mLocationClient = new AMapLocationClient(AppApplication.getInstance());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(new AMapLocationListener() {
-            @Override
-            public void onLocationChanged(AMapLocation aMapLocation) {
-                tvAddress.setText(aMapLocation.getCity());
-            }
-        });
-        AMapLocationClientOption option = new AMapLocationClientOption();
-        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
-        if (null != mLocationClient) {
-            mLocationClient.setLocationOption(option);
-            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-            mLocationClient.stopLocation();
-            mLocationClient.startLocation();
+    public class MyLocationListener extends BDAbstractLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location){
+            tvAddress.setText(location.getCity());
         }
+    }
+    private void startLocation() {
+        Log.d("tag","开启定位");
+
+        mLocationClient = new LocationClient(getContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+
+        LocationClientOption option = new LocationClientOption();
+
+        option.setIsNeedAddress(true);
+        //可选，是否需要地址信息，默认为不需要，即参数为false
+        //如果开发者需要获得当前点的地址信息，此处必须为true
+
+        option.setNeedNewVersionRgc(true);
+        //可选，设置是否需要最新版本的地址信息。默认需要，即参数为true
+
+        mLocationClient.setLocOption(option);
+
+        mLocationClient.start();
+
     }
 
     @Override
@@ -527,10 +444,6 @@ public class HomeFragment extends BaseFragment {
         //结束轮播
         if (mBanner != null) {
             mBanner.stopAutoPlay();
-        }
-        if (mLocationClient != null) {
-            mLocationClient.stopLocation();
-            mLocationClient = null;
         }
     }
 }
