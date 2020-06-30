@@ -99,7 +99,7 @@ public class WebActivity extends BaseActivity {
 //                "的分开管理<img src=\"http://wgzx.test.jingcaiwang.cn/group1/M00/00/68/rBMBOF0J-8WABHG6AAGBabvhhYo556.png\" title=\" 000.png\" alt=\" 000.png\" style=\"white-space: normal;\"/></p>";
         //String html = ViewUtil.getViewUtil().getHtmlData(Temporary.webContent);
         //webView.loadData(html, "text/html;charset=utf-8","utf-8");
-        String u="http://10.17.1.90:8848/htmlDemo/file2.html";
+        String u="http://www.baidu.com";
         webView.loadUrl(u);
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();

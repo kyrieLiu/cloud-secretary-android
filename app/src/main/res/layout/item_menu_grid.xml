@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/selector_fill_rectangle_blue_4"
+    android:background="@drawable/selector_fill_rectangle_white_4"
     android:paddingTop="@dimen/dp_13"
     android:paddingBottom="@dimen/dp_13">
 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:paddingTop="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_10"
+    android:paddingStart="@dimen/dp_5"
+    android:paddingEnd="5dp"
+    android:background="@drawable/selector_fill_rectangle_white_press"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_100">
+        <ImageView
+            android:id="@+id/iv_item_active"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/banner1"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/tv_active_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="5dp"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingBottom="@dimen/dp_2"
+            android:text="报名中"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_5"
+            ></TextView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/dp_10"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_item_active_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="暑假支教活动"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/sp_16" />
+        <TextView
+            android:id="@+id/tv_item_active_content"
+            style="@style/text_14_wrap_gray"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="内蒙古通辽市科尔沁区丰田镇2号存暑假指教活动招募志愿者" />
+        <TextView
+            android:id="@+id/tv_item_active_people"
+            style="@style/text_14_wrap_gray"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="发起人:李云书记" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_5"
+            >
+            <TextView
+                android:id="@+id/tv_item_active_date"
+                style="@style/text_14_wrap_gray"
+                android:textSize="12sp"
+                android:textColor="#EECC46"
+                android:text="2020年4月18日-2020年4月19日" />
+            <TextView
+                android:id="@+id/tv_item_active_code"
+                style="@style/text_14_wrap_gray"
+                android:textSize="12sp"
+                android:layout_marginStart="@dimen/dp_5"
+                android:text="邀请码:517517" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
+
+

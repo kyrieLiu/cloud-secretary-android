@@ -191,17 +191,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        Log.d("tag","定位权限回调");
-//    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d("tag","定位权限回调");
-//    }
 
     @Override
     protected void onDestroy() {

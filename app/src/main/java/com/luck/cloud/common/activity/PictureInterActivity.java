@@ -50,40 +50,40 @@ public class PictureInterActivity extends AppCompatActivity {
         //访问网页Html
         webView.loadUrl(url);
 
-        Button button=findViewById(R.id.button);
-                button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (Build.VERSION.SDK_INT >= 23) {
-                    int REQUEST_CODE_CONTACT = 101;
-                    String[] permissions = {
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                    //验证是否许可权限
-                    for (String str : permissions) {
-                        if (PictureInterActivity.this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
-                            //申请权限
-                            PictureInterActivity.this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
-                            return;
-                        } else {
-                            //这里就是权限打开之后自己要操作的逻辑
-                            String path= "file://"+Environment.getExternalStorageDirectory()+ File.separator+"erweima.png";
-
-                            File file = new File(Environment.getExternalStorageDirectory(), "erweima.png");
-                            Log.d("tag","图片==="+file.getAbsolutePath()+file.length());
-                            String b="data:image/png;base64,"+imageToBase64(file.getAbsolutePath());
-
-                            webView.evaluateJavascript("javascript:show('"+b+"')", new ValueCallback<String>() {
-                                @Override
-                                public void onReceiveValue(String value) {
-                                    //此处为 js 返回的结果
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        });
+//        Button button=findViewById(R.id.button);
+//                button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (Build.VERSION.SDK_INT >= 23) {
+//                    int REQUEST_CODE_CONTACT = 101;
+//                    String[] permissions = {
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//                    //验证是否许可权限
+//                    for (String str : permissions) {
+//                        if (PictureInterActivity.this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+//                            //申请权限
+//                            PictureInterActivity.this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
+//                            return;
+//                        } else {
+//                            //这里就是权限打开之后自己要操作的逻辑
+//                            String path= "file://"+Environment.getExternalStorageDirectory()+ File.separator+"erweima.png";
+//
+//                            File file = new File(Environment.getExternalStorageDirectory(), "erweima.png");
+//                            Log.d("tag","图片==="+file.getAbsolutePath()+file.length());
+//                            String b="data:image/png;base64,"+imageToBase64(file.getAbsolutePath());
+//
+//                            webView.evaluateJavascript("javascript:show('"+b+"')", new ValueCallback<String>() {
+//                                @Override
+//                                public void onReceiveValue(String value) {
+//                                    //此处为 js 返回的结果
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
     }
 

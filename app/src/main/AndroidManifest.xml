@@ -37,6 +37,15 @@
         <activity android:name=".common.activity.PictureInterActivity">
 
         </activity>
+        <activity android:name=".function.active.ActiveActivity">
+
+        </activity>
+        <activity android:name=".function.active.ActiveDetailActivity">
+
+        </activity>
+        <activity android:name=".function.active.AddActiveActivity">
+
+        </activity>
         <activity android:name=".function.study.StudyActivity">
 
         </activity>
@@ -69,9 +78,9 @@
 <!--        <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="be7696056928ef5fbe721bbae1bfd831" />-->
-        <!--<meta-data
+        <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" />-->
+            android:value="2.1" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -83,7 +92,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service android:name="com.amap.api.location.APSService"></service>
 
     </application>
 

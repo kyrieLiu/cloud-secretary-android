@@ -1,10 +1,9 @@
-package com.luck.cloud.function.science;
+package com.luck.cloud.function.active;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -13,7 +12,8 @@ import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
 import com.luck.cloud.common.activity.WebActivity;
-import com.luck.cloud.common.entity.Temporary;
+import com.luck.cloud.function.science.ScienceAdapter;
+import com.luck.cloud.function.science.SuperviseHandleBean;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
@@ -25,20 +25,20 @@ import butterknife.Bind;
 
 /**
  * Created by liuyin on 2019/4/16 15:11
- * Description: 推荐页面
+ * Description: 活动列表
  */
-public class RecommendFragment extends BaseFragment {
+public class ActiveFragment extends BaseFragment {
     @Bind(R.id.xrv_common_list)
     XRecyclerView mRvList;
-    private ScienceAdapter<SuperviseHandleBean.ItemsBean> adapter;
+    private ActiveAdapter<SuperviseHandleBean.ItemsBean> adapter;
     private Context context;
 
     private int type;
 
 
 
-    public static RecommendFragment getInstance(int type) {
-        RecommendFragment fragment = new RecommendFragment();
+    public static ActiveFragment getInstance(int type) {
+        ActiveFragment fragment = new ActiveFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         fragment.setArguments(bundle);
@@ -63,7 +63,7 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
-        adapter = new ScienceAdapter(context);
+        adapter = new ActiveAdapter(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         mRvList.setLayoutManager(layoutManager);
         mRvList.setAdapter(adapter);
@@ -73,7 +73,7 @@ public class RecommendFragment extends BaseFragment {
             public void onItemClick(View view, int position) {
                 SuperviseHandleBean.ItemsBean itemsBean=adapter.getList().get(position);
                // WebActivity.start(context,itemsBean.getId(),itemsBean.getIsRead());
-                Intent intent=new Intent(context, WebActivity.class);
+                Intent intent=new Intent(context, ActiveDetailActivity.class);
                 context.startActivity(intent);
             }
         });

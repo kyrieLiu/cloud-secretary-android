@@ -39,6 +39,7 @@ import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.common.entity.RequestBean;
 import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.active.ActiveActivity;
 import com.luck.cloud.function.main.MainActivity;
 import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.function.office.OfficeActivity;
@@ -182,6 +183,10 @@ public class HomeFragment extends BaseFragment {
                         intent.setClass(getContext(), StudyActivity.class);
                         startActivity(intent);
                         break;
+                    case "小云活动":
+                        intent.setClass(getContext(), ActiveActivity.class);
+                        startActivity(intent);
+                        break;
 //                    default:
 //                        intent.setClass(getContext(), OfficeActivity.class);
 //                        startActivity(intent);
@@ -254,17 +259,6 @@ public class HomeFragment extends BaseFragment {
         waitDoneAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                String body="<p>史莱克的积分凉快圣诞节福利卡接收到了分开讲道理；反馈给家里的分管局领导； 分开了大家转发来看是剪短发了恐惧的妇女，" +
-//                        "那地方，你的，父母，小丑女，没出息女，模拟现场，门店，电脑发的，烦恼歌带你飞，等你再放开你的身份，给你的，父母给你，的麻烦你" +
-//                        "给，sdmfnsdjfngjksdnfjndfgjnsdjfs.dj,fng,sdjfn的扣分监考老师电饭锅水电费能够理解对方了第三方机构开始的返回给会计师对高" +
-//                        "房价是的分开管理史莱克的积分凉快圣诞节福利卡接收到了分开讲道理；反馈给家里的分管局领导； 分开了大家转发来看是剪短发了恐惧的妇" +
-//                        "女，那地方，你的，父母，小丑女，没出息女，模拟现场，门店，电脑发的，烦恼歌带你飞，等你再放开你的身份，给你的，父母给你，的麻" +
-//                        "烦你给，sdmfnsdjfngjksdnfjndfgjnsdjfs.dj,fng,sdjfn的扣分监考老师电饭锅水电费能够理解对方了第三方机构开始的返回给会计师对" +
-//                        "高房价是的分开管理史莱克的积分凉快圣诞节福利卡接收到了分开讲道理；反馈给家里的分管局领导； 分开了大家转发来看是剪短发了恐惧的妇" +
-//                        "女，那地方，你的，父母，小丑女，没出息女，模拟现场，门店，电脑发的，烦恼歌带你飞，等你再放开你的身份，给你的，父母给你，的麻烦你" +
-//                        "给，sdmfnsdjfngjksdnfjndfgjnsdjfs.dj,fng,sdjfn的扣分监考老师电饭锅水电费能够理解对方了第三方机构开始的返回给会计师对高房价是" +
-//                        "的分开管理<img src=\"http://wgzx.test.jingcaiwang.cn/group1/M00/00/68/rBMBOF0J-8WABHG6AAGBabvhhYo556.png\" title=\" 000.png\" alt=\" 000.png\" style=\"white-space: normal;\"/></p>";
-//                Temporary.webContent=body;
                 Intent intent = new Intent(getContext(), WebActivity.class);
                 getContext().startActivity(intent);
             }
@@ -416,7 +410,6 @@ public class HomeFragment extends BaseFragment {
         }
     }
     private void startLocation() {
-        Log.d("tag","开启定位");
 
         mLocationClient = new LocationClient(getContext());
         //声明LocationClient类
