@@ -324,6 +324,8 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+
+
     /**
      * 请求待办事项列表数据
      *
@@ -437,6 +439,9 @@ public class HomeFragment extends BaseFragment {
         //结束轮播
         if (mBanner != null) {
             mBanner.stopAutoPlay();
+        }
+        if (mLocationClient!=null){
+            mLocationClient.stop();
         }
     }
 }

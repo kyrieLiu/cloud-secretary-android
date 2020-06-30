@@ -137,7 +137,5 @@ public class CollectActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        rxManager.clear();
-        rxManager = null;
     }
 }
