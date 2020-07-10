@@ -1,7 +1,6 @@
 package com.luck.cloud.function.office.files;
 
 import android.Manifest;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,14 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
-import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
-import com.luck.cloud.common.entity.RequestBean;
-import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.science.SuperviseHandleBean;
-import com.luck.cloud.network.OKHttpManager;
-import com.luck.cloud.utils.FileUtil;
 import com.luck.cloud.utils.PermissionHelper;
 import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
@@ -28,11 +21,9 @@ import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 
 /**
  * 我的共享文件

@@ -77,10 +77,7 @@ public class HomeMenuAdapter<T extends HomeMenuBean> extends BaseRecyclerViewAda
                 @Override
                 public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
                     Random random = new Random();
-//                paint.setColor(Color.argb(255,random.nextInt(256),
-//                        random.nextInt(256), random.nextInt(256)));
                     paint.setColor(Color.parseColor("#ffffff"));
-                    //int color=R.color.main_color;
                     return t;
                 }
 

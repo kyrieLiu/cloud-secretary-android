@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,7 +15,11 @@ import android.util.Log;
 import com.luck.cloud.common.activity.FileBrowserActivity;
 import com.luck.cloud.common.activity.FileDisplayActivity;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +66,26 @@ public class FileUtil {
 
         str = paramString.substring(i + 1);
         return str;
+    }
+
+    public File getFile(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        File file = new File(Environment.getExternalStorageDirectory() + "/temp.jpg");
+        try {
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream is = new ByteArrayInputStream(baos.toByteArray());
+            int x = 0;
+            byte[] b = new byte[1024 * 100];
+            while ((x = is.read(b)) != -1) {
+                fos.write(b, 0, x);
+            }
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
 

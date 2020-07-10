@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
-import com.luck.cloud.function.science.SuperviseHandleBean;
+import com.luck.cloud.function.witness.SuperviseHandleBean;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.RoundedCornersTransformation;
 

@@ -11,12 +11,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.luck.cloud.FullyGridLayoutManager;
 import com.luck.cloud.R;
+import com.luck.cloud.adapter.GridImageAdapter;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
 import com.luck.cloud.function.home.SuperviseHandleBean;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.RoundedCornersTransformation;
+import com.luck.cloud.widget.MeasureRecyclerView;
+import com.luck.picture.lib.decoration.GridSpacingItemDecoration;
+import com.luck.picture.lib.tools.ScreenUtils;
 
 import butterknife.Bind;
 
@@ -63,6 +71,7 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
             drawable.setCornerRadius(5);
             drawable.setColor(Color.parseColor("#1FA2DB"));
             rlLevel.setBackground(drawable);
+
 //            mTvTitle.setText(bean.getMissionName());
 //            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
 //            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());

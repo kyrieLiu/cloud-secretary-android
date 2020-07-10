@@ -1,6 +1,5 @@
 package com.luck.cloud.function.main;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,8 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,12 +16,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.function.home.HomeFragment;
 import com.luck.cloud.function.mine.MineFragment;
-import com.luck.cloud.function.science.WitnessFragment;
+import com.luck.cloud.function.witness.WitnessFragment;
 import com.luck.cloud.manager.ActivitiesManager;
 
 import java.util.ArrayList;

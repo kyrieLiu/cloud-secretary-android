@@ -1,9 +1,6 @@
 package com.luck.cloud.function.study;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -12,12 +9,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
-import com.luck.cloud.base.BaseFragment;
-import com.luck.cloud.common.activity.PropertyServiceStandardSearchActivity;
 import com.luck.cloud.common.adapter.CommonFragmentPagerAdapter;
 import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.science.GardenInfoBean;
-import com.luck.cloud.function.science.RecommendFragment;
+import com.luck.cloud.function.witness.GardenInfoBean;
+import com.luck.cloud.function.witness.RecommendFragment;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
 
@@ -25,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 
 /**
  * Created by liuyin on 2019/4/11 15:54

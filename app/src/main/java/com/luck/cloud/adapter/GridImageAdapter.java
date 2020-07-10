@@ -1,7 +1,10 @@
 package com.luck.cloud.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +24,11 @@ import com.luck.picture.lib.tools.DateUtils;
 import com.luck.cloud.R;
 import com.luck.cloud.listener.OnItemLongClickListener;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,6 +215,17 @@ public class GridImageAdapter extends
             if (chooseModel == PictureMimeType.ofAudio()) {
                 viewHolder.mImg.setImageResource(R.drawable.picture_audio_placeholder);
             } else {
+//                boolean isUri=PictureMimeType.isContent(path) && !media.isCut() && !media.isCompressed();
+//
+//                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+//
+//                mmr.setDataSource(viewHolder.itemView.getContext(),Uri.parse(path));
+//                Log.d("tag","isUri"+mmr);
+//                Bitmap bitmap = mmr.getFrameAtTime();
+//
+//                viewHolder.mImg.setImageBitmap(bitmap);
+//                File file=getFile(bitmap);
+//                Log.d("tag","isUri"+file);
                 Glide.with(viewHolder.itemView.getContext())
                         .load(PictureMimeType.isContent(path) && !media.isCut() && !media.isCompressed() ? Uri.parse(path)
                                 : path)
@@ -216,22 +234,28 @@ public class GridImageAdapter extends
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(viewHolder.mImg);
             }
-            //itemView 的点击事件
-            if (mItemClickListener != null) {
-                viewHolder.itemView.setOnClickListener(v -> {
-                    int adapterPosition = viewHolder.getAdapterPosition();
-                    mItemClickListener.onItemClick(v, adapterPosition);
-                });
-            }
 
-            if (mItemLongClickListener != null) {
-                viewHolder.itemView.setOnLongClickListener(v -> {
-                    int adapterPosition = viewHolder.getAdapterPosition();
-                    mItemLongClickListener.onItemLongClick(viewHolder, adapterPosition, v);
-                    return true;
-                });
-            }
         }
+
+    }
+    public File getFile(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        File file = new File(Environment.getExternalStorageDirectory() + "/temp.jpg");
+        try {
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream is = new ByteArrayInputStream(baos.toByteArray());
+            int x = 0;
+            byte[] b = new byte[1024 * 100];
+            while ((x = is.read(b)) != -1) {
+                fos.write(b, 0, x);
+            }
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 
     private OnItemClickListener mItemClickListener;

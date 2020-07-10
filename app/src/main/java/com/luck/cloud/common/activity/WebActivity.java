@@ -2,6 +2,7 @@ package com.luck.cloud.common.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -9,9 +10,12 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.ValueCallback;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
@@ -99,7 +103,7 @@ public class WebActivity extends BaseActivity {
 //                "的分开管理<img src=\"http://wgzx.test.jingcaiwang.cn/group1/M00/00/68/rBMBOF0J-8WABHG6AAGBabvhhYo556.png\" title=\" 000.png\" alt=\" 000.png\" style=\"white-space: normal;\"/></p>";
         //String html = ViewUtil.getViewUtil().getHtmlData(Temporary.webContent);
         //webView.loadData(html, "text/html;charset=utf-8","utf-8");
-        String u="http://www.baidu.com";
+        String u="https://192.168.124.31:3001/examination/auth";
         webView.loadUrl(u);
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();
@@ -161,6 +165,12 @@ public class WebActivity extends BaseActivity {
 
     // Web视图
     private class MyWebViewClient extends WebViewClient {
+
+        @Override
+        public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+            sslErrorHandler.proceed();
+        }
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
@@ -187,6 +197,22 @@ public class WebActivity extends BaseActivity {
     }
 
     protected class MyWebChromeClient extends WebChromeClient {
+
+
+
+        @Override
+        public void openFileChooser(ValueCallback<Uri> valueCallback, String s, String s1) {
+
+            Log.d("s===",s);
+            Log.d("s1===",s1);
+        }
+
+        @Override
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> valueCallback, FileChooserParams fileChooserParams) {
+            Log.d("tag",fileChooserParams.getMode()+"");
+            Log.d("tag",fileChooserParams.isCaptureEnabled()+"");
+            return super.onShowFileChooser(webView, valueCallback, fileChooserParams);
+        }
 
         @Override
         public void onProgressChanged(WebView view, int newProgress) {

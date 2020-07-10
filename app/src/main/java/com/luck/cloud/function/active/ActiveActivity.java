@@ -13,11 +13,9 @@ import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.common.adapter.CommonFragmentPagerAdapter;
 import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.science.GardenInfoBean;
-import com.luck.cloud.function.science.RecommendFragment;
+import com.luck.cloud.function.witness.GardenInfoBean;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
-import com.luck.cloud.widget.dialog.DateSelectDialog;
 
 import java.util.ArrayList;
 import java.util.List;

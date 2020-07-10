@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    >
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <include layout="@layout/layout_title"></include>
+
+    <EditText
+        android:id="@+id/activity_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_180"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:textSize="14sp"
+        android:gravity="start"
+        android:padding="5dp"
+        android:background="@drawable/shape_fill_white_only_bottom_gray"
+        android:hint="动态内容"
+        ></EditText>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/dp_20"
+        android:overScrollMode="never" />
+
+    <Button
+        android:id="@+id/bt_initiate"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_42"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:text="发布" />
+
+
+</LinearLayout>
+</ScrollView>

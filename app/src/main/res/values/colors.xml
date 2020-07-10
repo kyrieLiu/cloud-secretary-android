@@ -21,6 +21,7 @@
     <color name="black">#000000</color>
     <color name="main_text_color">#333333</color>
     <color name="gray_color">#E5E5E5</color>
+    <color name="gray_color_shallow">#85E5E5E5</color>
     <color name="transparent">#00000000</color>
     <color name="gray_light_color">#f7f7f7</color>
     <color name="gray_text_color">#999999</color>
