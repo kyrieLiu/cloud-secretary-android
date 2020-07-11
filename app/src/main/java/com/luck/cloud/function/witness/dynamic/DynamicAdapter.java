@@ -281,9 +281,6 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
             FullyGridLayoutManager manager = new FullyGridLayoutManager(context,
                     3, GridLayoutManager.VERTICAL, false);
             mRecyclerView.setLayoutManager(manager);
-
-//            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3,
-//                    ScreenUtils.dip2px(context, 8), false));
             DynamicPictureAdapter<LocalMedia> mAdapter = new DynamicPictureAdapter(context);
             List<LocalMedia> list = new ArrayList<>();
             for (int i = 0; i < 5; i++) {

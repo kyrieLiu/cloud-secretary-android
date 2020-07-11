@@ -44,6 +44,7 @@ import com.luck.cloud.function.main.MainActivity;
 import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.function.office.OfficeActivity;
 import com.luck.cloud.function.office.clock.ClockInActivity;
+import com.luck.cloud.function.science.ScienceActivity;
 import com.luck.cloud.function.study.StudyActivity;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.GlideImageLoader;
@@ -185,6 +186,10 @@ public class HomeFragment extends BaseFragment {
                         break;
                     case "小云活动":
                         intent.setClass(getContext(), ActiveActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "小云科普":
+                        intent.setClass(getContext(), ScienceActivity.class);
                         startActivity(intent);
                         break;
 //                    default:

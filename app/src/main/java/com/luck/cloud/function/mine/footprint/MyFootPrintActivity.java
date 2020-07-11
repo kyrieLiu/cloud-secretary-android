@@ -1,4 +1,4 @@
-package com.luck.cloud.function.mine;
+package com.luck.cloud.function.mine.footprint;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
 import com.luck.cloud.config.RxConstant;
+import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.manager.RxManager;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
@@ -24,13 +25,13 @@ import java.util.List;
 import butterknife.Bind;
 import rx.functions.Action1;
 
-public class CollectActivity extends BaseActivity {
+public class MyFootPrintActivity extends BaseActivity {
 
     @Bind(R.id.rv_common_list)
     XRecyclerView mRvList;
     private RxManager rxManager;
 
-    private HomeWaitDoneAdapter<WaitDoneBean.ItemsBean> waitDoneAdapter;
+    private FootPrintAdapter<WaitDoneBean.ItemsBean> waitDoneAdapter;
 
     @Override
     protected void back() {
@@ -45,7 +46,7 @@ public class CollectActivity extends BaseActivity {
     @Override
     protected void initView(Bundle savedInstanceState) {
 
-        setTitle("我的收藏");
+        setTitle("我的足迹");
 
 
     }
@@ -65,7 +66,7 @@ public class CollectActivity extends BaseActivity {
                 requestData(reqPage);
             }
         });
-        waitDoneAdapter = new HomeWaitDoneAdapter(this);
+        waitDoneAdapter = new FootPrintAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvList.setLayoutManager(layoutManager);
         mRvList.setAdapter(waitDoneAdapter);
@@ -73,7 +74,7 @@ public class CollectActivity extends BaseActivity {
         waitDoneAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent=new Intent(CollectActivity.this, PictureMainActivity.class);
+                Intent intent=new Intent(MyFootPrintActivity.this, PictureMainActivity.class);
                 startActivity(intent);
             }
         });

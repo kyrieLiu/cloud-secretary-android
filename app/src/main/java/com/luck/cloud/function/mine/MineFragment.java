@@ -19,10 +19,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
-import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
+import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.function.home.HomeMenuBean;
+import com.luck.cloud.function.login.LoginActivity;
+import com.luck.cloud.function.mine.collect.MyCollectActivity;
+import com.luck.cloud.function.mine.footprint.MyFootPrintActivity;
 import com.luck.cloud.function.mine.publish.MyPublishActivity;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.pixplicity.sharp.OnSvgElementListener;
@@ -30,6 +33,7 @@ import com.pixplicity.sharp.Sharp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import butterknife.Bind;
@@ -76,7 +80,7 @@ public class MineFragment extends BaseFragment {
             model.setIconPath(icons[i]);
             list.add(model);
         }
-        MineMenuAdapter adapter = new MineMenuAdapter(list, getContext());
+        MineMenuAdapter<HomeMenuBean> adapter = new MineMenuAdapter(list, getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -91,11 +95,26 @@ public class MineFragment extends BaseFragment {
                         openDing("com.alibaba.android.rimet");
                         break;
                     case "我的发布":
-                        intent.setClass(getContext(), MyPublishActivity.class);
+                        intent.setClass(Objects.requireNonNull(getContext()), MyPublishActivity.class);
                         startActivity(intent);
                         break;
+                    case "我的收藏":
+                        intent.setClass(Objects.requireNonNull(getContext()), MyCollectActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "我的足迹":
+                        intent.setClass(Objects.requireNonNull(getContext()), MyFootPrintActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "我的名片":
+                        intent.setClass(Objects.requireNonNull(getContext()), PersonDataActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "退出登录":
+                        LoginActivity.start(getContext());
+                        break;
                     default:
-                        intent.setClass(getContext(), CollectActivity.class);
+                        intent.setClass(Objects.requireNonNull(getContext()), MyFootPrintActivity.class);
                         startActivity(intent);
                         break;
                 }

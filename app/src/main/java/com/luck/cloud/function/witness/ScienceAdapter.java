@@ -33,19 +33,8 @@ public class ScienceAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
     }
 
     class ViewHolder extends BaseViewHolder<T> {
-//        @Bind(R.id.tv_item_supervise_handle_title)
-//        TextView mTvTitle;
-//        @Bind(R.id.tv_item_supervise_handle_belongProject)
-//        TextView mTvBelongProject;
-//        @Bind(R.id.tv_item_supervise_handle_operationUnit)
-//        TextView mTvOperationUnit;
-//        @Bind(R.id.tv_item_supervise_charge_person)
-//        TextView mTvChargePerson;
-//        @Bind(R.id.tv_item_supervise_handle_status)
-//        TextView mTvStatus;
-//        private ViewUtil util;
         @Bind(R.id.iv_item_science)
-ImageView imageView;
+        ImageView imageView;
         public ViewHolder(View itemView) {
             super(itemView);
             //util=ViewUtil.getViewUtil();

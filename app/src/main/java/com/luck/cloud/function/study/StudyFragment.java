@@ -1,4 +1,4 @@
-package com.luck.cloud.function.witness;
+package com.luck.cloud.function.study;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,12 @@ import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
 import com.luck.cloud.common.activity.WebActivity;
+import com.luck.cloud.function.study.model.StudyModel;
+import com.luck.cloud.function.witness.SuperviseHandleBean;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +29,18 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 15:11
  * Description: 推荐页面
  */
-public class RecommendFragment extends BaseFragment {
+public class StudyFragment extends BaseFragment {
     @Bind(R.id.xrv_common_list)
     XRecyclerView mRvList;
-    private ScienceAdapter<SuperviseHandleBean.ItemsBean> adapter;
+    private StudyAdapter<StudyModel> adapter;
     private Context context;
 
     private int type;
 
 
 
-    public static RecommendFragment getInstance(int type) {
-        RecommendFragment fragment = new RecommendFragment();
+    public static StudyFragment getInstance(int type) {
+        StudyFragment fragment = new StudyFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         fragment.setArguments(bundle);
@@ -62,7 +65,7 @@ public class RecommendFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
-        adapter = new ScienceAdapter(context);
+        adapter = new StudyAdapter(context);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         mRvList.setLayoutManager(layoutManager);
         mRvList.setAdapter(adapter);
@@ -70,7 +73,7 @@ public class RecommendFragment extends BaseFragment {
         adapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                SuperviseHandleBean.ItemsBean itemsBean=adapter.getList().get(position);
+                StudyModel itemsBean=adapter.getList().get(position);
                // WebActivity.start(context,itemsBean.getId(),itemsBean.getIsRead());
                 Intent intent=new Intent(context, WebActivity.class);
                 context.startActivity(intent);
@@ -97,9 +100,27 @@ public class RecommendFragment extends BaseFragment {
      * @param page
      */
     private void requestData(final int page) {
-        List<SuperviseHandleBean.ItemsBean> list = new ArrayList<>();
+        List<StudyModel> list = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            StudyModel model=new StudyModel();
+            String url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
+            if (i%2==0){
+                List<LocalMedia> picturelist = new ArrayList<>();
+                for (int j=0;j<3;j++){
+                    LocalMedia media = new LocalMedia();
+                    media.setPath(url);
+                    picturelist.add(media);
+                }
+                model.setPictureList(picturelist);
+
+            }else if (i==1){
+                model.setSingleImage(url);
+            }
+            list.add(model);
+        }
         for(int i=0;i<10;i++){
-            list.add(new SuperviseHandleBean.ItemsBean());
+            list.add(new StudyModel());
         }
         adapter.setSuccessReqList(list, 13, page, mRvList,"暂无推荐内容");
 //        final RequestBean request = initRequestParams();
@@ -121,7 +142,7 @@ public class RecommendFragment extends BaseFragment {
 //            public void onResponse(BaseBean<SuperviseHandleBean> response) {
 //                hideRDialog();
 //                SuperviseHandleBean acceptanceBean = response.getData();
-//                List<SuperviseHandleBean.ItemsBean> list = null;
+//                List<StudyModel> list = null;
 //                if (acceptanceBean != null) list = acceptanceBean.getItems();
 //                adapter.setSuccessReqList(list, request.getPageable().getSize(), page, mRvList,"暂无推荐内容");
 //            }

@@ -1,4 +1,4 @@
-package com.luck.cloud.function.study;
+package com.luck.cloud.function.science;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.common.adapter.CommonFragmentPagerAdapter;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.study.StudyFragment;
 import com.luck.cloud.function.witness.GardenInfoBean;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
@@ -24,7 +25,7 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/11 15:54
  * Describe:TableLayout 科普
  */
-public class StudyActivity extends BaseActivity {
+public class ScienceActivity extends BaseActivity {
 
     @Bind(R.id.mtl_science_management)
     TabLayout mMtlManagement;
@@ -91,10 +92,12 @@ public class StudyActivity extends BaseActivity {
     private void setPageData(int id) {
         List<String> titleList = new ArrayList<>();
         List<Fragment> fragmentList = new ArrayList<>();
-        titleList.add("重要讲话");
-        titleList.add("影视资料");
-        titleList.add("第一书记荣誉堂");
-        titleList.add("地方政策");
+        titleList.add("植物");
+        titleList.add("动物");
+        titleList.add("蒙医药");
+        titleList.add("种植技术");
+        titleList.add("农业前沿");
+        titleList.add("农药");
         for (int i=0;i<titleList.size();i++){
             fragmentList.add(new StudyFragment());
         }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_10"
+    android:gravity="center_vertical"
+    android:background="@drawable/selector_fill_rectangle_white_press"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_study_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="同期声:用力时代潮头,争做时代先锋"
+            android:textColor="@color/main_text_color"
+            android:textSize="@dimen/sp_16" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_study_pictures"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:layout_marginTop="@dimen/dp_10"
+            ></androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/tv_study_source"
+            style="@style/text_14_wrap_gray"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="来源:微信公众号" />
+
+        <LinearLayout
+            android:id="@+id/ll_study_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dp_10"
+            android:gravity="center_vertical"
+            >
+            <TextView
+                android:id="@+id/tv_study_time"
+                style="@style/text_14_wrap_gray"
+                android:text="2020-05-03" />
+            <TextView
+                android:id="@+id/tv_study_watch_num"
+                style="@style/text_14_wrap_gray"
+                android:drawableLeft="@mipmap/eye"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:text="11" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_item_study"
+        android:layout_width="130dp"
+        android:layout_height="90dp"
+        android:src="@mipmap/banner1"
+        android:scaleType="centerCrop" />
+</LinearLayout>
+
+

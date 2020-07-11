@@ -25,15 +25,22 @@
         <activity
             android:name="com.luck.cloud.function.login.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="fullSensor" >
 
-        <activity android:name="com.luck.cloud.function.main.MainActivity">
+        </activity>
+
+        <activity android:name=".function.login.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.luck.cloud.function.main.MainActivity">
+
+        </activity>
+        <activity android:name=".function.mine.collect.MyCollectActivity"></activity>
         <activity android:name=".function.witness.video.add.AddVideoActivity">
 
         </activity>
@@ -58,6 +65,9 @@
         <activity android:name=".function.study.StudyActivity">
 
         </activity>
+        <activity android:name=".function.science.ScienceActivity">
+
+        </activity>
         <activity android:name=".common.activity.WebActivity" >
 
         </activity>
@@ -78,7 +88,7 @@
 
         </activity>
         <activity android:name=".common.activity.ModifyActivity" />
-        <activity android:name=".function.mine.CollectActivity" />
+        <activity android:name=".function.mine.footprint.MyFootPrintActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

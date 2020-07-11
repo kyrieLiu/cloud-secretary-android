@@ -1,4 +1,4 @@
-package com.luck.cloud.function.mine;
+package com.luck.cloud.function.mine.footprint;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
+import com.luck.cloud.function.mine.WaitDoneBean;
 
 import java.util.List;
 
@@ -16,19 +17,19 @@ import java.util.List;
  * Created by liuyin on 2019/2/27 15:19
  * Description:待办事项
  */
-public class HomeWaitDoneAdapter<T extends WaitDoneBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
+public class FootPrintAdapter<T extends WaitDoneBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
 
-    public HomeWaitDoneAdapter(List<T> list, Context context) {
+    public FootPrintAdapter(List<T> list, Context context) {
         super(list, context);
     }
 
-    public HomeWaitDoneAdapter(Context context) {
+    public FootPrintAdapter(Context context) {
         super(context);
     }
 
     @Override
     public BaseViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_home_wait_done, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_foot_print, parent, false);
         return new ViewHolder(view);
     }
 

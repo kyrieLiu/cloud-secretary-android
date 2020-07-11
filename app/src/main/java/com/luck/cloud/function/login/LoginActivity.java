@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 import com.luck.cloud.PictureMainActivity;
@@ -40,6 +41,8 @@ public class LoginActivity extends BaseActivity {
     //登录
     @Bind(R.id.bt_login_enter)
     Button mBtLogin;
+    @Bind(R.id.tv_register)
+    TextView tvRegister;
 
     private String account;
     private String password;
@@ -76,10 +79,6 @@ public class LoginActivity extends BaseActivity {
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        mEtAccount.setText("哈哈哈");
     }
 
     @Override
@@ -116,8 +115,19 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.bt_login_enter)
-    public void onViewClicked() {
+    @OnClick({R.id.bt_login_enter,R.id.tv_register})
+    public void onViewClicked(View view) {
+        switch (view.getId()){
+            case R.id.bt_login_enter:
+                startLogin();
+                break;
+            case R.id.tv_register:
+                break;
+        }
+
+    }
+
+    private void startLogin(){
         final String account = mEtAccount.getText().toString();
         final String password = mEtPassword.getText().toString();
         if (TextUtils.isEmpty(account)) {

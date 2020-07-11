@@ -1,5 +1,6 @@
-package com.luck.cloud.function.study;
+package com.luck.cloud.function.login;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +12,10 @@ import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.common.adapter.CommonFragmentPagerAdapter;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.login.register.FirstSecretaryFragment;
 import com.luck.cloud.function.witness.GardenInfoBean;
+import com.luck.cloud.function.witness.dynamic.DynamicFragment;
+import com.luck.cloud.function.witness.video.VideoFragment;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
 
@@ -20,18 +24,15 @@ import java.util.List;
 
 import butterknife.Bind;
 
-/**
- * Created by liuyin on 2019/4/11 15:54
- * Describe:TableLayout 科普
- */
-public class StudyActivity extends BaseActivity {
-
-    @Bind(R.id.mtl_science_management)
+public class RegisterActivity extends BaseActivity {
+    @Bind(R.id.mtl_common)
     TabLayout mMtlManagement;
-    @Bind(R.id.vp_science_management)
+    @Bind(R.id.vp_common)
     ViewPager mViewPager;
 
     private List<GardenInfoBean.ItemsBean> gardenList;
+
+    private Context context;
 
     @Override
     protected void back() {
@@ -40,11 +41,12 @@ public class StudyActivity extends BaseActivity {
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_study;
+        return R.layout.common_tab_viewpager;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        setTitle("我的发布");
     }
 
     @Override
@@ -53,6 +55,26 @@ public class StudyActivity extends BaseActivity {
         setPageData(1);
     }
 
+//    @OnClick({R.id.science_keyWords,R.id.iv_right})
+//    public void onClick(View view) {
+//        Intent intent=new Intent();
+//        switch (view.getId()) {
+//            case R.id.science_keyWords:
+//                intent.setClass(this, PropertyServiceStandardSearchActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.iv_right:
+//                int currentItem=mViewPager.getCurrentItem();
+//                if (currentItem==0){
+//                    intent.setClass(this, AddDynamicActivity.class);
+//                    startActivity(intent);
+//                }else{
+//                    intent.setClass(this, AddVideoActivity.class);
+//                    startActivity(intent);
+//                }
+//                break;
+//        }
+//    }
 
 
     /**
@@ -91,17 +113,18 @@ public class StudyActivity extends BaseActivity {
     private void setPageData(int id) {
         List<String> titleList = new ArrayList<>();
         List<Fragment> fragmentList = new ArrayList<>();
-        titleList.add("重要讲话");
-        titleList.add("影视资料");
-        titleList.add("第一书记荣誉堂");
-        titleList.add("地方政策");
-        for (int i=0;i<titleList.size();i++){
-            fragmentList.add(new StudyFragment());
-        }
+        titleList.add("第一书记");
+        titleList.add("大学生及高校");
+        titleList.add("驻地村民");
+        titleList.add("其他人员");
+
+        fragmentList.add(new FirstSecretaryFragment());
+        fragmentList.add(new FirstSecretaryFragment());
+        fragmentList.add(new FirstSecretaryFragment());
+        fragmentList.add(new FirstSecretaryFragment());
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);
-        mMtlManagement.setTabMode(TabLayout.MODE_SCROLLABLE);
         mMtlManagement.setupWithViewPager(mViewPager);
 
     }
