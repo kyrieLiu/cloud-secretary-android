@@ -92,8 +92,47 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:background="@drawable/selector_fill_rectangle_white_4"
         android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/ll_dynamic_like"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/iv_dynamic_like"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                ></ImageView>
+            <TextView
+                android:id="@+id/tv_dynamic_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点赞"></TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_dynamic_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/iv_dynamic_comment"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                ></ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="评论"></TextView>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
