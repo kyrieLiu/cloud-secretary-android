@@ -4,8 +4,17 @@ import java.util.List;
 
 public class DynamicModel {
     private int isLike;
+    private int isCollect;
     private List<CommentModel> commentModel;
     private List<String> likeUsers;
+
+    public int getIsCollect() {
+        return isCollect;
+    }
+
+    public void setIsCollect(int isCollect) {
+        this.isCollect = isCollect;
+    }
 
     public List<String> getLikeUsers() {
         return likeUsers;

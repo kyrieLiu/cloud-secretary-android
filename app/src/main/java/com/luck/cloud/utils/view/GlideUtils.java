@@ -32,7 +32,7 @@ public class GlideUtils {
      */
     public static void loadRoundedCorners(Context context, ImageView imageView, String path, int radius, RoundedCornersTransformation.CornerType cornerType) {
         RequestOptions options = new RequestOptions()
-                .placeholder(R.mipmap.image_default_holder)
+                // .placeholder(R.mipmap.image_default_holder)
                 .transforms(new CenterCrop(), new RoundedCornersTransformation(context, radius, 0, cornerType));
 
 

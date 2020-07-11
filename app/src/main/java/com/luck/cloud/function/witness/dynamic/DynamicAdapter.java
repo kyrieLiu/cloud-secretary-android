@@ -17,6 +17,7 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -123,6 +124,12 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
         LinearLayout llLikeStatistic;
         @Bind(R.id.ll_dynamic_container)
         LinearLayout container;
+        @Bind(R.id.ll_dynamic_collect)
+        LinearLayout llCollect;
+        @Bind(R.id.iv_dynamic_collect)
+        ImageView ivCollect;
+        @Bind(R.id.tv_dynamic_collect)
+        TextView tvCollect;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -146,8 +153,6 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
 
                 @Override
                 public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
-//                    Random random = new Random();
-//                    paint.setColor(Color.parseColor("#ffffff"));
                     if (bean.getIsLike() == 1) {
                         assert paint != null;
                         paint.setColor(Color.parseColor("#ff0000"));
@@ -164,6 +169,35 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
                 }
             });
             sharp.into(ivLike);
+
+            Sharp collectSharp = Sharp.loadResource(context.getResources(), R.raw.collect);
+            collectSharp.setOnElementListener(new OnSvgElementListener() {
+                @Override
+                public void onSvgStart(@NonNull Canvas canvas, @Nullable RectF rectF) {
+                }
+
+                @Override
+                public void onSvgEnd(@NonNull Canvas canvas, @Nullable RectF rectF) {
+                }
+
+                @Override
+                public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
+                    if (bean.getIsCollect() == 1) {
+                        assert paint != null;
+                        paint.setColor(Color.parseColor("#ff0000"));
+                        tvCollect.setTextColor(Color.parseColor("#ff0000"));
+                    } else {
+                        tvCollect.setTextColor(context.getResources().getColor(R.color.main_text_color));
+                    }
+
+                    return t;
+                }
+
+                @Override
+                public <T> void onSvgElementDrawn(@Nullable String s, @NonNull T t, @NonNull Canvas canvas, @Nullable Paint paint) {
+                }
+            });
+            collectSharp.into(ivCollect);
 
             Sharp shComment = Sharp.loadResource(context.getResources(), R.raw.comment);
             shComment.into(ivComment);
@@ -199,66 +233,50 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
 
             String videoPicture = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
 
-//            RequestOptions options = new RequestOptions()
-//                    .placeholder(R.mipmap.image_default_holder)
-//                    .transforms(new CenterCrop(), new RoundedCornersTransformation(context, radius, 0, cornerType));
-
-            Glide.with(context).load(videoPicture)
-                    .into(ivVideo);
-
             GlideUtils.loadRoundedCorners(context, ivVideo, videoPicture, 4, RoundedCornersTransformation.CornerType.ALL);
 
-            ivVideo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("tag","播放视频");
-                    String videoUrl="http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
-                    PictureSelector.create((Activity) context)
-                            .themeStyle(R.style.picture_default_style)
-                            .externalPictureVideo(videoUrl);
-                }
-            });
-
-            mLlLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int isLike = bean.getIsLike();
-                    List<String> likeUsers = bean.getLikeUsers();
-                    if (likeUsers == null) {
-                        likeUsers = new ArrayList<>();
-                    }
-                    if (isLike == 0) {
-                        likeUsers.add("刘隐");
-                    } else {
-                        likeUsers.remove("刘隐");
-                    }
-                    bean.setLikeUsers(likeUsers);
-                    bean.setIsLike(bean.getIsLike() == 1 ? 0 : 1);
-                    notifyDataSetChanged();
-                }
-            });
-            llComment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickListener.commentCallback(bean, p);
-                }
-            });
-
-            llTransimit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickListener.transmitCallback(bean,p);
-                }
-            });
+//            ivVideo.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    clickListener.playVideoCallback(bean,p);
+//                }
+//            });
+//
+//            mLlLike.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    clickListener.likeCallback(bean,p);
+//                }
+//            });
+//            llComment.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    clickListener.commentCallback(bean, p);
+//                }
+//            });
+//
+//            llTransimit.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    clickListener.transmitCallback(bean,p);
+//                }
+//            });
+//
+//
+//            llCollect.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    clickListener.collectCallback(bean,p);
+//                }
+//            });
 
 
-            rlVideoParent.setOnClickListener(new View.OnClickListener() {
+            container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    bean.setIsLike(1);
+                    clickListener.collectCallback(bean,p);
                 }
             });
-
 
             FullyGridLayoutManager manager = new FullyGridLayoutManager(context,
                     3, GridLayoutManager.VERTICAL, false);
@@ -278,6 +296,16 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
 
             mAdapter.setList(list);
             mRecyclerView.setAdapter(mAdapter);
+
+//            mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View view, MotionEvent motionEvent) {
+//                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                        container.performClick();  //模拟父控件的点击
+//                    }
+//                    return false;
+//                }
+//            });
 
             mAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
                 @Override
@@ -301,6 +329,9 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
         void commentCallback(DynamicModel model, int position);
 
         void transmitCallback(DynamicModel model, int position);
-        void deleteItem(DynamicModel model, int position);
+        void likeCallback(DynamicModel model,int position);
+        void deleteCallback(DynamicModel model, int position);
+        void collectCallback(DynamicModel model,int position);
+        void playVideoCallback(DynamicModel model,int position);
     }
 }

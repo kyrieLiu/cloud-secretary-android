@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
+import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;

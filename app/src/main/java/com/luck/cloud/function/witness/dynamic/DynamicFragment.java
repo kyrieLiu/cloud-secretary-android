@@ -1,13 +1,17 @@
 package com.luck.cloud.function.witness.dynamic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.luck.cloud.GlideEngine;
 import com.luck.cloud.R;
+import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
@@ -23,6 +27,8 @@ import com.luck.cloud.widget.dialog.DateSelectDialog;
 import com.luck.cloud.widget.dialog.SelectMenuDialog;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +118,24 @@ public class DynamicFragment extends BaseFragment {
             }
 
             @Override
-            public void deleteItem(DynamicModel model, int position) {
+            public void likeCallback(DynamicModel bean, int position) {
+                int isLike = bean.getIsLike();
+                List<String> likeUsers = bean.getLikeUsers();
+                if (likeUsers == null) {
+                    likeUsers = new ArrayList<>();
+                }
+                if (isLike == 0) {
+                    likeUsers.add("刘隐");
+                } else {
+                    likeUsers.remove("刘隐");
+                }
+                bean.setLikeUsers(likeUsers);
+                bean.setIsLike(bean.getIsLike() == 1 ? 0 : 1);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void deleteCallback(DynamicModel model, int position) {
                 SelectMenuDialog dialog=new SelectMenuDialog(getContext());
                 dialog.setListener(new SelectMenuDialog.OnMenuSelectListener() {
                     @Override
@@ -123,6 +146,22 @@ public class DynamicFragment extends BaseFragment {
                 dialog.show();
                 dialog.setTitle("提醒");
                 dialog.setContent("是否删除该信息");
+            }
+
+            @Override
+            public void collectCallback(DynamicModel bean, int position) {
+                ToastUtil.toastShortCenter("已收藏");
+                int isCollect = bean.getIsCollect();
+                bean.setIsCollect(isCollect == 1 ? 0 : 1);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void playVideoCallback(DynamicModel bean, int position) {
+                String videoUrl="http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
+                PictureSelector.create((Activity) context)
+                        .themeStyle(R.style.picture_default_style)
+                        .externalPictureVideo(videoUrl);
             }
         });
     }
@@ -174,5 +213,6 @@ public class DynamicFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
 }
