@@ -1,10 +1,13 @@
-package com.luck.cloud.function.witness.dynamic;
+package com.luck.cloud.function.witness.video;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
@@ -14,15 +17,10 @@ import com.luck.cloud.callback.OnRecyclerLoadingListener;
 import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.function.witness.ScienceAdapter;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
-import com.luck.cloud.function.witness.model.CommentModel;
-import com.luck.cloud.function.witness.model.DynamicModel;
-import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
-import com.luck.cloud.widget.dialog.CommentDialog;
-import com.luck.cloud.widget.dialog.DateSelectDialog;
-import com.luck.cloud.widget.dialog.SelectMenuDialog;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
+import com.luck.picture.lib.PictureSelector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,18 +29,20 @@ import butterknife.Bind;
 
 /**
  * Created by liuyin on 2019/4/16 15:11
- * Description: 动态列表
+ * Description: 推荐页面
  */
-public class DynamicFragment extends BaseFragment {
+public class VideoFragment extends BaseFragment {
     @Bind(R.id.xrv_common_list)
     XRecyclerView mRvList;
-    private DynamicAdapter<DynamicModel> adapter;
+    private VideoAdapter<SuperviseHandleBean.ItemsBean> adapter;
     private Context context;
+
     private int type;
 
 
-    public static DynamicFragment getInstance(int type) {
-        DynamicFragment fragment = new DynamicFragment();
+
+    public static VideoFragment getInstance(int type) {
+        VideoFragment fragment = new VideoFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
         fragment.setArguments(bundle);
@@ -54,7 +54,7 @@ public class DynamicFragment extends BaseFragment {
         super.onAttach(context);
         this.context = context;
     }
-
+    
     @Override
     protected int getContentId() {
         return R.layout.common_fragment_xrecycler_list;
@@ -67,12 +67,24 @@ public class DynamicFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
-        adapter = new DynamicAdapter(context);
-        setListener();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        adapter = new VideoAdapter(context);
+        GridLayoutManager layoutManager = new GridLayoutManager(context,2);
         mRvList.setLayoutManager(layoutManager);
+
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mRvList.getLayoutParams();
+        lp.setMargins(15, 0, 15, 0);
+        mRvList.setLayoutParams(lp);
         mRvList.setAdapter(adapter);
-        mRvList.addItemDecoration(new ItemLinearDivider(15, 0, 0, getResources().getColor(R.color.gray_color_shallow)));
+        mRvList.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
+        adapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                String videoUrl="http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
+                PictureSelector.create(getActivity())
+                        .themeStyle(R.style.picture_default_style)
+                        .externalPictureVideo(videoUrl);
+            }
+        });
         mRvList.setLoadingListener(new OnRecyclerLoadingListener() {
             @Override
             public void onRefresh() {
@@ -87,46 +99,6 @@ public class DynamicFragment extends BaseFragment {
         mRvList.refresh();
     }
 
-    private void setListener(){
-        adapter.setClickListener(new DynamicAdapter.ItemClickListener() {
-
-            @Override
-            public void commentCallback(DynamicModel model, int position) {
-                CommentDialog dialog=CommentDialog.newInstance();
-                dialog.setConfirmCommentListener(new CommentDialog.ConfirmCommentListener() {
-                    @Override
-                    public void addComment(String content) {
-                        model.getCommentModel().add(new CommentModel("刘隐",content));
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-                dialog.show(getActivity().getFragmentManager(),"comment");
-
-//                DateSelectDialog dialog1=new DateSelectDialog(getContext());
-//                dialog1.show();
-            }
-
-            @Override
-            public void transmitCallback(DynamicModel model, int position) {
-                ToastUtil.toastShortCenter("已转发");
-            }
-
-            @Override
-            public void deleteItem(DynamicModel model, int position) {
-                SelectMenuDialog dialog=new SelectMenuDialog(getContext());
-                dialog.setListener(new SelectMenuDialog.OnMenuSelectListener() {
-                    @Override
-                    public void callback() {
-
-                    }
-                });
-                dialog.show();
-                dialog.setTitle("提醒");
-                dialog.setContent("是否删除该信息");
-            }
-        });
-    }
-
 
     /**
      * 请求督查督办列表数据
@@ -134,17 +106,11 @@ public class DynamicFragment extends BaseFragment {
      * @param page
      */
     private void requestData(final int page) {
-        List<DynamicModel> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            List<CommentModel> models=new ArrayList<>();
-            models.add(new CommentModel("刘隐","很强啊,小伙子"));
-            models.add(new CommentModel("魏明","你这个地方很厉害啊"));
-            models.add(new CommentModel("王青青","哈哈,有机会去找你"));
-            DynamicModel model=new DynamicModel();
-            model.setCommentModel(models);
-            list.add(model);
+        List<SuperviseHandleBean.ItemsBean> list = new ArrayList<>();
+        for(int i=0;i<10;i++){
+            list.add(new SuperviseHandleBean.ItemsBean());
         }
-        adapter.setSuccessReqList(list, 13, page, mRvList, "暂无推荐内容");
+        adapter.setSuccessReqList(list, 10, page, mRvList,"暂无推荐内容");
 //        final RequestBean request = initRequestParams();
 //        request.getPageable().setCurrent(page);
 //        RequestBean.CondBean condBean = new RequestBean.CondBean();
@@ -164,13 +130,12 @@ public class DynamicFragment extends BaseFragment {
 //            public void onResponse(BaseBean<SuperviseHandleBean> response) {
 //                hideRDialog();
 //                SuperviseHandleBean acceptanceBean = response.getData();
-//                List<DynamicModel> list = null;
+//                List<SuperviseHandleBean.ItemsBean> list = null;
 //                if (acceptanceBean != null) list = acceptanceBean.getItems();
 //                adapter.setSuccessReqList(list, request.getPageable().getSize(), page, mRvList,"暂无推荐内容");
 //            }
 //        }, this);
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

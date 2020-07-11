@@ -23,6 +23,7 @@ import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.function.home.HomeMenuBean;
+import com.luck.cloud.function.mine.publish.MyPublishActivity;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.pixplicity.sharp.OnSvgElementListener;
 import com.pixplicity.sharp.Sharp;
@@ -84,12 +85,17 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 HomeMenuBean bean = list.get(position);
+                Intent intent=new Intent();
                 switch (bean.getMenuName()) {
                     case "钉钉交流":
                         openDing("com.alibaba.android.rimet");
                         break;
+                    case "我的发布":
+                        intent.setClass(getContext(), MyPublishActivity.class);
+                        startActivity(intent);
+                        break;
                     default:
-                        Intent intent = new Intent(getContext(), CollectActivity.class);
+                        intent.setClass(getContext(), CollectActivity.class);
                         startActivity(intent);
                         break;
                 }

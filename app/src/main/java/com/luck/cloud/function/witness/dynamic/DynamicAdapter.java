@@ -13,7 +13,9 @@ import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,9 @@ import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -43,6 +47,9 @@ import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.function.main.MainActivity;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
+import com.luck.cloud.function.witness.dynamic.add.AddDynamicActivity;
+import com.luck.cloud.function.witness.model.CommentModel;
+import com.luck.cloud.function.witness.model.DynamicModel;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.RoundedCornersTransformation;
 import com.luck.picture.lib.PictureSelector;
@@ -65,11 +72,16 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 10:15
  * Description:动态列表适配器
  */
-public class DynamicAdapter<T extends SuperviseHandleBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
+public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdapter<T> {
 
+    private ItemClickListener clickListener;
 
     public DynamicAdapter(Context context) {
         super(context);
+    }
+
+    public void setClickListener(ItemClickListener listener) {
+        this.clickListener = listener;
     }
 
     @Override
@@ -93,37 +105,88 @@ public class DynamicAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
         ImageView ivLike;
         @Bind(R.id.tv_dynamic_like)
         TextView tvLike;
+        @Bind(R.id.ll_dynamic_comment)
+        LinearLayout llComment;
+        @Bind(R.id.iv_dynamic_comment)
+        ImageView ivComment;
+        @Bind(R.id.ll_dynamic_transmit)
+        LinearLayout llTransimit;
+        @Bind(R.id.iv_dynamic_transmit)
+        ImageView ivTransmit;
+        @Bind({R.id.rv_dynamic_comment_list})
+        RecyclerView rlCommentList;
+        @Bind(R.id.tv_dynamic_like_statistic)
+        TextView tvLikeStatistic;
+        @Bind(R.id.iv_dynamic_like_statistic)
+        ImageView ivLikeStatistic;
+        @Bind(R.id.ll_like_statistic)
+        LinearLayout llLikeStatistic;
+        @Bind(R.id.ll_dynamic_container)
+        LinearLayout container;
 
         public ViewHolder(View itemView) {
             super(itemView);
             //util=ViewUtil.getViewUtil();
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @SuppressLint("WrongConstant")
         @Override
         protected void bind(T bean, int p) {
 
-
-            Sharp sharp= Sharp.loadResource(context.getResources(), R.raw.like);
+            Sharp sharp = Sharp.loadResource(context.getResources(), R.raw.like);
             sharp.setOnElementListener(new OnSvgElementListener() {
                 @Override
-                public void onSvgStart(@NonNull Canvas canvas, @Nullable RectF rectF) { }
+                public void onSvgStart(@NonNull Canvas canvas, @Nullable RectF rectF) {
+                }
 
                 @Override
-                public void onSvgEnd(@NonNull Canvas canvas, @Nullable RectF rectF) { }
+                public void onSvgEnd(@NonNull Canvas canvas, @Nullable RectF rectF) {
+                }
 
                 @Override
                 public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
 //                    Random random = new Random();
 //                    paint.setColor(Color.parseColor("#ffffff"));
+                    if (bean.getIsLike() == 1) {
+                        assert paint != null;
+                        paint.setColor(Color.parseColor("#ff0000"));
+                        tvLike.setTextColor(Color.parseColor("#ff0000"));
+                    } else {
+                        tvLike.setTextColor(context.getResources().getColor(R.color.main_text_color));
+                    }
+
                     return t;
                 }
 
                 @Override
-                public <T> void onSvgElementDrawn(@Nullable String s, @NonNull T t, @NonNull Canvas canvas, @Nullable Paint paint) { }
+                public <T> void onSvgElementDrawn(@Nullable String s, @NonNull T t, @NonNull Canvas canvas, @Nullable Paint paint) {
+                }
             });
             sharp.into(ivLike);
 
+            Sharp shComment = Sharp.loadResource(context.getResources(), R.raw.comment);
+            shComment.into(ivComment);
+            Sharp shTransmit = Sharp.loadResource(context.getResources(), R.raw.transmit);
+            shTransmit.into(ivTransmit);
+            Sharp shStatisticLike = Sharp.loadResource(context.getResources(), R.raw.like);
+            shStatisticLike.into(ivLikeStatistic);
+            if (bean.getLikeUsers() != null && bean.getLikeUsers().size() > 0) {
+                tvLikeStatistic.setText(String.join(",", bean.getLikeUsers()));
+                llLikeStatistic.setVisibility(View.VISIBLE);
+
+            } else {
+                llLikeStatistic.setVisibility(View.GONE);
+            }
+
+
+            List<CommentModel> commentList = bean.getCommentModel();
+            CommentsAdapter<CommentModel> commentsAdapter = new CommentsAdapter(context);
+            commentsAdapter.setList(commentList);
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            rlCommentList.setLayoutManager(layoutManager);
+            rlCommentList.setAdapter(commentsAdapter);
 
             GradientDrawable drawable = new GradientDrawable();
             drawable.setShape(GradientDrawable.RECTANGLE);
@@ -133,21 +196,66 @@ public class DynamicAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
             attention.setBackground(drawable);
 
 
-            String videoUrl="http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
+
+            String videoPicture = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
 
 //            RequestOptions options = new RequestOptions()
 //                    .placeholder(R.mipmap.image_default_holder)
 //                    .transforms(new CenterCrop(), new RoundedCornersTransformation(context, radius, 0, cornerType));
 
-                Glide.with(context).load(videoUrl)
-                        .into(ivVideo);
+            Glide.with(context).load(videoPicture)
+                    .into(ivVideo);
 
+            GlideUtils.loadRoundedCorners(context, ivVideo, videoPicture, 4, RoundedCornersTransformation.CornerType.ALL);
+
+            ivVideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("tag","播放视频");
+                    String videoUrl="http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
+                    PictureSelector.create((Activity) context)
+                            .themeStyle(R.style.picture_default_style)
+                            .externalPictureVideo(videoUrl);
+                }
+            });
+
+            mLlLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int isLike = bean.getIsLike();
+                    List<String> likeUsers = bean.getLikeUsers();
+                    if (likeUsers == null) {
+                        likeUsers = new ArrayList<>();
+                    }
+                    if (isLike == 0) {
+                        likeUsers.add("刘隐");
+                    } else {
+                        likeUsers.remove("刘隐");
+                    }
+                    bean.setLikeUsers(likeUsers);
+                    bean.setIsLike(bean.getIsLike() == 1 ? 0 : 1);
+                    notifyDataSetChanged();
+                }
+            });
+            llComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.commentCallback(bean, p);
+                }
+            });
+
+            llTransimit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.transmitCallback(bean,p);
+                }
+            });
 
 
             rlVideoParent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    bean.setIsLike(1);
                 }
             });
 
@@ -156,13 +264,13 @@ public class DynamicAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
                     3, GridLayoutManager.VERTICAL, false);
             mRecyclerView.setLayoutManager(manager);
 
-            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3,
-                    ScreenUtils.dip2px(context, 8), false));
+//            mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3,
+//                    ScreenUtils.dip2px(context, 8), false));
             DynamicPictureAdapter<LocalMedia> mAdapter = new DynamicPictureAdapter(context);
             List<LocalMedia> list = new ArrayList<>();
-            for (int i=0;i<5;i++){
-                LocalMedia media=new LocalMedia();
-                String url="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
+            for (int i = 0; i < 5; i++) {
+                LocalMedia media = new LocalMedia();
+                String url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
                 media.setPath(url);
                 list.add(media);
             }
@@ -187,5 +295,12 @@ public class DynamicAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
             });
 
         }
+    }
+
+    public interface ItemClickListener {
+        void commentCallback(DynamicModel model, int position);
+
+        void transmitCallback(DynamicModel model, int position);
+        void deleteItem(DynamicModel model, int position);
     }
 }

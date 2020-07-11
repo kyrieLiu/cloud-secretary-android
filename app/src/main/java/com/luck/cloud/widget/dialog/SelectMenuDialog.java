@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+
 import com.luck.cloud.R;
 
 import butterknife.Bind;
@@ -28,7 +30,7 @@ public class SelectMenuDialog extends Dialog {
     @Bind(R.id.tv_menu_select_confirm)
     TextView mTvConfirm;
 
-    public SelectMenuDialog( Context context) {
+    public SelectMenuDialog(@NonNull Context context) {
         super(context, R.style.ThemeCustomDialog);
     }
 

@@ -1,4 +1,4 @@
-package com.luck.cloud.function.witness;
+package com.luck.cloud.function.mine.publish;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +10,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.luck.cloud.R;
+import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
-import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.common.activity.PropertyServiceStandardSearchActivity;
 import com.luck.cloud.common.adapter.CommonFragmentPagerAdapter;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.witness.GardenInfoBean;
 import com.luck.cloud.function.witness.dynamic.DynamicFragment;
 import com.luck.cloud.function.witness.dynamic.add.AddDynamicActivity;
 import com.luck.cloud.function.witness.video.VideoFragment;
@@ -34,11 +35,11 @@ import butterknife.OnClick;
  * Created by liuyin on 2019/4/11 15:54
  * Describe:TableLayout 科普
  */
-public class WitnessFragment extends BaseFragment {
+public class MyPublishActivity extends BaseActivity {
 
-    @Bind(R.id.mtl_science_management)
+    @Bind(R.id.mtl_common)
     TabLayout mMtlManagement;
-    @Bind(R.id.vp_science_management)
+    @Bind(R.id.vp_common)
     ViewPager mViewPager;
 
     private List<GardenInfoBean.ItemsBean> gardenList;
@@ -46,19 +47,18 @@ public class WitnessFragment extends BaseFragment {
     private Context context;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
+    protected void back() {
+        finish();
     }
 
     @Override
-    protected int getContentId() {
-        return R.layout.fragment_witness;
+    protected int getContentViewId() {
+        return R.layout.common_tab_viewpager;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-
+        setTitle("我的发布");
     }
 
     @Override
@@ -67,26 +67,26 @@ public class WitnessFragment extends BaseFragment {
         setPageData(1);
     }
 
-    @OnClick({R.id.science_keyWords,R.id.iv_right})
-    public void onClick(View view) {
-        Intent intent=new Intent();
-        switch (view.getId()) {
-            case R.id.science_keyWords:
-                intent.setClass(Objects.requireNonNull(getActivity()), PropertyServiceStandardSearchActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.iv_right:
-                int currentItem=mViewPager.getCurrentItem();
-                if (currentItem==0){
-                    intent.setClass(Objects.requireNonNull(getActivity()), AddDynamicActivity.class);
-                    startActivity(intent);
-                }else{
-                    intent.setClass(Objects.requireNonNull(getActivity()), AddVideoActivity.class);
-                    startActivity(intent);
-                }
-                break;
-        }
-    }
+//    @OnClick({R.id.science_keyWords,R.id.iv_right})
+//    public void onClick(View view) {
+//        Intent intent=new Intent();
+//        switch (view.getId()) {
+//            case R.id.science_keyWords:
+//                intent.setClass(this, PropertyServiceStandardSearchActivity.class);
+//                startActivity(intent);
+//                break;
+//            case R.id.iv_right:
+//                int currentItem=mViewPager.getCurrentItem();
+//                if (currentItem==0){
+//                    intent.setClass(this, AddDynamicActivity.class);
+//                    startActivity(intent);
+//                }else{
+//                    intent.setClass(this, AddVideoActivity.class);
+//                    startActivity(intent);
+//                }
+//                break;
+//        }
+//    }
 
 
     /**
@@ -131,7 +131,7 @@ public class WitnessFragment extends BaseFragment {
         fragmentList.add(new DynamicFragment());
         fragmentList.add(new VideoFragment());
 
-        CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getContext(), getChildFragmentManager(), fragmentList, titleList);
+        CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);
         mMtlManagement.setupWithViewPager(mViewPager);
 

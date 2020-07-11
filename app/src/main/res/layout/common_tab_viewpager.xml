@@ -6,14 +6,13 @@
 
     <include layout="@layout/layout_title"></include>
 
-    <com.jingkai.asset.widget.mark_tablayout.MarkTabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/mtl_common"
         style="@style/mark_tablayout_view_style"
-        app:fTabIndicatorFixedWidth="@dimen/dp_80"
         />
 
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_common"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
