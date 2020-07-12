@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.KeyManager;
@@ -158,6 +159,26 @@ public class OKHttpManager {
     public static void getAsyn(String url, ResultCallback callback, Object tag) {
         getInstance().getGetDelegate().getAsyn(url, callback, tag);
     }
+    public static void getJoint(String url, HashMap<String, Object> map,int[] joint, ResultCallback callback, Object tag) {
+        if (joint!=null&&joint.length>0){
+            for (int i=0;i<joint.length;i++){
+                int value=joint[i];
+                url=url.concat("/"+value);
+            }
+        }
+
+        if (map!=null&&map.size()>0){
+            url=url.concat("?");
+            for(String key:map.keySet()) {
+                String value= Objects.requireNonNull(map.get(key)).toString();
+                url=url.concat(key+"="+value);
+            }
+        }
+
+        Log.d("tag","请求URL=="+url);
+
+        getInstance().getGetDelegate().getAsyn(url, callback, tag);
+    }
 
 
     /**
@@ -256,23 +277,17 @@ public class OKHttpManager {
                                 sendSuccessResultCallback(result, resultCallback);
                             } else {
                                 JSONObject jsonObject = new JSONObject(result);
-                                if (jsonObject.has("status")) {//判断服务器是否异常
-                                    int status = jsonObject.getInt("status");
-                                    if (status == 404 || status == 500) {
-                                        sendFailedStringCallback(status, result, AppConstants.HTTP_SERVER_EXCEPTION, resultCallback);
-                                        return;
-                                    }
-                                } else if (jsonObject.has("code")) {
+                                if (jsonObject.has("code")) {
                                     String code = jsonObject.getString("code");
                                     //token 过期,重新登录
                                     if (code.equals("401")) {
-                                        // LoginActivity.start(AppApplication.getInstance());
+                                        LoginActivity.start(AppApplication.getInstance());
                                         return;
                                     }
                                 }
                                 Object object = JsonUtils.jsonToObjectWithType(result, resultCallback.mType);
                                 if (object != null) {
-                                    String code = "";
+                                    String code = "SUCCESS";
                                     String message = "";
                                     if (object instanceof BaseBean) {
                                         BaseBean baseBean = (BaseBean) object;
@@ -285,8 +300,8 @@ public class OKHttpManager {
                                     }
                                     if ("SUCCESS".equals(code)) {
                                         sendSuccessResultCallback(object, resultCallback);
-                                    } else if (code.equals("500")) {
-                                        sendFailedStringCallback(500, result, AppConstants.HTTP_SERVER_EXCEPTION, resultCallback);
+                                    } else if ("500".equals(code)) {
+                                        sendSuccessResultCallback(object, resultCallback);
                                     } else {
                                         sendFailedStringCallback(400, result, message, resultCallback);
                                     }

@@ -26,11 +26,7 @@
             android:name="com.luck.cloud.function.login.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:screenOrientation="fullSensor" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".function.mine.work.CalendarDesignateActivity">
 
@@ -41,7 +37,11 @@
         </activity>
 
         <activity android:name="com.luck.cloud.function.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".function.mine.collect.MyCollectActivity"></activity>
         <activity android:name=".function.witness.video.add.AddVideoActivity">

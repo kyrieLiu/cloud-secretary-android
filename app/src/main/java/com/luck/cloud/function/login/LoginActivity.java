@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,36 +85,10 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+        mEtAccount.setText(SpUtil.getLoginAcount());
+        mEtPassword.setText(SpUtil.getLoginPassword());
     }
 
-
-    /**
-     * OA用户登录
-     */
-    private void oaLogin(final String userName, String token) {
-        params.clear();
-        params.put("loginName", userName);
-        params.put("token", token);
-        params.put("os", 2);
-        params.put("idEntity", 2);
-        mBtLogin.setEnabled(false);
-        showRDialog();
-        OKHttpManager.postJsonNoToken(URLConstant.OA_LOGIN, params, new OKHttpManager.ResultCallback<BaseBean<LoginBean>>() {
-            @Override
-            public void onError(int code, String result, String message) {
-                hideRDialog();
-                ToastUtil.toastShortCenter(message);
-                mBtLogin.setEnabled(true);
-            }
-
-            @Override
-            public void onResponse(BaseBean<LoginBean> response) {
-                hideRDialog();
-
-                operateLoginData(response.getData(), userName, "");
-            }
-        }, this);
-    }
 
 
     @OnClick({R.id.bt_login_enter,R.id.tv_register})
@@ -133,42 +108,39 @@ public class LoginActivity extends BaseActivity {
     private void startLogin(){
         final String account = mEtAccount.getText().toString();
         final String password = mEtPassword.getText().toString();
-//        if (TextUtils.isEmpty(account)) {
-//            ToastUtil.toastShortCenter("请输入账号");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(password)) {
-//            ToastUtil.toastShortCenter("请输入密码");
-//            return;
-//        }
+        if (TextUtils.isEmpty(account)) {
+            ToastUtil.toastShortCenter("请输入账号");
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            ToastUtil.toastShortCenter("请输入密码");
+            return;
+        }
         params.clear();
-        params.put("username", account);
+        params.put("username", account+"_park");
         params.put("password", password);
-        params.put("imageCode", "HACD");
-//        params.put("os", 2);
-//        params.put("idEntity", 2);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-      /*  showRDialog();
-        OKHttpManager.getAsyn(URLConstant.LOGIN, new OKHttpManager.ResultCallback<BaseBean<LoginBean>>() {
+        showRDialog();
+        OKHttpManager.postAsyn(URLConstant.LOGIN,params, new OKHttpManager.ResultCallback<LoginBean>() {
             @Override
             public void onError(int code, String result, String message) {
+                Log.d("tag","message"+message);
                 hideRDialog();
                 ToastUtil.toastShortCenter(message);
             }
 
             @Override
-            public void onResponse(BaseBean<LoginBean> response) {
+            public void onResponse(LoginBean response) {
+                Log.d("tag","返回数据"+response);
                 hideRDialog();
-                LoginBean loginBean =response.getData();
-                if (loginBean.getApiResource()==null||loginBean.getApiResource().size()==0){
-                    ToastUtil.toastShortCenter("当前账号暂无登录权限");
-                    return;
+                if (response.getCode().equals("SUCCESS")) {
+
+                    operateLoginData(response,account,password);
+
+                }else{
+                    ToastUtil.toastShortCenter(response.getMessage());
                 }
-                operateLoginData(response.getData(), account, password);
             }
-        }, this);*/
+        }, this);
     }
 
 
@@ -180,11 +152,8 @@ public class LoginActivity extends BaseActivity {
         SpUtil.setLoginAcount(account);
         SpUtil.setLoginPassword(password);
         SpUtil.setToken(loginBean.getToken());
-        SpUtil.setJob(loginBean.getNameDepart());
-        //存储权限CODE
-        SpUtil.setPermissionCode(loginBean.getApiResource());
 
-        Intent intent = new Intent(this, PictureMainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }

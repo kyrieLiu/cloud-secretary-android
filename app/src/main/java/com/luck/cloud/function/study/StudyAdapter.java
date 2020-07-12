@@ -15,6 +15,7 @@ import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
 import com.luck.cloud.function.study.model.StudyModel;
+import com.luck.cloud.function.study.model.StudyScienceModel;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
 import com.luck.cloud.function.witness.dynamic.DynamicPictureAdapter;
 import com.luck.cloud.utils.view.GlideUtils;
@@ -30,7 +31,7 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 10:15
  * Description:科普列表适配器
  */
-public class StudyAdapter<T extends StudyModel> extends BaseRecyclerViewAdapter<T> {
+public class StudyAdapter<T extends StudyScienceModel.RecordsBean> extends BaseRecyclerViewAdapter<T> {
 
 
     public StudyAdapter(Context context) {
@@ -67,32 +68,33 @@ public class StudyAdapter<T extends StudyModel> extends BaseRecyclerViewAdapter<
 
         @Override
         protected void bind(T bean, int position) {
-            List<LocalMedia> list = bean.getPictureList();
+            // List<LocalMedia> list = bean.getPictureList();
             imageView.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.GONE);
-            if (bean.getSingleImage() != null) {
+            if (bean.getTitlePicture() != null) {
                 imageView.setVisibility(View.VISIBLE);
-                String url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
+                String url = bean.getTitlePicture();
                 GlideUtils.loadRoundedCorners(context, imageView, url, 10, RoundedCornersTransformation.CornerType.ALL);
-            } else if (bean.getPictureList() != null && bean.getPictureList().size() > 0) {
-                mRecyclerView.setVisibility(View.VISIBLE);
-                FullyGridLayoutManager manager = new FullyGridLayoutManager(context,
-                        3, GridLayoutManager.VERTICAL, false);
-                mRecyclerView.setLayoutManager(manager);
-                DynamicPictureAdapter<LocalMedia> mAdapter = new DynamicPictureAdapter(context);
-                mAdapter.setList(list);
-                mRecyclerView.setAdapter(mAdapter);
-
-                mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                            listener.onItemClick(view, position);
-                        }
-                        return false;
-                    }
-                });
             }
+//            else if (bean.getPictureList() != null && bean.getPictureList().size() > 0) {
+//                mRecyclerView.setVisibility(View.VISIBLE);
+//                FullyGridLayoutManager manager = new FullyGridLayoutManager(context,
+//                        3, GridLayoutManager.VERTICAL, false);
+//                mRecyclerView.setLayoutManager(manager);
+//                DynamicPictureAdapter<LocalMedia> mAdapter = new DynamicPictureAdapter(context);
+//                mAdapter.setList(list);
+//                mRecyclerView.setAdapter(mAdapter);
+//
+//                mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View view, MotionEvent motionEvent) {
+//                        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                            listener.onItemClick(view, position);
+//                        }
+//                        return false;
+//                    }
+//                });
+//            }
 
 
 //            mTvTitle.setText(bean.getMissionName());

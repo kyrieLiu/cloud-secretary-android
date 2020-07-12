@@ -11,7 +11,15 @@ public class BaseListBean<T> implements Serializable {
     private String code;
     private int count;
     private String msg;
-    private ArrayList<T> body;
+    private ArrayList<T> data;
+
+    public ArrayList<T> getData() {
+        return data;
+    }
+
+    public void setData(ArrayList<T> data) {
+        this.data = data;
+    }
 
     public String getCode() {
         return code;
@@ -37,11 +45,4 @@ public class BaseListBean<T> implements Serializable {
         this.msg = msg;
     }
 
-    public ArrayList<T> getBody() {
-        return body;
-    }
-
-    public void setBody(ArrayList<T> body) {
-        this.body = body;
-    }
 }

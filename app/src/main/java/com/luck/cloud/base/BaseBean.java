@@ -10,8 +10,17 @@ public class BaseBean<T>  implements Serializable {
     private static final long serialVersionUID = 1876345352L;
     private String code;
     private String msg;
+    private String message;
     private T data;
     private T body;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public T getBody() {
         return body;
