@@ -46,6 +46,9 @@ import com.luck.cloud.function.office.OfficeActivity;
 import com.luck.cloud.function.office.clock.ClockInActivity;
 import com.luck.cloud.function.science.ScienceActivity;
 import com.luck.cloud.function.study.StudyActivity;
+import com.luck.cloud.function.study.StudyAdapter;
+import com.luck.cloud.function.study.model.StudyDetailModel;
+import com.luck.cloud.function.study.model.StudyScienceModel;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.GlideImageLoader;
 import com.luck.cloud.utils.PermissionHelper;
@@ -99,7 +102,7 @@ public class HomeFragment extends BaseFragment {
     @Bind(R.id.sv_notice)
     RelativeSwitcherView svNotice;
 
-    private ScienceAdapter<SuperviseHandleBean.ItemsBean> waitDoneAdapter;
+    private StudyAdapter<StudyScienceModel.RecordsBean> recommendAdapter;
 
 
     private static final int LOCATION_READ_PHONE_STATE = 100;//定位权限请求
@@ -139,7 +142,7 @@ public class HomeFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                requestWaitDone();
+                initInformations();
             }
         });
 
@@ -182,6 +185,7 @@ public class HomeFragment extends BaseFragment {
                         break;
                     case "小云学习":
                         intent.setClass(getContext(), StudyActivity.class);
+                        intent.putExtra("type", 1);
                         startActivity(intent);
                         break;
                     case "小云活动":
@@ -189,7 +193,8 @@ public class HomeFragment extends BaseFragment {
                         startActivity(intent);
                         break;
                     case "小云科普":
-                        intent.setClass(getContext(), ScienceActivity.class);
+                        intent.setClass(getContext(), StudyActivity.class);
+                        intent.putExtra("type", 2);
                         startActivity(intent);
                         break;
 //                    default:
@@ -200,6 +205,7 @@ public class HomeFragment extends BaseFragment {
             }
         });
     }
+
 
     private void initNotice() {
         List<ArticleListBean> communityList = new ArrayList<>();
@@ -221,18 +227,45 @@ public class HomeFragment extends BaseFragment {
      * 初始化banner图
      */
     private void initBanner() {
-        List<Integer> imageURL = new ArrayList<Integer>() {
-            {
-                add(R.mipmap.banner1);
-                add(R.mipmap.banner2);
-                add(R.mipmap.banner3);
+
+        params.put("isfirst", 1);
+        OKHttpManager.getJoint(URLConstant.STUDY_LIST, params, new int[]{1, 100}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
             }
-        };
+
+            @Override
+            public void onResponse(BaseBean<StudyScienceModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")) {
+                    List<StudyScienceModel.RecordsBean> list = response.getData().getRecords();
+                    showBanner(list);
+                } else {
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
+
+    private void showBanner(List<StudyScienceModel.RecordsBean> list) {
+        List<String> bannerList = new ArrayList<>();
+        for (StudyScienceModel.RecordsBean bean : list) {
+            bannerList.add(bean.getTitlePicture());
+        }
+//        List<Integer> imageURL = new ArrayList<Integer>() {
+//            {
+//                add(R.mipmap.banner1);
+//                add(R.mipmap.banner2);
+//                add(R.mipmap.banner3);
+//            }
+//        };
 
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
         //设置图片集合
-        mBanner.setImages(imageURL);
+        mBanner.setImages(bannerList);
         //设置自动轮播，默认为true
         mBanner.isAutoPlay(true);
         //设置指示器位置（当banner模式中有指示器时）
@@ -242,93 +275,97 @@ public class HomeFragment extends BaseFragment {
         mBanner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
-                //ToastUtil.toastShortCenter("position==" + position);
-                //H5Activity.start(this, "详情", "http://wwww.baidu.com");
+                StudyScienceModel.RecordsBean bean = list.get(position);
+                getDetailData(bean);
             }
         });
 
         mBanner.startAutoPlay();
-
     }
 
+    private void getDetailData(StudyScienceModel.RecordsBean bean) {
+        showRDialog();
+        OKHttpManager.getJoint(URLConstant.STUDY_DETAIL, null, new int[]{bean.getInid()}, new OKHttpManager.ResultCallback<BaseBean<StudyDetailModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<StudyDetailModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")) {
+
+                    Temporary.webContent = response.getData().getContent();
+
+                    Intent intent = new Intent(getActivity(), WebActivity.class);
+                    startActivity(intent);
+
+
+                } else {
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
 
     /**
      * 初始化列表
      */
     private void initInformations() {
-        waitDoneAdapter = new ScienceAdapter(getContext());
+        recommendAdapter = new StudyAdapter(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRvWaitDone.setLayoutManager(layoutManager);
-        mRvWaitDone.setAdapter(waitDoneAdapter);
+        mRvWaitDone.setAdapter(recommendAdapter);
         mRvWaitDone.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
-        waitDoneAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
+        recommendAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), WebActivity.class);
-                getContext().startActivity(intent);
+                StudyScienceModel.RecordsBean itemsBean = recommendAdapter.getList().get(position);
+                getDetailData(itemsBean);
             }
         });
 
-        // requestWaitDone();
-        List<SuperviseHandleBean.ItemsBean> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            SuperviseHandleBean.ItemsBean bean = new SuperviseHandleBean.ItemsBean();
-            list.add(bean);
-        }
-        waitDoneAdapter.setList(list);
+        showRDialog();
+        OKHttpManager.getJoint(URLConstant.STUDY_LIST, null,new int[]{1,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+                refreshLayout.finishRefresh();
+                //adapter.setErrorReqList(message, mRvList);
+            }
+
+            @Override
+            public void onResponse(BaseBean<StudyScienceModel> response) {
+                refreshLayout.finishRefresh();
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    List<StudyScienceModel.RecordsBean> list=response.getData().getRecords();
+                    recommendAdapter.setList(list);
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
 
     }
 
-    /**
-     * 请求待办事项数据
-     */
-    private void requestWaitDone() {
-        RequestBean requestBean = initRequestParams();
-
-//        OKHttpManager.postJsonRequest(URLConstant.WAIT_DONE_HOME, requestBean, new OKHttpManager.ResultCallback<BaseBean<WaitDoneBean>>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                if (refreshLayout.getState() == RefreshState.Refreshing) {
-//                    refreshLayout.finishRefresh();
-//                }
-//                mViewWaitWarn.setVisibility(View.VISIBLE);
-//                mViewWaitWarn.setExceptionMessage(AppConstants.HTTP_CONNECT_ERROR);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean<WaitDoneBean> response) {
-//                if (refreshLayout.getState() == RefreshState.Refreshing) {
-//                    refreshLayout.finishRefresh();
-//                }
-//                final List<WaitDoneBean.ItemsBean> list = response.getBody().getItems();
-//                if (list == null || list.size() == 0) {
-//                    mViewWaitWarn.setVisibility(View.VISIBLE);
-//                    mViewWaitWarn.setExceptionMessage("暂无待办事项");
-//                    mRvWaitDone.setVisibility(View.GONE);
-//                } else {
-//                    mViewWaitWarn.setVisibility(View.GONE);
-//                    mRvWaitDone.setVisibility(View.VISIBLE);
-//                }
-//                waitDoneAdapter.setList(list);
-//            }
-//        }, this);
-    }
-
-    @OnClick({R.id.main_search})
+    @OnClick({R.id.main_search,R.id.ll_home_wait_done_more})
     public void click(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
-//            case R.id.iv_home_mine:
-//              intent.setClass(getContext(), MineActivity.class);
-//              startActivity(intent);
-//                break;
+            case R.id.ll_home_wait_done_more:
+              intent.setClass(getContext(), MoreRecommendActivity.class);
+              startActivity(intent);
+                break;
             case R.id.main_search:
                 intent.setClass(getContext(), PropertyServiceStandardSearchActivity.class);
                 startActivity(intent);
                 break;
         }
     }
-
 
 
     /**
@@ -370,7 +407,7 @@ public class HomeFragment extends BaseFragment {
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                         != PERMISSION_GRANTED) {// 没有权限，申请权限。
                     //ActivityCompat.requestPermissions(getActivity(), LOCATIONGPS, LOCATION_READ_PHONE_STATE);
-                    requestPermissions( LOCATIONGPS, LOCATION_READ_PHONE_STATE);
+                    requestPermissions(LOCATIONGPS, LOCATION_READ_PHONE_STATE);
                 } else {
                     startLocation();
                 }
@@ -412,10 +449,11 @@ public class HomeFragment extends BaseFragment {
 
     public class MyLocationListener extends BDAbstractLocationListener {
         @Override
-        public void onReceiveLocation(BDLocation location){
+        public void onReceiveLocation(BDLocation location) {
             tvAddress.setText(location.getCity());
         }
     }
+
     private void startLocation() {
 
         mLocationClient = new LocationClient(getContext());
@@ -445,7 +483,7 @@ public class HomeFragment extends BaseFragment {
         if (mBanner != null) {
             mBanner.stopAutoPlay();
         }
-        if (mLocationClient!=null){
+        if (mLocationClient != null) {
             mLocationClient.stop();
         }
     }

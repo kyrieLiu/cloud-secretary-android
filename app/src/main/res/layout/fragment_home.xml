@@ -137,6 +137,7 @@
                         android:background="@drawable/shape_fill_white_only_bottom_gray"
                         android:paddingLeft="@dimen/dp_10"
                         android:paddingRight="@dimen/dp_10"
+                        android:clickable="true"
                         app:right_icon="@mipmap/icon_right"
                         app:right_menu="更多"
                         app:title="每日推荐" />

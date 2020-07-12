@@ -11,8 +11,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.base.BaseListBean;
 import com.luck.cloud.common.adapter.CommonFragmentPagerAdapter;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.study.model.StudyTabModel;
 import com.luck.cloud.function.witness.GardenInfoBean;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
@@ -56,7 +58,9 @@ public class ActiveActivity extends BaseActivity {
 
         rightVisible(R.mipmap.add);
 
-        setPageData(1);
+        // setPageData(1);
+
+        getTabList();
     }
 
     @OnClick({R.id.iv_right})
@@ -93,6 +97,26 @@ public class ActiveActivity extends BaseActivity {
 
 
                 setPageData(itemsBean.getId());
+
+            }
+        }, this);
+    }
+
+    private void getTabList() {
+        showRDialog();
+        params.put("atType", 1);
+        OKHttpManager.getJoint(URLConstant.STUDY_SCIENCE_TAB, params, null, new OKHttpManager.ResultCallback<BaseListBean<StudyTabModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseListBean<StudyTabModel> response) {
+                hideRDialog();
+                List<StudyTabModel> list = response.getData();
+                setPageData(0);
 
             }
         }, this);

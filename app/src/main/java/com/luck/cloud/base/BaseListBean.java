@@ -11,7 +11,16 @@ public class BaseListBean<T> implements Serializable {
     private String code;
     private int count;
     private String msg;
+    private String message;
     private ArrayList<T> data;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public ArrayList<T> getData() {
         return data;

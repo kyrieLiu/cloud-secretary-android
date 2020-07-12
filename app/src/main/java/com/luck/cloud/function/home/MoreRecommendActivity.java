@@ -1,38 +1,31 @@
-package com.luck.cloud.function.study;
+package com.luck.cloud.function.home;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
-
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
+import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
 import com.luck.cloud.common.activity.WebActivity;
-import com.luck.cloud.common.entity.DictBean;
-import com.luck.cloud.common.entity.RequestBean;
 import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.study.StudyAdapter;
 import com.luck.cloud.function.study.model.StudyDetailModel;
-import com.luck.cloud.function.study.model.StudyModel;
 import com.luck.cloud.function.study.model.StudyScienceModel;
 import com.luck.cloud.function.study.model.StudyTabModel;
-import com.luck.cloud.function.witness.SuperviseHandleBean;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
-import com.luck.picture.lib.entity.LocalMedia;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -41,50 +34,35 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 15:11
  * Description: 推荐页面
  */
-public class StudyFragment extends BaseFragment {
-    @Bind(R.id.xrv_common_list)
+public class MoreRecommendActivity extends BaseActivity {
+    @Bind(R.id.rv_common_list)
     XRecyclerView mRvList;
     private StudyAdapter<StudyScienceModel.RecordsBean> adapter;
-    private Context context;
 
     private StudyTabModel dict;
     //1学习  2科普
     private int type;
 
 
-    public static StudyFragment getInstance(StudyTabModel dict,int type) {
-        StudyFragment fragment = new StudyFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("dict", dict);
-        bundle.putInt("type",type);
-        fragment.setArguments(bundle);
-        return fragment;
+    @Override
+    protected void back() {
+        finish();
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
-
-    @Override
-    protected int getContentId() {
-        return R.layout.common_fragment_xrecycler_list;
+    protected int getContentViewId() {
+        return R.layout.common_activity_list;
     }
 
     @Override
     protected void initView(Bundle bundle) {
-        if (getArguments()!=null&&getArguments().getSerializable("dict")!=null){
-            dict = (StudyTabModel) bundle.getSerializable("dict");
-        }
-        type=bundle.getInt("type");
-
+            setTitle("每日推荐");
     }
 
     @Override
     protected void loadData() {
-        adapter = new StudyAdapter(context);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        adapter = new StudyAdapter(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvList.setLayoutManager(layoutManager);
         mRvList.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
         // mRvList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
@@ -129,7 +107,7 @@ public class StudyFragment extends BaseFragment {
 
                     Temporary.webContent=response.getData().getContent();
 
-                    Intent intent=new Intent(getActivity(),WebActivity.class);
+                    Intent intent=new Intent(MoreRecommendActivity.this,WebActivity.class);
                     startActivity(intent);
 
 
@@ -148,9 +126,6 @@ public class StudyFragment extends BaseFragment {
      */
     private void requestData(final int page,String keyWord) {
         showRDialog();
-        params.put("inotype",dict.getAtCode());
-        params.put("keyWords",keyWord);
-        params.put("contentType",type);
         OKHttpManager.getJoint(URLConstant.STUDY_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
             @Override
             public void onError(int code, String result, String message) {

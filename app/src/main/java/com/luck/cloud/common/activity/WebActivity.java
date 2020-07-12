@@ -10,6 +10,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.luck.cloud.function.mine.work.DateUtil;
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
@@ -22,6 +23,7 @@ import com.tencent.smtt.sdk.WebView;
 
 import android.webkit.JavascriptInterface;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 
 import com.luck.cloud.R;
@@ -78,33 +80,18 @@ public class WebActivity extends BaseActivity {
         setTitle("详情");
 
         webUrl = getIntent().getStringExtra("url");
-        //webUrl = "http://debugtbs.qq.com";
-        //webUrl = "https://vodkgeyttp8.vod.126.net/cloudmusic/IiUyIDAwMGA0IDQhNCAhMQ==/mv/5678292/3e508549183aadc029aec6d37cc32aac.mp4?wsSecret=6d33dad586e1a369c95826d622658fa0&wsTime=1560319430";
-        //webUrl = "http://www.ytmp3.cn/down/73693.mp3";
-        //webUrl = "http://ac.test.jingcaiwang.cn:18080/assetH5/index.html#/HouseRental?token=customerce031cec9e4f4793aced6dd30b1fe41c";
-
-        Log.e("tag", "URL==" + webUrl);
 
     }
 
     @Override
     protected void loadData() {
         initWebView();
-
-//        String body="<p>史莱克的积分凉快圣诞节福利卡接收到了分开讲道理；反馈给家里的分管局领导； 分开了大家转发来看是剪短发了恐惧的妇女，" +
-//                "那地方，你的，父母，小丑女，没出息女，模拟现场，门店，电脑发的，烦恼歌带你飞，等你再放开你的身份，给你的，父母给你，的麻烦你" +
-//                "给，sdmfnsdjfngjksdnfjndfgjnsdjfs.dj,fng,sdjfn的扣分监考老师电饭锅水电费能够理解对方了第三方机构开始的返回给会计师对高" +
-//                "房价是的分开管理史莱克的积分凉快圣诞节福利卡接收到了分开讲道理；反馈给家里的分管局领导； 分开了大家转发来看是剪短发了恐惧的妇" +
-//                "女，那地方，你的，父母，小丑女，没出息女，模拟现场，门店，电脑发的，烦恼歌带你飞，等你再放开你的身份，给你的，父母给你，的麻" +
-//                "烦你给，sdmfnsdjfngjksdnfjndfgjnsdjfs.dj,fng,sdjfn的扣分监考老师电饭锅水电费能够理解对方了第三方机构开始的返回给会计师对" +
-//                "高房价是的分开管理史莱克的积分凉快圣诞节福利卡接收到了分开讲道理；反馈给家里的分管局领导； 分开了大家转发来看是剪短发了恐惧的妇" +
-//                "女，那地方，你的，父母，小丑女，没出息女，模拟现场，门店，电脑发的，烦恼歌带你飞，等你再放开你的身份，给你的，父母给你，的麻烦你" +
-//                "给，sdmfnsdjfngjksdnfjndfgjnsdjfs.dj,fng,sdjfn的扣分监考老师电饭锅水电费能够理解对方了第三方机构开始的返回给会计师对高房价是" +
-//                "的分开管理<img src=\"http://wgzx.test.jingcaiwang.cn/group1/M00/00/68/rBMBOF0J-8WABHG6AAGBabvhhYo556.png\" title=\" 000.png\" alt=\" 000.png\" style=\"white-space: normal;\"/></p>";
-        //String html = ViewUtil.getViewUtil().getHtmlData(Temporary.webContent);
-        //webView.loadData(html, "text/html;charset=utf-8","utf-8");
-        String u="https://192.168.124.31:3001/examination/auth";
-        webView.loadUrl(u);
+        if (webUrl!=null){
+            webView.loadUrl(webUrl);
+        }else{
+            String html = ViewUtil.getViewUtil().getHtmlData(Temporary.webContent);
+            webView.loadData(html, "text/html;charset=utf-8","utf-8");
+        }
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();
     }

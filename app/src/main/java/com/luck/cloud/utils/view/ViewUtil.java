@@ -124,7 +124,7 @@ public class ViewUtil {
                 "<meta name=\"viewport\" content=\"width=device-width, maximum-scale=1, minimum-scale=1, user-scale=1\"> " +
                 "<style type=\"text/css\">" +
                 "p{word-wrap: break-word;}" +
-                "img{width: 100%;height: 100%;}" +
+                "img{width: 100%;height: 100%;max-height:450px;}" +
                 "</style>" +
                 "</head>";
         return "<html>" + head + "<body>" + bodyHTML + "</body></html>";

@@ -5,4 +5,7 @@ package com.luck.cloud.common.entity;
  */
 public class Temporary {
     public static String webContent;
+    public static String title;
+    public static String source;
+    public static String time;
 }

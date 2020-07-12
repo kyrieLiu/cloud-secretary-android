@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.luck.cloud.FullyGridLayoutManager;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
+import com.luck.cloud.function.mine.work.DateUtil;
 import com.luck.cloud.function.study.model.StudyModel;
 import com.luck.cloud.function.study.model.StudyScienceModel;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.BindDimen;
 
 /**
  * Created by liuyin on 2019/4/16 10:15
@@ -45,25 +48,21 @@ public class StudyAdapter<T extends StudyScienceModel.RecordsBean> extends BaseR
     }
 
     class ViewHolder extends BaseViewHolder<T> {
-        //        @Bind(R.id.tv_item_supervise_handle_title)
-//        TextView mTvTitle;
-//        @Bind(R.id.tv_item_supervise_handle_belongProject)
-//        TextView mTvBelongProject;
-//        @Bind(R.id.tv_item_supervise_handle_operationUnit)
-//        TextView mTvOperationUnit;
-//        @Bind(R.id.tv_item_supervise_charge_person)
-//        TextView mTvChargePerson;
-//        @Bind(R.id.tv_item_supervise_handle_status)
-//        TextView mTvStatus;
-//        private ViewUtil util;
         @Bind(R.id.iv_item_study)
         ImageView imageView;
         @Bind(R.id.rv_study_pictures)
         RecyclerView mRecyclerView;
+        @Bind(R.id.tv_study_title)
+        TextView title;
+        @Bind(R.id.tv_study_source)
+        TextView source;
+        @Bind(R.id.tv_study_time)
+        TextView time;
+        @Bind(R.id.tv_study_watch_num)
+        TextView clickNum;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            //util=ViewUtil.getViewUtil();
         }
 
         @Override
@@ -96,12 +95,11 @@ public class StudyAdapter<T extends StudyScienceModel.RecordsBean> extends BaseR
 //                });
 //            }
 
+            title.setText(bean.getInotitle());
+            source.setText(bean.getLinkurl());
+            time.setText(DateUtil.getMinuteTime(bean.getPublishtime()));
+            clickNum.setText(String.valueOf(bean.getClicks()));
 
-//            mTvTitle.setText(bean.getMissionName());
-//            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
-//            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());
-//            util.setTextMessage(mTvChargePerson,"责任人",bean.getChargeInfo());
-//            mTvStatus.setText(bean.getSupervisoryStatusTitle());
         }
     }
 }

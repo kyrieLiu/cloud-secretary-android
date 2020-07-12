@@ -14,7 +14,7 @@ public class DateUtil {
     private int daysOfMonth = 0;
     private int dayOfWeek = 0;
 
-    private static DateFormat dateTFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+SSSS");  //yyyy-MM-dd'T'HH:mm:ss.SSSZ
+    private static DateFormat dateTFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");  //yyyy-MM-dd'T'HH:mm:ss.SSSZ
     private static DateFormat pointFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 
     private static DateFormat dayFormat = new SimpleDateFormat("yyyy.MM.dd");
@@ -144,7 +144,7 @@ public class DateUtil {
     /**
      * 将utc时间数据转化为String
      *
-     * @param dateTime 2018-08-05T00:00:00.000+0000  这种格式的时间
+     * @param dateTime 2018-08-05T00:00:00  这种格式的时间
      * @return 2018/08/13 00:00这种格式
      */
     public static String getBiasMinuteDay(String dateTime) {

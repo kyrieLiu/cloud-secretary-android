@@ -18,6 +18,8 @@ public class URLConstant {
     public static final String STUDY_SCIENCE_TAB = BASE_URL + "/sys/domain/list";
     //学习列表
     public static final String STUDY_LIST = BASE_URL + "/information/info/page";
+    //学习详情
+    public static final String STUDY_DETAIL = BASE_URL + "/information/info/door/getDetail";
 
 
     //OA用户登录

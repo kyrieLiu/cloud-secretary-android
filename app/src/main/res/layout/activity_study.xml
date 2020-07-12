@@ -50,6 +50,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:gravity="center"
+            android:clickable="true"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">

@@ -170,8 +170,10 @@ public class OKHttpManager {
         if (map!=null&&map.size()>0){
             url=url.concat("?");
             for(String key:map.keySet()) {
-                String value= Objects.requireNonNull(map.get(key)).toString();
-                url=url.concat(key+"="+value);
+                if (map.get(key)!=null){
+                    String value= Objects.requireNonNull(map.get(key)).toString();
+                    url=url.concat(key+"="+value+"&");
+                }
             }
         }
 
@@ -292,11 +294,11 @@ public class OKHttpManager {
                                     if (object instanceof BaseBean) {
                                         BaseBean baseBean = (BaseBean) object;
                                         code = baseBean.getCode();
-                                        message = baseBean.getMsg();
+                                        message = baseBean.getMsg()==null?baseBean.getMessage():baseBean.getMsg();
                                     } else if (object instanceof BaseListBean) {
                                         BaseListBean baseListBean = (BaseListBean) object;
                                         code = baseListBean.getCode();
-                                        message = baseListBean.getMsg();
+                                        message = baseListBean.getMsg()==null?baseListBean.getMessage():baseListBean.getMsg();
                                     }
                                     if ("SUCCESS".equals(code)) {
                                         sendSuccessResultCallback(object, resultCallback);
