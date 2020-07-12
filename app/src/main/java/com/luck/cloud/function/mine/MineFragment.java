@@ -27,6 +27,7 @@ import com.luck.cloud.function.login.LoginActivity;
 import com.luck.cloud.function.mine.collect.MyCollectActivity;
 import com.luck.cloud.function.mine.footprint.MyFootPrintActivity;
 import com.luck.cloud.function.mine.publish.MyPublishActivity;
+import com.luck.cloud.function.mine.work.CalendarDesignateActivity;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.pixplicity.sharp.OnSvgElementListener;
 import com.pixplicity.sharp.Sharp;
@@ -110,12 +111,12 @@ public class MineFragment extends BaseFragment {
                         intent.setClass(Objects.requireNonNull(getContext()), PersonDataActivity.class);
                         startActivity(intent);
                         break;
+                    case "工作日志":
+                        intent.setClass(Objects.requireNonNull(getContext()), CalendarDesignateActivity.class);
+                        startActivity(intent);
+                        break;
                     case "退出登录":
                         LoginActivity.start(getContext());
-                        break;
-                    default:
-                        intent.setClass(Objects.requireNonNull(getContext()), MyFootPrintActivity.class);
-                        startActivity(intent);
                         break;
                 }
             }

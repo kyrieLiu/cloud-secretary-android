@@ -46,7 +46,7 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setTitle("我的发布");
+        setTitle("注册");
     }
 
     @Override
@@ -118,10 +118,10 @@ public class RegisterActivity extends BaseActivity {
         titleList.add("驻地村民");
         titleList.add("其他人员");
 
-        fragmentList.add(new FirstSecretaryFragment());
-        fragmentList.add(new FirstSecretaryFragment());
-        fragmentList.add(new FirstSecretaryFragment());
-        fragmentList.add(new FirstSecretaryFragment());
+        fragmentList.add(FirstSecretaryFragment.getInstance(0));
+        fragmentList.add(FirstSecretaryFragment.getInstance(1));
+        fragmentList.add(FirstSecretaryFragment.getInstance(2));
+        fragmentList.add(FirstSecretaryFragment.getInstance(3));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

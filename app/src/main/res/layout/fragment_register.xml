@@ -23,15 +23,30 @@
             style="@style/register_edit"
             android:hint="账号"
             />
-        <EditText
-            android:id="@+id/et_register_identity"
-            style="@style/register_edit"
-            android:hint="身份"
-            />
+
         <EditText
             android:id="@+id/et_register_unit"
             style="@style/register_edit"
             android:hint="单位信息"
+            android:visibility="gone"
+            />
+        <EditText
+            android:id="@+id/et_register_school"
+            style="@style/register_edit"
+            android:hint="学校"
+            android:visibility="gone"
+            />
+        <EditText
+            android:id="@+id/et_register_village"
+            style="@style/register_edit"
+            android:hint="所在村落"
+            android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/tv_register_industry"
+            style="@style/register_edit"
+            android:hint="选择行业"
+            android:visibility="gone"
             />
         <EditText
             android:id="@+id/et_register_idNum"
@@ -63,7 +78,13 @@
             style="@style/register_edit"
             android:hint="昵称"
             />
-
+        <Button
+            android:id="@+id/bt_register"
+            style="@style/button_style"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_42"
+            android:layout_marginTop="@dimen/dp_60"
+            android:text="注册" />
     </LinearLayout>
     </ScrollView>
 </LinearLayout>

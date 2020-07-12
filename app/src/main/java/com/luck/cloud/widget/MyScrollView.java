@@ -8,8 +8,9 @@ import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 /**
- * Created by liuyin on 2019/2/28 21:05
- * @Describe 描述：自定义ScrollView解决自动滑动到中间的问题和判断是否滑动到底部
+ * 描述：自定义ScrollView解决自动滑动到中间的问题和判断是否滑动到底部
+ *
+ * @author wangjian
  */
 public class MyScrollView extends ScrollView {
     private int page = 1;

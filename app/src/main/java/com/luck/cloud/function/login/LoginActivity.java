@@ -18,6 +18,7 @@ import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.main.MainActivity;
 import com.luck.cloud.manager.ActivitiesManager;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.SpUtil;
@@ -122,6 +123,8 @@ public class LoginActivity extends BaseActivity {
                 startLogin();
                 break;
             case R.id.tv_register:
+                Intent intent=new Intent(this,RegisterActivity.class);
+                startActivity(intent);
                 break;
         }
 
@@ -130,21 +133,21 @@ public class LoginActivity extends BaseActivity {
     private void startLogin(){
         final String account = mEtAccount.getText().toString();
         final String password = mEtPassword.getText().toString();
-        if (TextUtils.isEmpty(account)) {
-            ToastUtil.toastShortCenter("请输入账号");
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            ToastUtil.toastShortCenter("请输入密码");
-            return;
-        }
+//        if (TextUtils.isEmpty(account)) {
+//            ToastUtil.toastShortCenter("请输入账号");
+//            return;
+//        }
+//        if (TextUtils.isEmpty(password)) {
+//            ToastUtil.toastShortCenter("请输入密码");
+//            return;
+//        }
         params.clear();
         params.put("username", account);
         params.put("password", password);
         params.put("imageCode", "HACD");
 //        params.put("os", 2);
 //        params.put("idEntity", 2);
-        Intent intent = new Intent(this, PictureMainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
       /*  showRDialog();

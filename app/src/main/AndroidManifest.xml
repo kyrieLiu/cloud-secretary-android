@@ -26,15 +26,18 @@
             android:name="com.luck.cloud.function.login.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:screenOrientation="fullSensor" >
-
-        </activity>
-
-        <activity android:name=".function.login.RegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".function.mine.work.CalendarDesignateActivity">
+
+        </activity>
+
+        <activity android:name=".function.login.RegisterActivity">
+
         </activity>
 
         <activity android:name="com.luck.cloud.function.main.MainActivity">
