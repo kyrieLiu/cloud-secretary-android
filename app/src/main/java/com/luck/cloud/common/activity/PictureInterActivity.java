@@ -85,7 +85,7 @@ public class PictureInterActivity extends AppCompatActivity {
             }
         });
         //访问Android assets文件夹内的
-        String url = "https://192.168.124.31:3001/examination/auth";
+        String url =  "https://192.168.199.100:3001/examination";
         //url="http://10.17.1.90:8848/htmlDemo/file2.html";
         //访问网页Html
         webView.loadUrl(url);
@@ -96,36 +96,35 @@ public class PictureInterActivity extends AppCompatActivity {
     private class chromClient extends WebChromeClient {
 
 //        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+            for (int i=0;i<fileChooserParams.getAcceptTypes().length;i++){
+                Log.d("tag", "点击" + fileChooserParams.getAcceptTypes()[i]);
+            }
+            Log.d("tag", "点击" + fileChooserParams.getFilenameHint());
+            valueCallback = filePathCallback;
+             selectPicture();
+            return true;
+        }
+
+//        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 //        @Override
 //        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-//            for (int i=0;i<fileChooserParams.getAcceptTypes().length;i++){
+//            for (int i = 0; i < fileChooserParams.getAcceptTypes().length; i++) {
 //                Log.d("tag", "点击" + fileChooserParams.getAcceptTypes()[i]);
 //            }
-//            Log.d("tag", "点击" + fileChooserParams.getFilenameHint());
+//            fileChooserParams.isCaptureEnabled();
+//            return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
+//        }
+//
+//        public void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType, String capture) {
+//            Log.d("tag", "点击" + capture);
 //            valueCallback = filePathCallback;
 //            // selectPicture();
 //            valueCallback.onReceiveValue(null);
 //            valueCallback = null;
-//            return true;
 //        }
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        @Override
-        public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-            for (int i = 0; i < fileChooserParams.getAcceptTypes().length; i++) {
-                Log.d("tag", "点击" + fileChooserParams.getAcceptTypes()[i]);
-            }
-            fileChooserParams.isCaptureEnabled();
-            return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
-        }
-
-        public void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType, String capture) {
-            Log.d("tag", "点击" + capture);
-            valueCallback = filePathCallback;
-            // selectPicture();
-            valueCallback.onReceiveValue(null);
-            valueCallback = null;
-        }
 
         @Override
         public void onProgressChanged(WebView view, int newProgress) {

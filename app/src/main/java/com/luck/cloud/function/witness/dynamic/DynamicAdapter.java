@@ -235,48 +235,48 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
 
             GlideUtils.loadRoundedCorners(context, ivVideo, videoPicture, 4, RoundedCornersTransformation.CornerType.ALL);
 
-//            ivVideo.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    clickListener.playVideoCallback(bean,p);
-//                }
-//            });
-//
-//            mLlLike.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    clickListener.likeCallback(bean,p);
-//                }
-//            });
-//            llComment.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    clickListener.commentCallback(bean, p);
-//                }
-//            });
-//
-//            llTransimit.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    clickListener.transmitCallback(bean,p);
-//                }
-//            });
-//
-//
-//            llCollect.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    clickListener.collectCallback(bean,p);
-//                }
-//            });
+            ivVideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.playVideoCallback(bean,p);
+                }
+            });
+
+            mLlLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.likeCallback(bean,p);
+                }
+            });
+            llComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.commentCallback(bean, p);
+                }
+            });
+
+            llTransimit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.transmitCallback(bean,p);
+                }
+            });
 
 
-            container.setOnClickListener(new View.OnClickListener() {
+            llCollect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     clickListener.collectCallback(bean,p);
                 }
             });
+
+
+//            container.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    clickListener.collectCallback(bean,p);
+//                }
+//            });
 
             FullyGridLayoutManager manager = new FullyGridLayoutManager(context,
                     3, GridLayoutManager.VERTICAL, false);

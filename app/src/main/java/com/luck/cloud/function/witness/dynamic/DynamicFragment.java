@@ -93,20 +93,20 @@ public class DynamicFragment extends BaseFragment {
         mRvList.refresh();
     }
 
-    private void setListener(){
+    private void setListener() {
         adapter.setClickListener(new DynamicAdapter.ItemClickListener() {
 
             @Override
             public void commentCallback(DynamicModel model, int position) {
-                CommentDialog dialog=CommentDialog.newInstance();
+                CommentDialog dialog = CommentDialog.newInstance();
                 dialog.setConfirmCommentListener(new CommentDialog.ConfirmCommentListener() {
                     @Override
                     public void addComment(String content) {
-                        model.getCommentModel().add(new CommentModel("刘隐",content));
+                        model.getCommentModel().add(new CommentModel("刘隐", content));
                         adapter.notifyDataSetChanged();
                     }
                 });
-                dialog.show(getActivity().getFragmentManager(),"comment");
+                dialog.show(getActivity().getFragmentManager(), "comment");
 
 //                DateSelectDialog dialog1=new DateSelectDialog(getContext());
 //                dialog1.show();
@@ -131,12 +131,12 @@ public class DynamicFragment extends BaseFragment {
                 }
                 bean.setLikeUsers(likeUsers);
                 bean.setIsLike(bean.getIsLike() == 1 ? 0 : 1);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemChanged(position + 1);
             }
 
             @Override
             public void deleteCallback(DynamicModel model, int position) {
-                SelectMenuDialog dialog=new SelectMenuDialog(getContext());
+                SelectMenuDialog dialog = new SelectMenuDialog(getContext());
                 dialog.setListener(new SelectMenuDialog.OnMenuSelectListener() {
                     @Override
                     public void callback() {
@@ -153,12 +153,12 @@ public class DynamicFragment extends BaseFragment {
                 ToastUtil.toastShortCenter("已收藏");
                 int isCollect = bean.getIsCollect();
                 bean.setIsCollect(isCollect == 1 ? 0 : 1);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemChanged(position + 1);
             }
 
             @Override
             public void playVideoCallback(DynamicModel bean, int position) {
-                String videoUrl="http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
+                String videoUrl = "http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
                 PictureSelector.create((Activity) context)
                         .themeStyle(R.style.picture_default_style)
                         .externalPictureVideo(videoUrl);
@@ -175,11 +175,11 @@ public class DynamicFragment extends BaseFragment {
     private void requestData(final int page) {
         List<DynamicModel> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            List<CommentModel> models=new ArrayList<>();
-            models.add(new CommentModel("刘隐","很强啊,小伙子"));
-            models.add(new CommentModel("魏明","你这个地方很厉害啊"));
-            models.add(new CommentModel("王青青","哈哈,有机会去找你"));
-            DynamicModel model=new DynamicModel();
+            List<CommentModel> models = new ArrayList<>();
+            models.add(new CommentModel("刘隐", "很强啊,小伙子"));
+            models.add(new CommentModel("魏明", "你这个地方很厉害啊"));
+            models.add(new CommentModel("王青青", "哈哈,有机会去找你"));
+            DynamicModel model = new DynamicModel();
             model.setCommentModel(models);
             list.add(model);
         }
