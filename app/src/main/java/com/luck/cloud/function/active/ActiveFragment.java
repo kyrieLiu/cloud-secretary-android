@@ -87,6 +87,7 @@ public class ActiveFragment extends BaseFragment {
                 ActiveItemBean.RecordsBean itemsBean=adapter.getList().get(position);
                 Intent intent=new Intent(context, ActiveDetailActivity.class);
                 intent.putExtra("id",itemsBean.getActivityId());
+                intent.putExtra("apply",type);
                 startActivityForResult(intent,200);
             }
         });

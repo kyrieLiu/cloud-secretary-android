@@ -30,6 +30,8 @@ public class URLConstant {
     public static final String ACTIVE_DETAIL = BASE_URL + "/activity/info/get";
     //活动报名
     public static final String ACTIVE_APPLY = BASE_URL + "/activity/user/save";
+    //留言
+    public static final String ACTIVE_MESSAGE_SAVE = BASE_URL + "/activity/message/save";
 
 
     //OA用户登录

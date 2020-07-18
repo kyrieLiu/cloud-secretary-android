@@ -1,5 +1,7 @@
 package com.luck.cloud.function.active.bean;
 
+import com.luck.cloud.function.witness.model.CommentModel;
+
 import java.util.List;
 
 public class ActiveItemBean {
@@ -109,6 +111,15 @@ public class ActiveItemBean {
         private String userPhone;
         private int peopleCount;
         private String activityPicture;
+        private List<CommentModel> messages;
+
+        public List<CommentModel> getMessages() {
+            return messages;
+        }
+
+        public void setMessages(List<CommentModel> messages) {
+            this.messages = messages;
+        }
 
         public int getActivityId() {
             return activityId;

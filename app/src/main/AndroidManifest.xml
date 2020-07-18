@@ -61,11 +61,12 @@
         <activity android:name=".function.active.ActiveActivity">
 
         </activity>
-        <activity android:name=".function.active.ActiveDetailActivity">
+        <activity android:name=".function.active.ActiveDetailActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden">
 
         </activity>
         <activity android:name=".function.active.AddActiveActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|keyboard">
+            android:windowSoftInputMode="adjustPan|stateHidden">
 
         </activity>
         <activity android:name=".function.study.StudyActivity">

@@ -68,7 +68,7 @@ public class CommentsAdapter<T extends CommentModel> extends BaseRecyclerViewAda
         @SuppressLint({"WrongConstant", "SetTextI18n"})
         @Override
         protected void bind(T bean, int p) {
-            tvComment.setText(bean.getUsername()+":   "+bean.getContent());
+            tvComment.setText(bean.getUserName()+":   "+bean.getMessageContent());
         }
 
 
