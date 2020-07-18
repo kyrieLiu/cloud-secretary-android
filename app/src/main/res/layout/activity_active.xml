@@ -25,7 +25,7 @@
             android:gravity="center_vertical">
 
             <EditText
-                android:id="@+id/science_keyWords"
+                android:id="@+id/active_keyWords"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -36,6 +36,7 @@
                 android:textColor="@color/main_text_color"
                 android:textSize="@dimen/sp_16" />
             <ImageView
+                android:id="@+id/iv_handle_search"
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="@dimen/dp_20"
                 android:src="@mipmap/search_grey"

@@ -44,7 +44,7 @@ public class DateSelectDialog extends Dialog {
                 int month=datePicker.getMonth()+1;
                 int day=datePicker.getDayOfMonth();
                 if (listener!=null){
-                    listener.callback(year+"年"+month+"月"+day+"日");
+                    listener.callback(year+"-"+(month<10?"0"+month:month)+"-"+(day<10?"0"+day:day));
                     dismiss();
                 }
                 break;

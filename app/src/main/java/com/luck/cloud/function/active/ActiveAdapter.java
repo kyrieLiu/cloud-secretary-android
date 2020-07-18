@@ -1,5 +1,6 @@
 package com.luck.cloud.function.active;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -12,9 +13,16 @@ import android.widget.TextView;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
+import com.luck.cloud.function.active.bean.ActiveItemBean;
+import com.luck.cloud.function.mine.work.DateUtil;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.RoundedCornersTransformation;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
 
@@ -22,7 +30,7 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 10:15
  * Description:科普列表适配器
  */
-public class ActiveAdapter<T extends SuperviseHandleBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
+public class ActiveAdapter<T extends ActiveItemBean.RecordsBean> extends BaseRecyclerViewAdapter<T> {
 
 
     public ActiveAdapter(Context context) {
@@ -36,43 +44,71 @@ public class ActiveAdapter<T extends SuperviseHandleBean.ItemsBean> extends Base
     }
 
     class ViewHolder extends BaseViewHolder<T> {
-//        @Bind(R.id.tv_item_supervise_handle_title)
-//        TextView mTvTitle;
-//        @Bind(R.id.tv_item_supervise_handle_belongProject)
-//        TextView mTvBelongProject;
-//        @Bind(R.id.tv_item_supervise_handle_operationUnit)
-//        TextView mTvOperationUnit;
-//        @Bind(R.id.tv_item_supervise_charge_person)
-//        TextView mTvChargePerson;
-//        @Bind(R.id.tv_item_supervise_handle_status)
-//        TextView mTvStatus;
-//        private ViewUtil util;
         @Bind(R.id.iv_item_active)
-ImageView imageView;
+        ImageView imageView;
         @Bind(R.id.tv_active_status)
         TextView status;
+        @Bind(R.id.tv_item_active_title)
+        TextView title;
+        @Bind(R.id.tv_item_active_content)
+        TextView content;
+        @Bind(R.id.tv_item_active_people)
+        TextView people;
+        @Bind(R.id.tv_item_active_date)
+        TextView date;
+        @Bind(R.id.tv_item_active_code)
+        TextView code;
+
         public ViewHolder(View itemView) {
             super(itemView);
             //util=ViewUtil.getViewUtil();
         }
 
+        @SuppressLint("WrongConstant")
         @Override
         protected void bind(T bean, int position) {
-            String url="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
+            String url=bean.getActivityPicture();
             GlideUtils.loadRoundedCorners(context,imageView,url,10, RoundedCornersTransformation.CornerType.ALL);
 
             GradientDrawable drawable=new GradientDrawable();
             drawable.setShape(GradientDrawable.RECTANGLE);
             drawable.setGradientType(GradientDrawable.RECTANGLE);
             drawable.setCornerRadius(5);
-            drawable.setColor(Color.parseColor("#1FA2DB"));
+
+
+            if (bean.getStartDate()!=null&&bean.getEndDate()!=null){
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                long startDate= 0;
+                long endDate= 0;
+                try {
+                    startDate = format.parse(bean.getStartDate()).getTime();
+                    endDate = format.parse(bean.getEndDate()).getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                long now=new Date().getTime();
+                if (startDate>now){
+                    status.setText("未开始");
+                    drawable.setColor(Color.parseColor("#FFFF9800"));
+                }else if (endDate<now){
+                    status.setText("已结束");
+                    drawable.setColor(Color.parseColor("#FFFF9800"));
+                }else{
+                    status.setText("报名中");
+                    drawable.setColor(Color.parseColor("#1FA2DB"));
+                }
+            }else{
+                drawable.setColor(Color.parseColor("#1FA2DB"));
+            }
+
             status.setBackground(drawable);
 
-//            mTvTitle.setText(bean.getMissionName());
-//            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
-//            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());
-//            util.setTextMessage(mTvChargePerson,"责任人",bean.getChargeInfo());
-//            mTvStatus.setText(bean.getSupervisoryStatusTitle());
+            title.setText(bean.getActivityName());
+            content.setText(bean.getActivityContent());
+            people.setText(bean.getUserName());
+            date.setText(bean.getStartDate()+" 至 "+bean.getEndDate());
+
+
         }
     }
 }

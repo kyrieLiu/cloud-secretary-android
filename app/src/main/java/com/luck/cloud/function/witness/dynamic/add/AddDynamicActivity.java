@@ -318,27 +318,6 @@ public class AddDynamicActivity extends BaseActivity {
         mPictureParameterStyle.pictureExternalPreviewGonePreviewDelete = true;
         // 设置NavBar Color SDK Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP有效
         mPictureParameterStyle.pictureNavBarColor = Color.parseColor("#393a3e");
-//        // 自定义相册右侧文本内容设置
-//        mPictureParameterStyle.pictureRightDefaultText = "";
-//        // 自定义相册未完成文本内容
-//        mPictureParameterStyle.pictureUnCompleteText = "";
-//        // 自定义相册完成文本内容
-//        mPictureParameterStyle.pictureCompleteText = "";
-//        // 自定义相册列表不可预览文字
-//        mPictureParameterStyle.pictureUnPreviewText = "";
-//        // 自定义相册列表预览文字
-//        mPictureParameterStyle.picturePreviewText = "";
-//
-//        // 自定义相册标题字体大小
-//        mPictureParameterStyle.pictureTitleTextSize = 18;
-//        // 自定义相册右侧文字大小
-//        mPictureParameterStyle.pictureRightTextSize = 14;
-//        // 自定义相册预览文字大小
-//        mPictureParameterStyle.picturePreviewTextSize = 14;
-//        // 自定义相册完成文字大小
-//        mPictureParameterStyle.pictureCompleteTextSize = 14;
-//        // 自定义原图文字大小
-//        mPictureParameterStyle.pictureOriginalTextSize = 14;
 
         // 裁剪主题
         mCropParameterStyle = new PictureCropParameterStyle(

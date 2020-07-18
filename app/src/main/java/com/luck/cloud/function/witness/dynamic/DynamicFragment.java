@@ -15,6 +15,7 @@ import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
+import com.luck.cloud.common.activity.PlayVideoActivity;
 import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.function.witness.ScienceAdapter;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
@@ -28,6 +29,8 @@ import com.luck.cloud.widget.dialog.SelectMenuDialog;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.PictureVideoPlayActivity;
+import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 
 import java.util.ArrayList;
@@ -159,9 +162,13 @@ public class DynamicFragment extends BaseFragment {
             @Override
             public void playVideoCallback(DynamicModel bean, int position) {
                 String videoUrl = "http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
-                PictureSelector.create((Activity) context)
-                        .themeStyle(R.style.picture_default_style)
-                        .externalPictureVideo(videoUrl);
+//                PictureSelector.create((Activity) context)
+//                        .themeStyle(R.style.picture_default_style)
+//                        .externalPictureVideo(videoUrl);
+                Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+                intent.putExtra(PictureConfig.EXTRA_VIDEO_PATH, videoUrl);
+                intent.putExtra(PictureConfig.EXTRA_PREVIEW_VIDEO, true);
+                startActivity(intent);
             }
         });
     }

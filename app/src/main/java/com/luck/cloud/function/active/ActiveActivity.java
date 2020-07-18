@@ -2,8 +2,11 @@ package com.luck.cloud.function.active;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -35,8 +38,12 @@ public class ActiveActivity extends BaseActivity {
     TabLayout mMtlManagement;
     @Bind(R.id.vp_science_management)
     ViewPager mViewPager;
+    @Bind(R.id.active_keyWords)
+    EditText keyWords;
 
-    private List<GardenInfoBean.ItemsBean> gardenList;
+    private ActiveFragment allActive;
+    private ActiveFragment myActive;
+    private List<Fragment> fragmentList = new ArrayList<>();
 
     @Override
     protected void back() {
@@ -58,83 +65,38 @@ public class ActiveActivity extends BaseActivity {
 
         rightVisible(R.mipmap.add);
 
-        // setPageData(1);
+        setPageData();
 
-        getTabList();
     }
 
-    @OnClick({R.id.iv_right})
+    @OnClick({R.id.iv_right, R.id.iv_handle_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_right:
                 Intent intent = new Intent(this, AddActiveActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,100);
+                break;
+            case R.id.iv_handle_search:
+                int currentIndex = mViewPager.getCurrentItem();
+                String keyword = keyWords.getText().toString();
+                ActiveFragment fragment = (ActiveFragment) fragmentList.get(currentIndex);
+                fragment.searchData(keyword);
                 break;
         }
     }
 
 
     /**
-     * 获取园区列表
-     */
-    private void getParkData() {
-        params.clear();
-        showRDialog();
-        OKHttpManager.postJsonRequest(URLConstant.PARK_LIST, params, new OKHttpManager.ResultCallback<BaseBean<GardenInfoBean>>() {
-            @Override
-            public void onError(int code, String result, String message) {
-                hideRDialog();
-                ToastUtil.toastShortCenter(message);
-            }
-
-            @Override
-            public void onResponse(BaseBean<GardenInfoBean> response) {
-                hideRDialog();
-
-                gardenList = response.getData().getItems();
-                GardenInfoBean.ItemsBean itemsBean = gardenList.get(0);
-                itemsBean.setIsChecked(1);
-
-
-                setPageData(itemsBean.getId());
-
-            }
-        }, this);
-    }
-
-    private void getTabList() {
-        showRDialog();
-        params.put("atType", 1);
-        OKHttpManager.getJoint(URLConstant.STUDY_SCIENCE_TAB, params, null, new OKHttpManager.ResultCallback<BaseListBean<StudyTabModel>>() {
-            @Override
-            public void onError(int code, String result, String message) {
-                hideRDialog();
-                ToastUtil.toastShortCenter(message);
-            }
-
-            @Override
-            public void onResponse(BaseListBean<StudyTabModel> response) {
-                hideRDialog();
-                List<StudyTabModel> list = response.getData();
-                setPageData(0);
-
-            }
-        }, this);
-    }
-
-    /**
      * 加载Fragment
-     *
-     * @param id
      */
-    private void setPageData(int id) {
+    private void setPageData() {
         List<String> titleList = new ArrayList<>();
-        List<Fragment> fragmentList = new ArrayList<>();
         titleList.add("全部活动");
         titleList.add("已报名活动");
-        for (int i = 0; i < titleList.size(); i++) {
-            fragmentList.add(new ActiveFragment());
-        }
+        allActive = ActiveFragment.getInstance(1);
+        myActive = ActiveFragment.getInstance(2);
+        fragmentList.add(allActive);
+        fragmentList.add(myActive);
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);
@@ -142,4 +104,11 @@ public class ActiveActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==100){
+            allActive.searchData(null);
+        }
+    }
 }

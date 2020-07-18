@@ -81,6 +81,7 @@
                 style="@style/text_14_wrap_gray"
                 android:textSize="12sp"
                 android:layout_marginStart="@dimen/dp_5"
+                android:visibility="gone"
                 android:text="邀请码:517517" />
         </LinearLayout>
     </LinearLayout>

@@ -20,6 +20,16 @@ public class URLConstant {
     public static final String STUDY_LIST = BASE_URL + "/information/info/page";
     //学习详情
     public static final String STUDY_DETAIL = BASE_URL + "/information/info/door/getDetail";
+    //活动列表
+    public static final String ACTIVE_LIST = BASE_URL + "/activity/info/page";
+    //我报名的活动列表
+    public static final String ACTIVE_LIST_MY = BASE_URL + "/activity/info/pageMy";
+    //发起活动
+    public static final String ACTIVE_CREATE = BASE_URL + "/activity/info/save";
+    //活动详情
+    public static final String ACTIVE_DETAIL = BASE_URL + "/activity/info/get";
+    //活动报名
+    public static final String ACTIVE_APPLY = BASE_URL + "/activity/user/save";
 
 
     //OA用户登录

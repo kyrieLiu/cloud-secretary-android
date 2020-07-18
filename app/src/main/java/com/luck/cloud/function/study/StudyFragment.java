@@ -51,6 +51,8 @@ public class StudyFragment extends BaseFragment {
     //1学习  2科普
     private int type;
 
+    private String keyWord;
+
 
     public static StudyFragment getInstance(StudyTabModel dict,int type) {
         StudyFragment fragment = new StudyFragment();
@@ -102,12 +104,12 @@ public class StudyFragment extends BaseFragment {
         mRvList.setLoadingListener(new OnRecyclerLoadingListener() {
             @Override
             public void onRefresh() {
-                requestData(1,null);
+                requestData(1);
             }
 
             @Override
             public void onLoadMore(int reqPage) {
-                requestData(reqPage,null);
+                requestData(reqPage);
             }
         });
         mRvList.refresh();
@@ -146,7 +148,7 @@ public class StudyFragment extends BaseFragment {
      *
      * @param page
      */
-    private void requestData(final int page,String keyWord) {
+    private void requestData(final int page) {
         showRDialog();
         params.put("inotype",dict.getAtCode());
         params.put("keyWords",keyWord);
@@ -173,7 +175,8 @@ public class StudyFragment extends BaseFragment {
     }
 
     public void searchData(String keyWord){
-        requestData(1,keyWord);
+        this.keyWord=keyWord;
+        requestData(1);
     }
 
     @Override

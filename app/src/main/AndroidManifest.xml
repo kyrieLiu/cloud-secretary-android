@@ -43,6 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".common.activity.PlayVideoActivity"></activity>
         <activity android:name=".function.mine.collect.MyCollectActivity"></activity>
         <activity android:name=".function.witness.video.add.AddVideoActivity">
 
@@ -63,7 +64,8 @@
         <activity android:name=".function.active.ActiveDetailActivity">
 
         </activity>
-        <activity android:name=".function.active.AddActiveActivity">
+        <activity android:name=".function.active.AddActiveActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard">
 
         </activity>
         <activity android:name=".function.study.StudyActivity">

@@ -1,9 +1,12 @@
 package com.luck.cloud.function.mine;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.common.activity.ModifyActivity;
 import com.luck.cloud.common.helper.FileCommitModel;
+import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.animators.AnimationType;
@@ -29,6 +33,7 @@ import com.luck.picture.lib.style.PictureCropParameterStyle;
 import com.luck.picture.lib.style.PictureParameterStyle;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -107,6 +112,20 @@ public class PersonDataActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            int REQUEST_CODE_CONTACT = 101;
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
+            //验证是否许可权限
+            for (String str : permissions) {
+                if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    //申请权限
+                    this.requestPermissions(permissions, REQUEST_CODE_CONTACT);
+                    return;
+                }
+            }
+        }
+
         getDefaultStyle();
     }
 
@@ -296,14 +315,13 @@ public class PersonDataActivity extends BaseActivity {
 //                mAdapterWeakReference.get().setList(result);
 //                mAdapterWeakReference.get().notifyDataSetChanged();
             }
-            Log.d("tag","图片==="+result.get(0).getPath());
+            Log.d("tag","图片==="+result.get(0).getRealPath());
             GlideUtils.loadCircleImage(context,mAdapterWeakReference.get(),result.get(0).getPath());
-//            FileCommitModel commitModel = FileCommitModel.getInstance();
-//            String path=result.get(0).getPath();
-//            ArrayList<String> list=new ArrayList<>();
-//            list.add(path);
-//            SpUtil.setToken("r8rk/OxEOsLV5WOVp8VISVWN0La6wiDr82V1tyFJfiq6iaql2su/2dfUrWNo5oLzO8tBC9rlTZhytXmsAOGNjNke3c8ZkXs4cKSjdMtFJao=");
-//            commitModel.commitComplaintData(list,"");
+            FileCommitModel commitModel = FileCommitModel.getInstance();
+            String path=result.get(0).getRealPath();
+            ArrayList<String> list=new ArrayList<>();
+            list.add(path);
+            commitModel.commitComplaintData(list,"");
 //            OKHttpManager.getAsyn("http://47.114.80.143/api/station/info/page/1/10", new OKHttpManager.ResultCallback<BaseBean>() {
 //                @Override
 //                public void onError(int code, String result, String message) {

@@ -208,6 +208,8 @@ public class AddDynamicAdapter extends
             if (chooseModel == PictureMimeType.ofAudio()) {
                 viewHolder.mImg.setImageResource(R.drawable.picture_audio_placeholder);
             } else {
+                boolean p=PictureMimeType.isContent(path) && !media.isCut() && !media.isCompressed();
+                Log.d("path==",p+""+path);
                 Glide.with(viewHolder.itemView.getContext())
                         .load(PictureMimeType.isContent(path) && !media.isCut() && !media.isCompressed() ? Uri.parse(path)
                                 : path)

@@ -3,20 +3,33 @@ package com.luck.cloud.function.active;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
+import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
+import com.luck.cloud.base.BaseListBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
+import com.luck.cloud.common.activity.WebActivity;
+import com.luck.cloud.common.entity.Temporary;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.active.bean.ActiveItemBean;
+import com.luck.cloud.function.study.model.StudyDetailModel;
+import com.luck.cloud.function.study.model.StudyScienceModel;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -28,10 +41,12 @@ import butterknife.Bind;
 public class ActiveFragment extends BaseFragment {
     @Bind(R.id.xrv_common_list)
     XRecyclerView mRvList;
-    private ActiveAdapter<SuperviseHandleBean.ItemsBean> adapter;
+    private ActiveAdapter<ActiveItemBean.RecordsBean> adapter;
     private Context context;
 
     private int type;
+
+    private String keyWord;
 
 
 
@@ -56,7 +71,7 @@ public class ActiveFragment extends BaseFragment {
 
     @Override
     protected void initView(Bundle bundle) {
-        //type = getArguments().getInt("type");
+        type = getArguments().getInt("type");
     }
 
     @Override
@@ -69,10 +84,10 @@ public class ActiveFragment extends BaseFragment {
         adapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                SuperviseHandleBean.ItemsBean itemsBean=adapter.getList().get(position);
-               // WebActivity.start(context,itemsBean.getId(),itemsBean.getIsRead());
+                ActiveItemBean.RecordsBean itemsBean=adapter.getList().get(position);
                 Intent intent=new Intent(context, ActiveDetailActivity.class);
-                context.startActivity(intent);
+                intent.putExtra("id",itemsBean.getActivityId());
+                startActivityForResult(intent,200);
             }
         });
         mRvList.setLoadingListener(new OnRecyclerLoadingListener() {
@@ -91,41 +106,48 @@ public class ActiveFragment extends BaseFragment {
 
 
     /**
-     * 请求督查督办列表数据
+     * 请求列表数据
      *
      * @param page
      */
     private void requestData(final int page) {
-        List<SuperviseHandleBean.ItemsBean> list = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            list.add(new SuperviseHandleBean.ItemsBean());
-        }
-        adapter.setSuccessReqList(list, 13, page, mRvList,"暂无推荐内容");
-//        final RequestBean request = initRequestParams();
-//        request.getPageable().setCurrent(page);
-//        RequestBean.CondBean condBean = new RequestBean.CondBean();
-//        condBean.setRules(new ArrayList());
-//        condBean.setGroupOp("AND");
-//        request.setCond(condBean);
-//        showRDialog();
-//        OKHttpManager.postJsonRequest(URLConstant.SUPERVISE_LIST, request, new OKHttpManager.ResultCallback<BaseBean<SuperviseHandleBean >>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                hideRDialog();
-//                ToastUtil.toastShortCenter(message);
-//                adapter.setErrorReqList(message, mRvList);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean<SuperviseHandleBean> response) {
-//                hideRDialog();
-//                SuperviseHandleBean acceptanceBean = response.getData();
-//                List<SuperviseHandleBean.ItemsBean> list = null;
-//                if (acceptanceBean != null) list = acceptanceBean.getItems();
-//                adapter.setSuccessReqList(list, request.getPageable().getSize(), page, mRvList,"暂无推荐内容");
-//            }
-//        }, this);
+        showRDialog();
+        params.put("keyWords",keyWord);
+        String url=type==1?URLConstant.ACTIVE_LIST:URLConstant.ACTIVE_LIST_MY;
+        OKHttpManager.getJoint(url, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<ActiveItemBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+                adapter.setErrorReqList(message, mRvList);
+            }
+
+            @Override
+            public void onResponse(BaseBean<ActiveItemBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    List<ActiveItemBean.RecordsBean> list=response.getData().getRecords();
+                    adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
     }
+
+    public void searchData(String keyWord){
+        this.keyWord=keyWord;
+        requestData(1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==200){
+            requestData(1);
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
