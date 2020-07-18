@@ -32,17 +32,19 @@ public class URLConstant {
     public static final String ACTIVE_APPLY = BASE_URL + "/activity/user/save";
     //留言
     public static final String ACTIVE_MESSAGE_SAVE = BASE_URL + "/activity/message/save";
+    //个人信息
+    public static final String USER_INFO = BASE_URL + "/sys/people/get";
+
+    //修改个人信息
+    public static final String UPDATE_USER_INFO = BASE_URL + "/sys/people/save";
 
 
-    //OA用户登录
-    public static final String OA_LOGIN = BASE_URL + "/rbac/oaAppLogin";
     //园区列表
     public static final String PARK_LIST = BASE_URL + AS_ASSETSAPI + "/api/parkinfo/listParkInfo";
     //待办任务更多列表
     public static final String WAIT_DONE_MORE = BASE_URL + "/station/info/page/1/10";//物业服务标准列表
     public static final String GET_DOC_LIST = BASE_URL + "/cms/api/doc/getDocList";
-    //修改个人信息
-    public static final String UPDATE_USER_INFO = BASE_URL + "/rbac/api/user/updateUserInfo";
+
     //上传文件
     public static final String UPLOAD_FILE = BASE_URL + "/uploadFiles";
 

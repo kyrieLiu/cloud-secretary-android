@@ -14,14 +14,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.Person;
 import androidx.core.content.ContextCompat;
 
 import com.luck.cloud.GlideEngine;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
+import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.common.activity.ModifyActivity;
 import com.luck.cloud.common.helper.FileCommitModel;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.mine.bean.PersonInfoBean;
+import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.SpUtil;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.animators.AnimationType;
@@ -48,40 +55,16 @@ public class PersonDataActivity extends BaseActivity {
     ImageView mIvAvatar;
     @Bind(R.id.tv_personal_phone)
     TextView mTvPhone;
-    @Bind(R.id.tv_personal_username)
-    TextView mTvUsername;
-    @Bind(R.id.tv_personal_forth_title)
-    TextView mTvForthTitle;
-    @Bind(R.id.tv_personal_forth)
-    TextView mTvForth;
-    @Bind(R.id.tv_personal_five_title)
-    TextView mTvFiveTitle;
-    @Bind(R.id.tv_personal_five)
-    TextView mTvFive;
-    @Bind(R.id.rl_personal_five_parent)
-    RelativeLayout mRlFiveParent;
-    @Bind(R.id.tv_personal_six_title)
-    TextView mTvSixTitle;
-    @Bind(R.id.tv_personal_six)
-    TextView mTvSix;
-    @Bind(R.id.rl_personal_six_parent)
-    RelativeLayout mRlSixParent;
-    @Bind(R.id.tv_personal_seven_title)
-    TextView mTvSevenTitle;
-    @Bind(R.id.tv_personal_seven)
-    TextView mTvSeven;
-    @Bind(R.id.rl_personal_seven_parent)
-    RelativeLayout mRlSevenParent;
-    @Bind(R.id.rl_personal_forth_parent)
-    RelativeLayout mRlForthParent;
-    @Bind(R.id.rl_personal_department_parent)
-    RelativeLayout mRlDepartmentParent;
-    @Bind(R.id.tv_personal_department)
-    TextView mTvDepartment;
-    @Bind(R.id.rl_personal_company_parent)
-    RelativeLayout mRlCompanyParent;
-    @Bind(R.id.tv_personal_company)
-    TextView mTvCompany;
+    @Bind(R.id.tv_personal_account)
+    TextView tvAccount;
+    @Bind(R.id.tv_real_name)
+    TextView tvReadName;
+    @Bind(R.id.tv_nick_name)
+    TextView tvNickName;
+    @Bind(R.id.tv_id_num)
+    TextView tvIdNum;
+
+    private boolean isModify;
 
 
     private FileCommitModel commitModel;
@@ -94,9 +77,17 @@ public class PersonDataActivity extends BaseActivity {
     private PictureParameterStyle mPictureParameterStyle;
     private PictureCropParameterStyle mCropParameterStyle;
 
+    private final static int CODE_PHONE=101;
+    private final static int CODE_REAL_NAME=102;
+    private final static int CODE_NICKNAME=103;
+    private final static int CODE_ID_NUM=104;
+
 
     @Override
     protected void back() {
+        if (isModify){
+            setResult(200);
+        }
         finish();
     }
 
@@ -127,17 +118,64 @@ public class PersonDataActivity extends BaseActivity {
         }
 
         getDefaultStyle();
+        getUserInfo();
     }
 
-    @OnClick({R.id.ll_avatar,R.id.rl_personal_phone_parent})
+    private void getUserInfo(){
+        int id= SpUtil.getUerId();
+        OKHttpManager.getJoint(URLConstant.USER_INFO, null,new int[]{id}, new OKHttpManager.ResultCallback<BaseBean<PersonInfoBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<PersonInfoBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    PersonInfoBean bean=response.getData();
+                    tvAccount.setText(bean.getPeopleLoginname());
+                    GlideUtils.loadCircleImage(getContext(),mIvAvatar,bean.getPhotoLogo());
+                    mTvPhone.setText(bean.getPeopleMobile());
+                    tvReadName.setText(bean.getPeopleName());
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
+
+    @OnClick({R.id.ll_avatar,R.id.tv_personal_phone,R.id.rl_real_name,R.id.tv_nick_name,R.id.tv_id_num})
     public void click(View view) {
+        Intent intent=new Intent();
         switch (view.getId()) {
             case R.id.ll_avatar:
                 selectPicture();
                 break;
-            case R.id.rl_personal_phone_parent:
-                Intent intent=new Intent(this,ModifyActivity.class);
-                startActivity(intent);
+            case R.id.tv_personal_phone:
+                intent.setClass(this,ModifyActivity.class);
+                intent.putExtra("title","修改手机号");
+                intent.putExtra("content","请输入手机号");
+                startActivityForResult(intent,CODE_PHONE);
+                break;
+            case R.id.rl_real_name:
+                intent.setClass(this,ModifyActivity.class);
+                intent.putExtra("title","修改姓名");
+                intent.putExtra("content","请输入姓名");
+                startActivityForResult(intent,CODE_REAL_NAME);
+                break;
+            case R.id.tv_nick_name:
+                intent.setClass(this,ModifyActivity.class);
+                intent.putExtra("title","修改昵称");
+                intent.putExtra("content","请输入昵称");
+                startActivityForResult(intent,CODE_NICKNAME);
+                break;
+            case R.id.tv_id_num:
+                intent.setClass(this,ModifyActivity.class);
+                intent.putExtra("title","修改身份证号");
+                intent.putExtra("content","请输入身份证号");
+                startActivityForResult(intent,CODE_ID_NUM);
                 break;
         }
     }
@@ -208,7 +246,7 @@ public class PersonDataActivity extends BaseActivity {
                 //.scaleEnabled(false)// 裁剪是否可放大缩小图片
                 //.videoQuality()// 视频录制质量 0 or 1
                 //.forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
-                .forResult(new MyResultCallback(mIvAvatar,getContext()));
+                .forResult(new MyResultCallback(mIvAvatar,this));
     }
     private void getDefaultStyle() {
         // 相册主题
@@ -263,27 +301,6 @@ public class PersonDataActivity extends BaseActivity {
         mPictureParameterStyle.pictureExternalPreviewGonePreviewDelete = true;
         // 设置NavBar Color SDK Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP有效
         mPictureParameterStyle.pictureNavBarColor = Color.parseColor("#393a3e");
-//        // 自定义相册右侧文本内容设置
-//        mPictureParameterStyle.pictureRightDefaultText = "";
-//        // 自定义相册未完成文本内容
-//        mPictureParameterStyle.pictureUnCompleteText = "";
-//        // 自定义相册完成文本内容
-//        mPictureParameterStyle.pictureCompleteText = "";
-//        // 自定义相册列表不可预览文字
-//        mPictureParameterStyle.pictureUnPreviewText = "";
-//        // 自定义相册列表预览文字
-//        mPictureParameterStyle.picturePreviewText = "";
-//
-//        // 自定义相册标题字体大小
-//        mPictureParameterStyle.pictureTitleTextSize = 18;
-//        // 自定义相册右侧文字大小
-//        mPictureParameterStyle.pictureRightTextSize = 14;
-//        // 自定义相册预览文字大小
-//        mPictureParameterStyle.picturePreviewTextSize = 14;
-//        // 自定义相册完成文字大小
-//        mPictureParameterStyle.pictureCompleteTextSize = 14;
-//        // 自定义原图文字大小
-//        mPictureParameterStyle.pictureOriginalTextSize = 14;
 
         // 裁剪主题
         mCropParameterStyle = new PictureCropParameterStyle(
@@ -315,28 +332,76 @@ public class PersonDataActivity extends BaseActivity {
 //                mAdapterWeakReference.get().setList(result);
 //                mAdapterWeakReference.get().notifyDataSetChanged();
             }
-            Log.d("tag","图片==="+result.get(0).getRealPath());
             GlideUtils.loadCircleImage(context,mAdapterWeakReference.get(),result.get(0).getPath());
             FileCommitModel commitModel = FileCommitModel.getInstance();
             String path=result.get(0).getRealPath();
             ArrayList<String> list=new ArrayList<>();
             list.add(path);
+            commitModel.setOnModelCallbackListener(new FileCommitModel.OnModelCallbackListener() {
+                @Override
+                public void fileUploadFinish(List<String> imageList, String voicePath) {
+                    String url=imageList.get(0);
+                    PersonDataActivity activity= (PersonDataActivity) context;
+                    activity.updateUserInfo("photoLogo",url);
+                }
+
+                @Override
+                public void fileUploadError() {
+
+                }
+            });
             commitModel.commitComplaintData(list,"");
-//            OKHttpManager.getAsyn("http://47.114.80.143/api/station/info/page/1/10", new OKHttpManager.ResultCallback<BaseBean>() {
-//                @Override
-//                public void onError(int code, String result, String message) {
-//
-//                }
-//
-//                @Override
-//                public void onResponse(BaseBean response) {
-//                        Log.d("tag","返回");
-//                }
-//            });
         }
 
         @Override
         public void onCancel() {
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==100){
+            String content=data.getStringExtra("content");
+            switch (requestCode){
+                case CODE_PHONE:
+                    mTvPhone.setText(content);
+                    updateUserInfo("peopleMobile",content);
+                    break;
+                case CODE_REAL_NAME:
+                    tvReadName.setText(content);
+                    updateUserInfo("peopleName",content);
+                    break;
+//                case CODE_NICKNAME:
+//                    tvNickName.setText(content);
+//                    break;
+                case CODE_ID_NUM:
+                    tvIdNum.setText(content);
+                    break;
+            }
+        }
+    }
+
+    private void updateUserInfo(String key,final String value) {
+        params.clear();
+        params.put(key, value);
+        params.put("peopleId",SpUtil.getUerId());
+        showRDialog();
+        OKHttpManager.postJsonRequest(URLConstant.UPDATE_USER_INFO, params, new OKHttpManager.ResultCallback<BaseBean>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean response) {
+                hideRDialog();
+                if ("SUCCESS".equals(response.getCode())){
+                    ToastUtil.toastShortCenter("修改成功");
+                    isModify=true;
+                }
+            }
+        }, this);
     }
 }

@@ -25,7 +25,6 @@ public class SpUtil {
     public static final String KEY_TOKEN = "KEY_TOKEN";// 应用token
     public static final String KEY_USER_NAME = "KEY_USER_NAME";// 名称
     public static final String KEY_TELEPHONE = "KEY_TELEPHONE";// 手机号
-    public static final String KEY_JOB = "KEY_JOB";// 用户角色
     public static final String KEY_USER_ID = "KEY_USER_ID";// 用户ID
     public static final String USER_ADDRESS = "USER_ADDRESS";// 用户地址
     public static final String USER_HEAD_IMAGE = "USER_HEAD_IMAGE";// 用户头像地址
@@ -114,26 +113,6 @@ public class SpUtil {
         }
         return false;
     }
-    /**
-     * 获取用户角色
-     */
-    public static String getJob() {
-        if (getPreferences() != null) {
-            return getPreferences().getString(KEY_JOB, "");
-        }
-        return "";
-    }
-
-    /**
-     * 存储用户角色
-     */
-    public static boolean setJob(String job) {
-        if (getPreferences() != null) {
-            return getPreferences().edit().putString(KEY_JOB, job).commit();
-        }
-        return false;
-    }
-
     public static void setShared(String key, String value) {
         if (getPreferences() != null) {
             getPreferences().edit().putString(key, value).commit();

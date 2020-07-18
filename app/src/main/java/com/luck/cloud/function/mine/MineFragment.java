@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,15 +20,23 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
+import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.common.activity.WebActivity;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.active.bean.ActiveItemBean;
 import com.luck.cloud.function.home.HomeMenuBean;
 import com.luck.cloud.function.login.LoginActivity;
+import com.luck.cloud.function.mine.bean.PersonInfoBean;
 import com.luck.cloud.function.mine.collect.MyCollectActivity;
 import com.luck.cloud.function.mine.footprint.MyFootPrintActivity;
 import com.luck.cloud.function.mine.publish.MyPublishActivity;
 import com.luck.cloud.function.mine.work.CalendarDesignateActivity;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.SpUtil;
+import com.luck.cloud.utils.ToastUtil;
+import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.pixplicity.sharp.OnSvgElementListener;
 import com.pixplicity.sharp.Sharp;
@@ -41,8 +50,8 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class MineFragment extends BaseFragment {
-    @Bind(R.id.iv_home_menu)
-    ImageView ivHomeMenu;
+    @Bind(R.id.iv_head_portrait)
+    ImageView ivPortrait;
     @Bind(R.id.tv_mine_name)
     TextView tvMineName;
     @Bind(R.id.tv_mine_identity)
@@ -64,7 +73,39 @@ public class MineFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
+        getUserInfo();
         initFunctionMenu();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            getUserInfo();
+        }
+    }
+
+    private void getUserInfo(){
+        int id= SpUtil.getUerId();
+        OKHttpManager.getJoint(URLConstant.USER_INFO, null,new int[]{id}, new OKHttpManager.ResultCallback<BaseBean<PersonInfoBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<PersonInfoBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    PersonInfoBean bean=response.getData();
+                    tvMineName.setText(bean.getPeopleName());
+                    GlideUtils.loadCircleImage(getContext(),ivPortrait,bean.getPhotoLogo());
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
     }
 
     /**
@@ -180,9 +221,16 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.ll_mine_personal:
                 intent.setClass(getContext(), PersonDataActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,100);
                 break;
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==200){
+            getUserInfo();
+        }
+    }
 }

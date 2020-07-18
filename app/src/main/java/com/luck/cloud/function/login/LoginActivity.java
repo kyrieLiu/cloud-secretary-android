@@ -152,6 +152,7 @@ public class LoginActivity extends BaseActivity {
         SpUtil.setLoginAcount(account);
         SpUtil.setLoginPassword(password);
         SpUtil.setToken(loginBean.getToken());
+        SpUtil.setUserId(loginBean.getUser().getPeopleId());
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

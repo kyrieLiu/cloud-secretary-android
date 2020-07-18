@@ -27,6 +27,8 @@ public class ModifyActivity extends BaseActivity {
 
     @Bind(R.id.et_modify_content)
     EditText mEtContent;
+    private String title;
+    private String content;
 
     @Override
     protected void back() {
@@ -46,21 +48,23 @@ public class ModifyActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        InputFilter[] addressFilter = {new InputFilter.LengthFilter(20)};
-        mEtContent.setFilters(addressFilter);
-        mEtContent.setHint("请输入手机号");
+//        InputFilter[] addressFilter = {new InputFilter.LengthFilter(20)};
+//        mEtContent.setFilters(addressFilter);
+//        mEtContent.setHint("请输入手机号");
+        title=getIntent().getStringExtra("title");
+        content=getIntent().getStringExtra("content");
+        setTitle(title);
+        mEtContent.setHint(content);
     }
 
     @OnClick({R.id.tv_right, R.id.iv_modify_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_right:
-                String content = mEtContent.getText().toString();
-                if (TextUtils.isEmpty(content)) {
-                    ToastUtil.toastShortCenter("请输入姓名");
-                    return;
-                }
-                updateUserInfo(content);
+                Intent intent=new Intent();
+                intent.putExtra("content",mEtContent.getText().toString());
+               setResult(100,intent);
+               finish();
                 break;
             case R.id.iv_modify_delete:
                 mEtContent.setText("");
