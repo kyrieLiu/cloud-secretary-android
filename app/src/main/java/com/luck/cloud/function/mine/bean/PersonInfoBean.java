@@ -4,30 +4,45 @@ import java.util.List;
 
 public class PersonInfoBean {
     /**
-     * peopleId : 12
-     * peopleLoginname : liuyinpark
-     * peoplePassword : f7b449140ffbe627364f137a3b548b94
-     * peopleName : 刘隐
+     * peopleId : 299
+     * peopleLoginname : first
+     * peopleName : 真实姓名
      * peopleMobile : 15001121167
-     * peopleMail : 652992429@qq.com
-     * photoLogo : http://121.36.144.200/group1/M00/00/01/wKgAnF6c9rmAO5hTAAAgDOh_BRw290.png
      * peopleType : 1
      * parkId : 1
-     * deptId : 59
-     * roles : [2,50]
+     * roles : []
+     * userType : 1
+     * idCard : 3729221994
+     * nickname : 昵称
+     * village :
+     * school :
+     * industry :
+     * affiliatedUnit : 单位
      */
 
     private int peopleId;
     private String peopleLoginname;
-    private String peoplePassword;
     private String peopleName;
     private String peopleMobile;
-    private String peopleMail;
-    private String photoLogo;
     private String peopleType;
     private int parkId;
-    private int deptId;
-    private List<Integer> roles;
+    private int userType;
+    private String idCard;
+    private String nickname;
+    private String village;
+    private String school;
+    private String industry;
+    private String affiliatedUnit;
+    private String photoLogo;
+    private List<?> roles;
+
+    public String getPhotoLogo() {
+        return photoLogo;
+    }
+
+    public void setPhotoLogo(String photoLogo) {
+        this.photoLogo = photoLogo;
+    }
 
     public int getPeopleId() {
         return peopleId;
@@ -43,14 +58,6 @@ public class PersonInfoBean {
 
     public void setPeopleLoginname(String peopleLoginname) {
         this.peopleLoginname = peopleLoginname;
-    }
-
-    public String getPeoplePassword() {
-        return peoplePassword;
-    }
-
-    public void setPeoplePassword(String peoplePassword) {
-        this.peoplePassword = peoplePassword;
     }
 
     public String getPeopleName() {
@@ -69,22 +76,6 @@ public class PersonInfoBean {
         this.peopleMobile = peopleMobile;
     }
 
-    public String getPeopleMail() {
-        return peopleMail;
-    }
-
-    public void setPeopleMail(String peopleMail) {
-        this.peopleMail = peopleMail;
-    }
-
-    public String getPhotoLogo() {
-        return photoLogo;
-    }
-
-    public void setPhotoLogo(String photoLogo) {
-        this.photoLogo = photoLogo;
-    }
-
     public String getPeopleType() {
         return peopleType;
     }
@@ -101,19 +92,67 @@ public class PersonInfoBean {
         this.parkId = parkId;
     }
 
-    public int getDeptId() {
-        return deptId;
+    public int getUserType() {
+        return userType;
     }
 
-    public void setDeptId(int deptId) {
-        this.deptId = deptId;
+    public void setUserType(int userType) {
+        this.userType = userType;
     }
 
-    public List<Integer> getRoles() {
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public String getAffiliatedUnit() {
+        return affiliatedUnit;
+    }
+
+    public void setAffiliatedUnit(String affiliatedUnit) {
+        this.affiliatedUnit = affiliatedUnit;
+    }
+
+    public List<?> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Integer> roles) {
+    public void setRoles(List<?> roles) {
         this.roles = roles;
     }
 }

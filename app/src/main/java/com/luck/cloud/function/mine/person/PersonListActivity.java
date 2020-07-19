@@ -2,6 +2,7 @@ package com.luck.cloud.function.mine.person;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -35,10 +37,10 @@ import butterknife.Bind;
 public class PersonListActivity extends BaseActivity {
     @Bind(R.id.rv_common_list)
     XRecyclerView mRvList;
-    private StudyAdapter<StudyScienceModel.RecordsBean> adapter;
+    private PersonAdapter<PersonModel> adapter;
 
     private StudyTabModel dict;
-    //1学习  2科普
+    //1关注  2粉丝
     private int type;
 
 
@@ -54,12 +56,17 @@ public class PersonListActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle bundle) {
-            setTitle("我的关注");
+            type=getIntent().getIntExtra("type",1);
+            if (type==1){
+                setTitle("我的关注");
+            }else{
+                setTitle("我的粉丝");
+            }
     }
 
     @Override
     protected void loadData() {
-        adapter = new StudyAdapter(this);
+        adapter = new PersonAdapter(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvList.setLayoutManager(layoutManager);
         mRvList.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
@@ -68,11 +75,18 @@ public class PersonListActivity extends BaseActivity {
         adapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                StudyScienceModel.RecordsBean itemsBean = adapter.getList().get(position);
-                // WebActivity.start(context,itemsBean.getId(),itemsBean.getIsRead());
-//                Intent intent = new Intent(context, WebActivity.class);
-//                context.startActivity(intent);
-                getDetailData(itemsBean);
+                PersonModel itemsBean = adapter.getList().get(position);
+
+                Intent intent=new Intent(PersonListActivity.this,PersonWitnessActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        adapter.setListener(new PersonAdapter.OnPersonClickListener() {
+            @Override
+            public void attentionCallback(PersonModel bean,int position) {
+                bean.setStatus(2);
+                adapter.notifyItemChanged(position+1);
             }
         });
         mRvList.setLoadingListener(new OnRecyclerLoadingListener() {
@@ -118,31 +132,38 @@ public class PersonListActivity extends BaseActivity {
 
 
     /**
-     * 请求督查督办列表数据
+     * 请求列表数据
      *
      * @param page
      */
     private void requestData(final int page,String keyWord) {
-        showRDialog();
-        OKHttpManager.getJoint(URLConstant.STUDY_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
-            @Override
-            public void onError(int code, String result, String message) {
-                hideRDialog();
-                ToastUtil.toastShortCenter(message);
-                adapter.setErrorReqList(message, mRvList);
-            }
-
-            @Override
-            public void onResponse(BaseBean<StudyScienceModel> response) {
-                hideRDialog();
-                if (response.getCode().equals("SUCCESS")){
-                    List<StudyScienceModel.RecordsBean> list=response.getData().getRecords();
-                    adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
-                }else{
-                    ToastUtil.toastShortCenter(response.getMsg());
-                }
-            }
-        }, this);
+        List<PersonModel> list=new ArrayList<>();
+        for (int i=0;i<6;i++){
+            PersonModel model=new PersonModel();
+            model.setStatus(1);
+            list.add(model);
+        }
+        adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
+//        showRDialog();
+//        OKHttpManager.getJoint(URLConstant.STUDY_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
+//            @Override
+//            public void onError(int code, String result, String message) {
+//                hideRDialog();
+//                ToastUtil.toastShortCenter(message);
+//                adapter.setErrorReqList(message, mRvList);
+//            }
+//
+//            @Override
+//            public void onResponse(BaseBean<StudyScienceModel> response) {
+//                hideRDialog();
+//                if (response.getCode().equals("SUCCESS")){
+//                    List<StudyScienceModel.RecordsBean> list=response.getData().getRecords();
+//                    adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
+//                }else{
+//                    ToastUtil.toastShortCenter(response.getMsg());
+//                }
+//            }
+//        }, this);
     }
 
     public void searchData(String keyWord){

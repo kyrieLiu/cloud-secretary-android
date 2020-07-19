@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
 
     <include layout="@layout/layout_title"></include>
 
@@ -23,58 +25,72 @@
                 android:id="@+id/activity_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 android:hint="活动名称"
                 ></EditText>
             <EditText
                 android:id="@+id/activity_unit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
                 android:hint="举办单位"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 ></EditText>
             <EditText
                 android:id="@+id/activity_principle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
                 android:hint="负责人"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 ></EditText>
             <EditText
                 android:id="@+id/activity_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
                 android:inputType="phone"
                 android:hint="负责人电话"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 ></EditText>
             <EditText
                 android:id="@+id/activity_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
                 android:hint="活动地点"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 ></EditText>
             <EditText
                 android:id="@+id/activity_initiator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
                 android:hint="发起人"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 ></EditText>
             <EditText
                 android:id="@+id/activity_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
                 android:hint="活动内容"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 ></EditText>
 
             <LinearLayout

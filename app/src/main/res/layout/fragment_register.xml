@@ -52,6 +52,7 @@
             android:id="@+id/et_register_idNum"
             style="@style/register_edit"
             android:hint="身份证号码"
+            android:inputType="text"
             />
         <EditText
             android:id="@+id/et_register_realName"
@@ -62,16 +63,19 @@
             android:id="@+id/et_register_phone"
             style="@style/register_edit"
             android:hint="手机号码"
+            android:inputType="phone"
             />
         <EditText
             android:id="@+id/et_register_password"
             style="@style/register_edit"
             android:hint="登录密码"
+            android:inputType="textPassword"
             />
         <EditText
             android:id="@+id/et_register_confirm_pass"
             style="@style/register_edit"
             android:hint="确认登录密码"
+            android:inputType="textPassword"
             />
         <EditText
             android:id="@+id/et_register_nickname"

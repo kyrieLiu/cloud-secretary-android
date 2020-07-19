@@ -2,8 +2,6 @@ package com.luck.cloud.function.office;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -12,18 +10,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.luck.cloud.BuildConfig;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
-import com.luck.cloud.function.home.ScienceAdapter;
 import com.luck.cloud.function.home.SuperviseHandleBean;
+import com.luck.cloud.function.office.notice.NoticeActivity;
 import com.luck.cloud.function.office.clock.ClockInActivity;
 import com.luck.cloud.function.office.files.MySharedFilesActivity;
-import com.luck.cloud.function.office.notice.NoticeActivity;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.luck.cloud.widget.view.LoadExceptionView;
@@ -34,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OfficeActivity extends BaseActivity {

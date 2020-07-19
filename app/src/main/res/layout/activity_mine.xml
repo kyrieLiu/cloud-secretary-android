@@ -83,10 +83,13 @@
                     android:gravity="center_vertical">
 
                     <LinearLayout
+                        android:id="@+id/ll_dynamic"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:background="@drawable/selector_fill_rectangle_white"
                         android:orientation="vertical">
 
                         <TextView
@@ -105,10 +108,13 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_attention"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:background="@drawable/selector_fill_rectangle_white"
                         android:orientation="vertical">
 
                         <TextView
@@ -127,10 +133,13 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_fans"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center_horizontal"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:background="@drawable/selector_fill_rectangle_white"
                         android:orientation="vertical">
 
                         <TextView

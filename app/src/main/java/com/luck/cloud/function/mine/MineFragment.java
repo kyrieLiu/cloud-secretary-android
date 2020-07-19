@@ -1,5 +1,6 @@
 package com.luck.cloud.function.mine;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -10,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,16 +23,16 @@ import com.luck.cloud.R;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
-import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.active.bean.ActiveItemBean;
 import com.luck.cloud.function.home.HomeMenuBean;
 import com.luck.cloud.function.login.LoginActivity;
 import com.luck.cloud.function.mine.bean.PersonInfoBean;
 import com.luck.cloud.function.mine.collect.MyCollectActivity;
-import com.luck.cloud.function.mine.footprint.MyFootPrintActivity;
+import com.luck.cloud.function.mine.dynamic.DynamicActivity;
+import com.luck.cloud.function.mine.person.PersonListActivity;
 import com.luck.cloud.function.mine.publish.MyPublishActivity;
 import com.luck.cloud.function.mine.work.CalendarDesignateActivity;
+import com.luck.cloud.function.study.StudyActivity;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.ToastUtil;
@@ -94,6 +94,7 @@ public class MineFragment extends BaseFragment {
                 ToastUtil.toastShortCenter(message);
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(BaseBean<PersonInfoBean> response) {
                 hideRDialog();
@@ -101,6 +102,22 @@ public class MineFragment extends BaseFragment {
                     PersonInfoBean bean=response.getData();
                     tvMineName.setText(bean.getPeopleName());
                     GlideUtils.loadCircleImage(getContext(),ivPortrait,bean.getPhotoLogo());
+
+                    switch (bean.getPeopleType()){
+                        case "1":
+                            tvMineIdentity.setText(bean.getAffiliatedUnit()+"   第一书记");
+                            break;
+                        case "2":
+                            tvMineIdentity.setText(bean.getSchool()+"   大学生及高校");
+                            break;
+                        case "3":
+                            tvMineIdentity.setText(bean.getVillage()+"   驻地村民");
+                            break;
+                        case "4":
+                            tvMineIdentity.setText(bean.getIndustry());
+                            break;
+                    }
+
                 }else{
                     ToastUtil.toastShortCenter(response.getMsg());
                 }
@@ -145,7 +162,7 @@ public class MineFragment extends BaseFragment {
                         startActivity(intent);
                         break;
                     case "我的足迹":
-                        intent.setClass(Objects.requireNonNull(getContext()), MyFootPrintActivity.class);
+                        intent.setClass(Objects.requireNonNull(getContext()), StudyActivity.class);
                         startActivity(intent);
                         break;
                     case "我的名片":
@@ -215,13 +232,27 @@ public class MineFragment extends BaseFragment {
         sharp.into(ivPersonalRight);
     }
 
-    @OnClick({R.id.ll_mine_personal})
+    @OnClick({R.id.ll_mine_personal,R.id.ll_dynamic,R.id.ll_attention,R.id.ll_fans})
     public void click(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.ll_mine_personal:
                 intent.setClass(getContext(), PersonDataActivity.class);
                 startActivityForResult(intent,100);
+                break;
+            case R.id.ll_dynamic:
+                intent.setClass(getContext(), DynamicActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.ll_attention:
+                intent.setClass(getContext(), PersonListActivity.class);
+                intent.putExtra("type",1);
+                startActivity(intent);
+                break;
+            case R.id.ll_fans:
+                intent.setClass(getContext(), PersonListActivity.class);
+                intent.putExtra("type",2);
+                startActivity(intent);
                 break;
         }
     }

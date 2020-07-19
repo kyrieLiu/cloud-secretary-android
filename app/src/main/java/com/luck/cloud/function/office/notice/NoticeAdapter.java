@@ -1,4 +1,4 @@
-package com.luck.cloud.function.mine.footprint;
+package com.luck.cloud.function.office.notice;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,13 +17,13 @@ import java.util.List;
  * Created by liuyin on 2019/2/27 15:19
  * Description:待办事项
  */
-public class FootPrintAdapter<T extends WaitDoneBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
+public class NoticeAdapter<T extends WaitDoneBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
 
-    public FootPrintAdapter(List<T> list, Context context) {
+    public NoticeAdapter(List<T> list, Context context) {
         super(list, context);
     }
 
-    public FootPrintAdapter(Context context) {
+    public NoticeAdapter(Context context) {
         super(context);
     }
 

@@ -99,7 +99,7 @@ public class WorkerCalendarAdapter extends BaseAdapter {
                 viewHolder.mIvPoint.setVisibility(View.GONE);
             }
             if (bean.isSelect()){//是否为选中状态
-                viewHolder.rlContent.setBackgroundColor(context.getResources().getColor(R.color.main_color));
+                viewHolder.rlContent.setBackgroundColor(context.getResources().getColor(R.color.gray_color));
                 viewHolder.tvDate.setTextColor(context.getResources().getColor(R.color.white));
             }else{
                 viewHolder.rlContent.setBackgroundColor(Color.argb(0,0,0,0));

@@ -63,6 +63,8 @@ public class PersonDataActivity extends BaseActivity {
     TextView tvNickName;
     @Bind(R.id.tv_id_num)
     TextView tvIdNum;
+    @Bind(R.id.tv_personal_identity)
+    TextView tvIdentity;
 
     private boolean isModify;
 
@@ -139,6 +141,24 @@ public class PersonDataActivity extends BaseActivity {
                     GlideUtils.loadCircleImage(getContext(),mIvAvatar,bean.getPhotoLogo());
                     mTvPhone.setText(bean.getPeopleMobile());
                     tvReadName.setText(bean.getPeopleName());
+                    tvIdNum.setText(bean.getIdCard());
+
+                    switch (bean.getPeopleType()){
+                        case "1":
+                            tvIdentity.setText("第一书记");
+                            break;
+                        case "2":
+                            tvIdentity.setText("大学生及高校");
+                            break;
+                        case "3":
+                            tvIdentity.setText("驻地村民");
+                            break;
+                        case "4":
+                            tvIdentity.setText("其他");
+                            break;
+                    }
+
+
                 }else{
                     ToastUtil.toastShortCenter(response.getMsg());
                 }

@@ -1,6 +1,7 @@
 package com.luck.cloud.function.login.register;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -8,7 +9,11 @@ import android.widget.TextView;
 
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseFragment;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.login.LoginBean;
 import com.luck.cloud.function.witness.dynamic.DynamicFragment;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.widget.dialog.RepairsTypeDialog;
 
 import butterknife.Bind;
@@ -57,19 +62,19 @@ public class FirstSecretaryFragment extends BaseFragment {
 
     @Override
     protected void initView(Bundle bundle) {
-        //0第一书记  1大学生及高校  2驻地村民  3其他人员
+        //1第一书记  2大学生及高校  3驻地村民  4其他人员
         type = getArguments().getInt("type");
         switch (type){
-            case 0:
+            case 1:
                 etUnit.setVisibility(View.VISIBLE);
                 break;
-            case 1:
+            case 2:
                 etSchool.setVisibility(View.VISIBLE);
                 break;
-            case 2:
+            case 3:
                 etVillage.setVisibility(View.VISIBLE);
                 break;
-            case 3:
+            case 4:
                 tvIndustry.setVisibility(View.VISIBLE);
                 break;
         }
@@ -77,6 +82,54 @@ public class FirstSecretaryFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
+
+    }
+
+    private void register(){
+
+        String password=etPassword.getText().toString();
+        String confirmPassword=etConfirmPass.getText().toString();
+        if (!password.equals(confirmPassword)){
+            ToastUtil.toastShortCenter("密码不一致,请重新输入");
+            return;
+        }
+
+
+        params.clear();
+        params.put("userType",type);
+        params.put("peopleLoginname",etUsername.getText().toString());
+        params.put("idCard",etIdNum.getText().toString());
+        params.put("peopleName",etRealName.getText().toString());
+        params.put("peopleMobile",etPhone.getText().toString());
+        params.put("peoplePassword",etConfirmPass.getText().toString());
+        params.put("nickname",etNickname.getText().toString());
+
+        params.put("affiliatedUnit",etUnit.getText().toString());
+        params.put("school",etSchool.getText().toString());
+        params.put("village",etVillage.getText().toString());
+        params.put("industry",tvIndustry.getText().toString());
+
+        showRDialog();
+        OKHttpManager.postJsonRequest(URLConstant.REGISTER,params, new OKHttpManager.ResultCallback<LoginBean>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(LoginBean response) {
+                hideRDialog();
+                if ("SUCCESS".equals(response.getCode())) {
+
+                  ToastUtil.toastShortCenter("注册成功");
+                  getActivity().finish();
+
+                }else{
+                    ToastUtil.toastShortCenter(response.getMessage());
+                }
+            }
+        }, this);
 
     }
 
@@ -94,6 +147,7 @@ public class FirstSecretaryFragment extends BaseFragment {
                 dialog.show();
                 break;
             case R.id.bt_register:
+                register();
                 break;
         }
     }

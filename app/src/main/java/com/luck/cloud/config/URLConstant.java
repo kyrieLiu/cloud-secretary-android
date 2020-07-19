@@ -13,6 +13,7 @@ public class URLConstant {
     public static final String AS_ASSETSAPI = "/ac";
 
     public static final String LOGIN = BASE_URL + "/login/login";
+    public static final String REGISTER = BASE_URL + "/sys/people/save";
     //字典数据
     public static final String DICT_DATA = BASE_URL + "/sys/dictionary/getDictValues";
     public static final String STUDY_SCIENCE_TAB = BASE_URL + "/sys/domain/list";

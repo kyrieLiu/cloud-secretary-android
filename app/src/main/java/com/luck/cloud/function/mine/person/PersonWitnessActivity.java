@@ -1,4 +1,4 @@
-package com.luck.cloud.function.login;
+package com.luck.cloud.function.mine.person;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.common.adapter.CommonFragmentPagerAdapter;
 import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.login.register.FirstSecretaryFragment;
 import com.luck.cloud.function.witness.GardenInfoBean;
 import com.luck.cloud.function.witness.dynamic.DynamicFragment;
 import com.luck.cloud.function.witness.video.VideoFragment;
@@ -24,7 +23,12 @@ import java.util.List;
 
 import butterknife.Bind;
 
-public class RegisterActivity extends BaseActivity {
+/**
+ * Created by liuyin on 2019/4/11 15:54
+ * Describe:TableLayout 科普
+ */
+public class PersonWitnessActivity extends BaseActivity {
+
     @Bind(R.id.mtl_common)
     TabLayout mMtlManagement;
     @Bind(R.id.vp_common)
@@ -46,7 +50,7 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setTitle("注册");
+        setTitle("粉丝");
     }
 
     @Override
@@ -113,15 +117,11 @@ public class RegisterActivity extends BaseActivity {
     private void setPageData(int id) {
         List<String> titleList = new ArrayList<>();
         List<Fragment> fragmentList = new ArrayList<>();
-        titleList.add("第一书记");
-        titleList.add("大学生及高校");
-        titleList.add("驻地村民");
-        titleList.add("其他人员");
+        titleList.add("动态");
+        titleList.add("视频");
 
-        fragmentList.add(FirstSecretaryFragment.getInstance(1));
-        fragmentList.add(FirstSecretaryFragment.getInstance(2));
-        fragmentList.add(FirstSecretaryFragment.getInstance(3));
-        fragmentList.add(FirstSecretaryFragment.getInstance(4));
+        fragmentList.add(new DynamicFragment());
+        fragmentList.add(new VideoFragment());
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);
