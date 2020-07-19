@@ -307,6 +307,7 @@ public class DynamicFragment extends BaseFragment {
 
     private void requestData(final int page) {
         showRDialog();
+        params.clear();
         params.put("dyType",1);
         OKHttpManager.getJoint(URLConstant.DYNAMIC_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
             @Override
