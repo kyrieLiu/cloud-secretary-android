@@ -28,9 +28,6 @@ public class ArticleListBean {
     private String article ; // 公告信息
     private String picture;
 
-    ArticleListBean(String title){
-        this.title=title;
-    }
 
     public String getPicture() {
         return picture;

@@ -1,50 +1,38 @@
 package com.luck.cloud.function.home;
 
 import android.Manifest;
-import android.app.Application;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.luck.cloud.R;
-import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
+import com.luck.cloud.base.BaseListBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.common.activity.PropertyServiceStandardSearchActivity;
 import com.luck.cloud.common.activity.WebActivity;
-import com.luck.cloud.common.entity.RequestBean;
 import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.active.ActiveActivity;
-import com.luck.cloud.function.main.MainActivity;
-import com.luck.cloud.function.mine.WaitDoneBean;
 import com.luck.cloud.function.office.OfficeActivity;
-import com.luck.cloud.function.office.clock.ClockInActivity;
-import com.luck.cloud.function.science.ScienceActivity;
+import com.luck.cloud.function.office.notice.NoticeBean;
 import com.luck.cloud.function.study.StudyActivity;
 import com.luck.cloud.function.study.StudyAdapter;
 import com.luck.cloud.function.study.model.StudyDetailModel;
@@ -130,9 +118,10 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void loadData() {
 
-        initBanner();//初始化banner图
 
         initFunctionMenu();//初始化功能菜单
+
+        initBanner();//初始化banner图
 
         initInformations();//初始化列表
 
@@ -208,19 +197,69 @@ public class HomeFragment extends BaseFragment {
 
 
     private void initNotice() {
-        List<ArticleListBean> communityList = new ArrayList<>();
-        communityList.add(new ArticleListBean("内蒙古通辽市寻找一名病虫防止专家"));
-        communityList.add(new ArticleListBean("内蒙古通辽市开鲁县招募10名道路清扫志愿者"));
-        svNotice.setArticleList(communityList);
-        svNotice.setOnMyClickListener(new RelativeSwitcherView.OnMyClickListener() {
+
+        OKHttpManager.getJoint(URLConstant.HOME_NOTICE, params, new int[]{}, new OKHttpManager.ResultCallback<BaseListBean<NoticeBean>>() {
             @Override
-            public void clickWhich(ArticleListBean bean) {
-                if (bean != null) {
-                    Intent intent = new Intent(getContext(), WebActivity.class);
-                    getContext().startActivity(intent);
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseListBean<NoticeBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")) {
+                    List<NoticeBean> list = response.getData();
+                    if (list!=null&&list.size()>0){
+                        List<ArticleListBean> communityList = new ArrayList<>();
+                        for (NoticeBean bean:list){
+                            ArticleListBean itemBean=new ArticleListBean();
+                            itemBean.setTitle(bean.getTitleName());
+                            itemBean.setId(bean.getNoticeId());
+                            communityList.add(itemBean);
+                        }
+                        svNotice.setArticleList(communityList);
+                        svNotice.setOnMyClickListener(new RelativeSwitcherView.OnMyClickListener() {
+                            @Override
+                            public void clickWhich(ArticleListBean bean) {
+                                if (bean != null) {
+                                getNoticeDetail(bean.getId());
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    ToastUtil.toastShortCenter(response.getMsg());
                 }
             }
-        });
+        }, this);
+    }
+
+    private void getNoticeDetail(int id) {
+        showRDialog();
+        OKHttpManager.getJoint(URLConstant.NOTICE_DETAIL, null, new int[]{id}, new OKHttpManager.ResultCallback<BaseBean<NoticeBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<NoticeBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")) {
+
+                    Temporary.webContent = response.getData().getContent();
+
+                    Intent intent = new Intent(getActivity(), WebActivity.class);
+                    startActivity(intent);
+
+
+                } else {
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
     }
 
     /**
@@ -328,7 +367,7 @@ public class HomeFragment extends BaseFragment {
         });
 
         showRDialog();
-        OKHttpManager.getJoint(URLConstant.STUDY_LIST, null,new int[]{1,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
+        OKHttpManager.getJoint(URLConstant.STUDY_LIST, null, new int[]{1, 10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
             @Override
             public void onError(int code, String result, String message) {
                 hideRDialog();
@@ -341,10 +380,10 @@ public class HomeFragment extends BaseFragment {
             public void onResponse(BaseBean<StudyScienceModel> response) {
                 refreshLayout.finishRefresh();
                 hideRDialog();
-                if (response.getCode().equals("SUCCESS")){
-                    List<StudyScienceModel.RecordsBean> list=response.getData().getRecords();
+                if (response.getCode().equals("SUCCESS")) {
+                    List<StudyScienceModel.RecordsBean> list = response.getData().getRecords();
                     recommendAdapter.setList(list);
-                }else{
+                } else {
                     ToastUtil.toastShortCenter(response.getMsg());
                 }
             }
@@ -352,13 +391,13 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    @OnClick({R.id.main_search,R.id.ll_home_wait_done_more})
+    @OnClick({R.id.main_search, R.id.ll_home_wait_done_more})
     public void click(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.ll_home_wait_done_more:
-              intent.setClass(getContext(), MoreRecommendActivity.class);
-              startActivity(intent);
+                intent.setClass(getContext(), MoreRecommendActivity.class);
+                startActivity(intent);
                 break;
             case R.id.main_search:
                 intent.setClass(getContext(), PropertyServiceStandardSearchActivity.class);
@@ -366,32 +405,6 @@ public class HomeFragment extends BaseFragment {
                 break;
         }
     }
-
-
-    /**
-     * 请求待办事项列表数据
-     *
-     * @param page
-     */
-    private void requestData(final int page) {
-        final RequestBean request = initRequestParams();
-        request.getPageable().setCurrent(page);
-        showRDialog();
-        OKHttpManager.getAsyn(URLConstant.WAIT_DONE_MORE, new OKHttpManager.ResultCallback<BaseBean<WaitDoneBean>>() {
-            @Override
-            public void onError(int code, String result, String message) {
-                hideRDialog();
-                ToastUtil.toastShortCenter(message);
-            }
-
-            @Override
-            public void onResponse(BaseBean<WaitDoneBean> response) {
-                hideRDialog();
-                final List<WaitDoneBean.ItemsBean> list = response.getData().getItems();
-            }
-        }, this);
-    }
-
 
     /**
      * 检测GPS、位置权限是否开启

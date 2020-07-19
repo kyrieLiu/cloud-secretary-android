@@ -3,6 +3,7 @@ package com.luck.cloud.function.mine.bean;
 import java.util.List;
 
 public class PersonInfoBean {
+
     /**
      * peopleId : 299
      * peopleLoginname : first
@@ -18,6 +19,9 @@ public class PersonInfoBean {
      * school :
      * industry :
      * affiliatedUnit : 单位
+     * fansCount : 0
+     * attentionCount : 0
+     * dynamicCount : 0
      */
 
     private int peopleId;
@@ -33,6 +37,9 @@ public class PersonInfoBean {
     private String school;
     private String industry;
     private String affiliatedUnit;
+    private int fansCount;
+    private int attentionCount;
+    private int dynamicCount;
     private String photoLogo;
     private List<?> roles;
 
@@ -146,6 +153,30 @@ public class PersonInfoBean {
 
     public void setAffiliatedUnit(String affiliatedUnit) {
         this.affiliatedUnit = affiliatedUnit;
+    }
+
+    public int getFansCount() {
+        return fansCount;
+    }
+
+    public void setFansCount(int fansCount) {
+        this.fansCount = fansCount;
+    }
+
+    public int getAttentionCount() {
+        return attentionCount;
+    }
+
+    public void setAttentionCount(int attentionCount) {
+        this.attentionCount = attentionCount;
+    }
+
+    public int getDynamicCount() {
+        return dynamicCount;
+    }
+
+    public void setDynamicCount(int dynamicCount) {
+        this.dynamicCount = dynamicCount;
     }
 
     public List<?> getRoles() {

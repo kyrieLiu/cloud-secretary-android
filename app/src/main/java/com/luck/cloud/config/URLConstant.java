@@ -38,6 +38,12 @@ public class URLConstant {
 
     //修改个人信息
     public static final String UPDATE_USER_INFO = BASE_URL + "/sys/people/save";
+    //首页通知公告
+    public static final String HOME_NOTICE = BASE_URL + "/information/notice/getHome";
+    //通知公告列表
+    public static final String NOTICE_LIST = BASE_URL + "/information/notice/page";
+    //通知公告详情
+    public static final String NOTICE_DETAIL = BASE_URL + "/information/notice/get";
 
 
     //园区列表

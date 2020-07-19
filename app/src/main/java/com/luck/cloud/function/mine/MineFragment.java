@@ -60,6 +60,12 @@ public class MineFragment extends BaseFragment {
     ImageView ivPersonalRight;
     @Bind(R.id.rl_mine_menu)
     MeasureRecyclerView recyclerView;
+    @Bind(R.id.tv_mine_dynamic)
+    TextView tvDynamic;
+    @Bind(R.id.tv_mine_attention)
+    TextView tvAttention;
+    @Bind(R.id.tv_mine_fans)
+    TextView tvFans;
 
     @Override
     protected int getContentId() {
@@ -102,6 +108,10 @@ public class MineFragment extends BaseFragment {
                     PersonInfoBean bean=response.getData();
                     tvMineName.setText(bean.getPeopleName());
                     GlideUtils.loadCircleImage(getContext(),ivPortrait,bean.getPhotoLogo());
+
+                    tvDynamic.setText(String.valueOf(bean.getDynamicCount()));
+                    tvAttention.setText(String.valueOf(bean.getAttentionCount()));
+                    tvFans.setText(String.valueOf(bean.getFansCount()));
 
                     switch (bean.getPeopleType()){
                         case "1":

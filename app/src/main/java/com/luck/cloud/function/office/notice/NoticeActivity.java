@@ -10,16 +10,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.luck.cloud.PictureMainActivity;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
+import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.base.BaseListBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
+import com.luck.cloud.common.activity.WebActivity;
+import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.RxConstant;
-import com.luck.cloud.function.mine.WaitDoneBean;
+import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.manager.RxManager;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -31,7 +36,7 @@ public class NoticeActivity extends BaseActivity {
     XRecyclerView mRvList;
     private RxManager rxManager;
 
-    private NoticeAdapter<WaitDoneBean.ItemsBean> waitDoneAdapter;
+    private NoticeAdapter<NoticeBean> waitDoneAdapter;
 
     @Override
     protected void back() {
@@ -74,65 +79,64 @@ public class NoticeActivity extends BaseActivity {
         waitDoneAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent=new Intent(NoticeActivity.this, PictureMainActivity.class);
-                startActivity(intent);
+                NoticeBean bean=waitDoneAdapter.getList().get(position);
+                getNoticeDetail(bean.getNoticeId());
             }
         });
-        //requestData(1);
        mRvList.refresh();
 //
-//        //观察督查督办验收和修缮审核
-//        initObserver();
     }
 
     /**
-     * 观察督查督办验收和修缮审核
-     */
-    private void initObserver() {
-        rxManager = new RxManager();
-        rxManager.on(RxConstant.RX_SUPERVISE_ACCEPT, new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                requestData(1);
-            }
-        });
-        rxManager.on(RxConstant.RX_REPAIR_CHECK, new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                requestData(1);
-            }
-        });
-    }
-
-    /**
-     * 请求待办事项列表数据
+     * 获取公告列表
      *
      * @param page
      */
     private void requestData(final int page) {
-        List<WaitDoneBean.ItemsBean> list = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            list.add(new WaitDoneBean.ItemsBean());
-        }
-        waitDoneAdapter.setSuccessReqList(list, 10, page, mRvList,"暂无推荐内容");
-//        final RequestBean request = initRequestParams();
-//        request.getPageable().setCurrent(page);
-//        showRDialog();
-//        OKHttpManager.postJsonRequest(URLConstant.WAIT_DONE_MORE, request, new OKHttpManager.ResultCallback<BaseBean<WaitDoneBean>>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                hideRDialog();
-//                ToastUtil.toastShortCenter(message);
-//                waitDoneAdapter.setErrorReqList(message, mRvList);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean<WaitDoneBean> response) {
-//                hideRDialog();
-//                final List<WaitDoneBean.ItemsBean> list = response.getData().getItems();
-//                waitDoneAdapter.setSuccessReqList(list, request.getPageable().getSize(), page, mRvList, "暂无待办事项");
-//            }
-//        }, this);
+        params.clear();
+        params.put("noticeStatus",1);
+        showRDialog();
+        OKHttpManager.getJoint(URLConstant.NOTICE_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<NoticeListBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+                waitDoneAdapter.setErrorReqList(message, mRvList);
+            }
+
+            @Override
+            public void onResponse(BaseBean<NoticeListBean> response) {
+                hideRDialog();
+                final List<NoticeBean> list = response.getData().getRecords();
+                waitDoneAdapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
+            }
+        }, this);
+    }
+    private void getNoticeDetail(int id) {
+        showRDialog();
+        OKHttpManager.getJoint(URLConstant.NOTICE_DETAIL, null, new int[]{id}, new OKHttpManager.ResultCallback<BaseBean<NoticeBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<NoticeBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")) {
+
+                    Temporary.webContent = response.getData().getContent();
+
+                    Intent intent = new Intent(NoticeActivity.this, WebActivity.class);
+                    startActivity(intent);
+
+
+                } else {
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
     }
 
     @Override

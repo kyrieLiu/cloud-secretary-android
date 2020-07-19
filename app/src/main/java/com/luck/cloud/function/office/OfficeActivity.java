@@ -1,5 +1,6 @@
 package com.luck.cloud.function.office;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +15,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
+import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
+import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.home.SuperviseHandleBean;
+import com.luck.cloud.function.mine.bean.PersonInfoBean;
 import com.luck.cloud.function.office.notice.NoticeActivity;
 import com.luck.cloud.function.office.clock.ClockInActivity;
 import com.luck.cloud.function.office.files.MySharedFilesActivity;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.SpUtil;
+import com.luck.cloud.utils.ToastUtil;
+import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.MeasureRecyclerView;
 import com.luck.cloud.widget.view.LoadExceptionView;
@@ -73,6 +81,7 @@ public class OfficeActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+        getUserInfo();
         initArrange();
     }
 
@@ -102,7 +111,7 @@ public class OfficeActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.ll_office_clock, R.id.ll_office_form, R.id.ll_office_notice, R.id.ll_office_document})
+    @OnClick({R.id.ll_office_clock, R.id.ll_office_form, R.id.ll_office_notice, R.id.ll_office_document,R.id.add_arrange})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -127,7 +136,34 @@ public class OfficeActivity extends BaseActivity {
                 intent.setClass(this, MySharedFilesActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.add_arrange:
+                break;
         }
+    }
+
+    private void getUserInfo(){
+        int id= SpUtil.getUerId();
+        OKHttpManager.getJoint(URLConstant.USER_INFO, null,new int[]{id}, new OKHttpManager.ResultCallback<BaseBean<PersonInfoBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseBean<PersonInfoBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    PersonInfoBean bean=response.getData();
+                    tvUsername.setText(bean.getPeopleName());
+                    GlideUtils.loadCircleImage(OfficeActivity.this,iveHead,bean.getPhotoLogo());
+
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
     }
 
     public static void openFile(Context context, File file) {
