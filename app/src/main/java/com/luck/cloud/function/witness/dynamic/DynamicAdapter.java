@@ -285,7 +285,7 @@ public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecy
                 mRecyclerView.setLayoutManager(manager);
                 DynamicPictureAdapter<LocalMedia> mAdapter = new DynamicPictureAdapter(context);
                 List<LocalMedia> list = new ArrayList<>();
-                String[] images=bean.getDyFile().split("-");
+                String[] images=bean.getDyFile().split(";");
                 for (String path:images){
                     LocalMedia media = new LocalMedia();
                     media.setPath(path);

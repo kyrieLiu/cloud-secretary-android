@@ -226,7 +226,7 @@ public class AddDynamicActivity extends BaseActivity {
                 StringBuffer buffer=new StringBuffer();
                for (int i=0;i<imageList.size();i++){
                    if (i<imageList.size()-1){
-                       buffer.append(imageList.get(i)+"-");
+                       buffer.append(imageList.get(i)+";");
                    }else{
                        buffer.append(imageList.get(i));
                    }

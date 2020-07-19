@@ -240,7 +240,7 @@ public class DynamicFragment extends BaseFragment {
     private void handleCollect(DynamicModel.RecordsBean bean,int position){
         params.clear();
         String url=URLConstant.COLLECT;
-        if (bean.getIsLike()==1){
+        if (bean.getIsCollect()==1){
             url=URLConstant.COLLECT_CANCEL;
             params.put("id",bean.getDyId());
         }else{

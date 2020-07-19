@@ -115,7 +115,7 @@ public class MineFragment extends BaseFragment {
 
                     switch (bean.getPeopleType()){
                         case "1":
-                            tvMineIdentity.setText(bean.getAffiliatedUnit()+"   第一书记");
+                            tvMineIdentity.setText(bean.getAffiliatedUnit()==null?"":bean.getAffiliatedUnit()+"   第一书记");
                             break;
                         case "2":
                             tvMineIdentity.setText(bean.getSchool()+"   大学生及高校");
