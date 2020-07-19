@@ -6,7 +6,8 @@ package com.luck.cloud.config;
  */
 public class URLConstant {
 
-    public static final String BASE_URL = "http://192.168.0.113:8066";//生产环境
+    //public static final String BASE_URL = "http://192.168.0.113:8066";//生产环境
+    public static final String BASE_URL = "http://121.36.144.200:8066";//生产环境
     public static final String BASE_HTML_URL = "http://ic.jingcaiwang.cn:18080/assetH5/index.html#/";//生产环境 H5页面地址
 
     public static final boolean DEBUG = true;

@@ -327,12 +327,16 @@ public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecy
             username.setText(bean.getUserName());
             time.setText(DateUtil.getUnderlineDay(bean.getCreateTime()));
 
-//            if (SpUtil.getUerId()==bean.getUserId()){
-//                attention.setVisibility(View.GONE);
-//            }else{
-//                attention.setVisibility(View.VISIBLE);
-//            }
-
+            if (SpUtil.getUerId()==bean.getUserId()){
+                attention.setVisibility(View.GONE);
+            }else{
+                attention.setVisibility(View.VISIBLE);
+            }
+            if (bean.getIsAttention()==1){
+                attention.setText("取消关注");
+            }else{
+                attention.setText("关注");
+            }
 
             attention.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -341,11 +345,11 @@ public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecy
                 }
             });
 
-            if (bean.getIsLike()==1){
-                tvLike.setText("取消点赞");
-            }else{
-                tvLike.setText("点赞");
-            }
+//            if (bean.getIsLike()==1){
+//                tvLike.setText("取消点赞");
+//            }else{
+//                tvLike.setText("点赞");
+//            }
 
 
         }
