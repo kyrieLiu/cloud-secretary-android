@@ -10,6 +10,7 @@ import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
+import com.luck.cloud.function.witness.model.DynamicModel;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.RoundedCornersTransformation;
 
@@ -19,7 +20,7 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 10:15
  * Description:科普列表适配器
  */
-public class VideoAdapter<T extends SuperviseHandleBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
+public class VideoAdapter<T extends DynamicModel.RecordsBean> extends BaseRecyclerViewAdapter<T> {
 
 
     public VideoAdapter(Context context) {

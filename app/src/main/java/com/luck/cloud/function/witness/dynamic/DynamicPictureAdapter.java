@@ -54,8 +54,7 @@ public class DynamicPictureAdapter<T extends LocalMedia> extends BaseRecyclerVie
 
         @Override
         protected void bind(T bean, int position) {
-            String url="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
-            GlideUtils.loadRoundedCorners(context,imageView,url,10, RoundedCornersTransformation.CornerType.ALL);
+            GlideUtils.loadRoundedCorners(context,imageView,bean.getPath(),10, RoundedCornersTransformation.CornerType.ALL);
 //            mTvTitle.setText(bean.getMissionName());
 //            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
 //            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());

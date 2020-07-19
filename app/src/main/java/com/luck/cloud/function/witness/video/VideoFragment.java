@@ -12,12 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.luck.cloud.R;
 import com.luck.cloud.app.AppApplication;
+import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
 import com.luck.cloud.common.activity.WebActivity;
+import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.witness.ScienceAdapter;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
+import com.luck.cloud.function.witness.model.DynamicModel;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
@@ -35,7 +40,7 @@ import butterknife.Bind;
 public class VideoFragment extends BaseFragment {
     @Bind(R.id.xrv_common_list)
     XRecyclerView mRvList;
-    private VideoAdapter<SuperviseHandleBean.ItemsBean> adapter;
+    private VideoAdapter<DynamicModel.RecordsBean> adapter;
     private Context context;
 
     private int type;
@@ -101,41 +106,33 @@ public class VideoFragment extends BaseFragment {
     }
 
 
-    /**
-     * 请求督查督办列表数据
-     *
-     * @param page
-     */
     private void requestData(final int page) {
-        List<SuperviseHandleBean.ItemsBean> list = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            list.add(new SuperviseHandleBean.ItemsBean());
-        }
-        adapter.setSuccessReqList(list, 10, page, mRvList,"暂无推荐内容");
-//        final RequestBean request = initRequestParams();
-//        request.getPageable().setCurrent(page);
-//        RequestBean.CondBean condBean = new RequestBean.CondBean();
-//        condBean.setRules(new ArrayList());
-//        condBean.setGroupOp("AND");
-//        request.setCond(condBean);
-//        showRDialog();
-//        OKHttpManager.postJsonRequest(URLConstant.SUPERVISE_LIST, request, new OKHttpManager.ResultCallback<BaseBean<SuperviseHandleBean >>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                hideRDialog();
-//                ToastUtil.toastShortCenter(message);
-//                adapter.setErrorReqList(message, mRvList);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean<SuperviseHandleBean> response) {
-//                hideRDialog();
-//                SuperviseHandleBean acceptanceBean = response.getData();
-//                List<SuperviseHandleBean.ItemsBean> list = null;
-//                if (acceptanceBean != null) list = acceptanceBean.getItems();
-//                adapter.setSuccessReqList(list, request.getPageable().getSize(), page, mRvList,"暂无推荐内容");
-//            }
-//        }, this);
+        showRDialog();
+        params.put("dyType",1);
+        OKHttpManager.getJoint(URLConstant.DYNAMIC_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+                adapter.setErrorReqList(message, mRvList);
+            }
+
+            @Override
+            public void onResponse(BaseBean<DynamicModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    List<DynamicModel.RecordsBean> list=response.getData().getRecords();
+                    adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
+
+    public void refreshData(String key){
+        mRvList.setReqPage(1);
+        requestData(1);
     }
     public void refreshData(){
         mRvList.setReqPage(1);

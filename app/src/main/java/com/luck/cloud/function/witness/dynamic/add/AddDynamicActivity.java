@@ -59,6 +59,7 @@ import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.ValueOf;
 
 import org.apache.poi.poifs.crypt.cryptoapi.CryptoAPIDecryptor;
+import org.apache.poi.util.ArrayUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -222,8 +223,15 @@ public class AddDynamicActivity extends BaseActivity {
         commitModel.setOnModelCallbackListener(new FileCommitModel.OnModelCallbackListener() {
             @Override
             public void fileUploadFinish(List<String> imageList, String videoPath) {
-                String images= JsonUtils.listToJson(imageList);
-                commitData(images,videoPath);
+                StringBuffer buffer=new StringBuffer();
+               for (int i=0;i<imageList.size();i++){
+                   if (i<imageList.size()-1){
+                       buffer.append(imageList.get(i)+"-");
+                   }else{
+                       buffer.append(imageList.get(i));
+                   }
+               }
+                commitData(buffer.toString(),videoPath);
             }
 
             @Override
@@ -239,12 +247,14 @@ public class AddDynamicActivity extends BaseActivity {
         params.clear();
         if (videoPath!=null){
             params.put("dyFile",videoPath);
-            params.put("code",imagePath);
+            params.put("surfacePlot",imagePath);
+            params.put("fileType",2);
         }else if (imagePath!=null){
             params.put("dyFile",imagePath);
+            params.put("fileType",1);
         }
         params.put("content",content.getText().toString());
-        params.put("dyType",0);
+        params.put("dyType",1);
         OKHttpManager.postJsonRequest(URLConstant.DYNAMIC_SAVE, params, new OKHttpManager.ResultCallback<BaseBean>() {
             @Override
             public void onError(int code, String result, String message) {

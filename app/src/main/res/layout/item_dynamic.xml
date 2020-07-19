@@ -69,6 +69,7 @@
     <RelativeLayout
         android:id="@+id/rl_video_parent"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_height="350dp">
         <ImageView
             android:id="@+id/iv_dynamic_video"
@@ -219,7 +220,11 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/gray_color_shallow"
+        ></View>
 </LinearLayout>
 
 

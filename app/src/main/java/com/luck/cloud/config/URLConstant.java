@@ -46,6 +46,22 @@ public class URLConstant {
     public static final String NOTICE_DETAIL = BASE_URL + "/information/notice/get";
     //保存动态
     public static final String DYNAMIC_SAVE = BASE_URL + "/information/dynamic/save";
+    //动态列表
+    public static final String DYNAMIC_LIST = BASE_URL + "/information/dynamic/page";
+    //关注
+    public static final String ATTENTION = BASE_URL + "/sys/attention/save";
+    //取消关注
+    public static final String ATTENTION_CANCEL = BASE_URL + "/sys/attention/remove";
+    //点赞
+    public static final String LIKE = BASE_URL + "/information/like/save";
+    //取消点赞
+    public static final String LIKE_CANCEL = BASE_URL + "/information/like/remove";
+    //收藏
+    public static final String COLLECT = BASE_URL + "/information/collect/save";
+    //取消收藏
+    public static final String COLLECT_CANCEL = BASE_URL + "/information/collect/remove";
+    //评论
+    public static final String COMMENT = BASE_URL + "/information/message/save";
 
 
     //园区列表

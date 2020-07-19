@@ -149,7 +149,7 @@ public class WitnessFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==100){
             if (resultCode==100){
-                dynamicFragment.refreshData();
+                dynamicFragment.refreshData(null);
             }else if (resultCode==200){
                 videoFragment.refreshData();
             }

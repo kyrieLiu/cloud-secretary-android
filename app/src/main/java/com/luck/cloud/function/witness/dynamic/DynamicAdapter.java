@@ -47,10 +47,13 @@ import com.luck.cloud.base.BaseViewHolder;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.function.main.MainActivity;
+import com.luck.cloud.function.mine.work.DateUtil;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
 import com.luck.cloud.function.witness.dynamic.add.AddDynamicActivity;
 import com.luck.cloud.function.witness.model.CommentModel;
 import com.luck.cloud.function.witness.model.DynamicModel;
+import com.luck.cloud.function.witness.model.DynamicModel.RecordsBean;
+import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.RoundedCornersTransformation;
 import com.luck.picture.lib.PictureSelector;
@@ -73,7 +76,7 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 10:15
  * Description:动态列表适配器
  */
-public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdapter<T> {
+public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecyclerViewAdapter<T> {
 
     private ItemClickListener clickListener;
 
@@ -130,6 +133,14 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
         ImageView ivCollect;
         @Bind(R.id.tv_dynamic_collect)
         TextView tvCollect;
+        @Bind(R.id.tv_dynamic_text)
+        TextView tvContent;
+        @Bind(R.id.iv_dynamic_head)
+        ImageView ivHead;
+        @Bind(R.id.tv_dynamic_people)
+        TextView username;
+        @Bind(R.id.tv_dynamic_time)
+        TextView time;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -153,12 +164,16 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
 
                 @Override
                 public <T> T onSvgElement(@Nullable String s, @NonNull T t, @Nullable RectF rectF, @NonNull Canvas canvas, @Nullable RectF rectF1, @Nullable Paint paint) {
-                    if (bean.getIsLike() == 1) {
+                    if (bean.getIsLike() ==1) {
+                        //已点赞
                         assert paint != null;
                         paint.setColor(Color.parseColor("#ff0000"));
                         tvLike.setTextColor(Color.parseColor("#ff0000"));
+                        tvLike.setText("取消点赞");
                     } else {
+                        paint.setColor(context.getResources().getColor(R.color.main_text_color));
                         tvLike.setTextColor(context.getResources().getColor(R.color.main_text_color));
+                        tvLike.setText("点赞");
                     }
 
                     return t;
@@ -186,8 +201,10 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
                         assert paint != null;
                         paint.setColor(Color.parseColor("#ff0000"));
                         tvCollect.setTextColor(Color.parseColor("#ff0000"));
+                        tvCollect.setText("取消收藏");
                     } else {
                         tvCollect.setTextColor(context.getResources().getColor(R.color.main_text_color));
+                        tvCollect.setText("收藏");
                     }
 
                     return t;
@@ -205,16 +222,18 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
             shTransmit.into(ivTransmit);
             Sharp shStatisticLike = Sharp.loadResource(context.getResources(), R.raw.like);
             shStatisticLike.into(ivLikeStatistic);
-            if (bean.getLikeUsers() != null && bean.getLikeUsers().size() > 0) {
-                tvLikeStatistic.setText(String.join(",", bean.getLikeUsers()));
-                llLikeStatistic.setVisibility(View.VISIBLE);
+//            if (bean.getLikeUsers() != null && bean.getLikeUsers().size() > 0) {
+//                tvLikeStatistic.setText(String.join(",", bean.getLikeUsers()));
+//                llLikeStatistic.setVisibility(View.VISIBLE);
+//
+//            } else {
+//                llLikeStatistic.setVisibility(View.GONE);
+//            }
 
-            } else {
-                llLikeStatistic.setVisibility(View.GONE);
-            }
+            tvLikeStatistic.setText(String.valueOf(bean.getLikeCount()));
 
 
-            List<CommentModel> commentList = bean.getCommentModel();
+            List<CommentModel> commentList = bean.getMessages();
             CommentsAdapter<CommentModel> commentsAdapter = new CommentsAdapter(context);
             commentsAdapter.setList(commentList);
 
@@ -228,19 +247,6 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
             drawable.setCornerRadius(5);
             drawable.setStroke(1, Color.parseColor("#FFCB02"));
             attention.setBackground(drawable);
-
-
-
-            String videoPicture = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
-
-            GlideUtils.loadRoundedCorners(context, ivVideo, videoPicture, 4, RoundedCornersTransformation.CornerType.ALL);
-
-            ivVideo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickListener.playVideoCallback(bean,p);
-                }
-            });
 
             mLlLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -270,65 +276,89 @@ public class DynamicAdapter<T extends DynamicModel> extends BaseRecyclerViewAdap
                 }
             });
 
+            if (bean.getFileType()==1) {
+                rlVideoParent.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                //图片
+                FullyGridLayoutManager manager = new FullyGridLayoutManager(context,
+                        3, GridLayoutManager.VERTICAL, false);
+                mRecyclerView.setLayoutManager(manager);
+                DynamicPictureAdapter<LocalMedia> mAdapter = new DynamicPictureAdapter(context);
+                List<LocalMedia> list = new ArrayList<>();
+                String[] images=bean.getDyFile().split("-");
+                for (String path:images){
+                    LocalMedia media = new LocalMedia();
+                    media.setPath(path);
+                    list.add(media);
+                }
+                mAdapter.setList(list);
+                mRecyclerView.setAdapter(mAdapter);
+                mAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        PictureSelector.create((Activity) context)
+                                .themeStyle(R.style.picture_default_style) // xml设置主题
+                                .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)// 设置相册Activity方向，不设置默认使用系统
+                                .isNotPreviewDownload(true)// 预览图片长按是否可以下载
+                                .imageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
+                                .openExternalPreview(position, list);
 
-//            container.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    clickListener.collectCallback(bean,p);
-//                }
-//            });
+                    }
+                });
 
-            FullyGridLayoutManager manager = new FullyGridLayoutManager(context,
-                    3, GridLayoutManager.VERTICAL, false);
-            mRecyclerView.setLayoutManager(manager);
-            DynamicPictureAdapter<LocalMedia> mAdapter = new DynamicPictureAdapter(context);
-            List<LocalMedia> list = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                LocalMedia media = new LocalMedia();
-                String url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
-                media.setPath(url);
-                list.add(media);
+            }else{
+                rlVideoParent.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
+
+                String videoPicture=bean.getSurfacePlot();
+                GlideUtils.loadRoundedCorners(context, ivVideo, videoPicture, 4, RoundedCornersTransformation.CornerType.ALL);
+
+                ivVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        clickListener.playVideoCallback(bean,p);
+                    }
+                });
             }
+            tvContent.setText(bean.getContent());
+
+            GlideUtils.loadCircleImage(context,ivHead,bean.getUserPhoto());
+
+            username.setText(bean.getUserName());
+            time.setText(DateUtil.getUnderlineDay(bean.getCreateTime()));
+
+//            if (SpUtil.getUerId()==bean.getUserId()){
+//                attention.setVisibility(View.GONE);
+//            }else{
+//                attention.setVisibility(View.VISIBLE);
+//            }
 
 
-            mAdapter.setList(list);
-            mRecyclerView.setAdapter(mAdapter);
-
-//            mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View view, MotionEvent motionEvent) {
-//                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//                        container.performClick();  //模拟父控件的点击
-//                    }
-//                    return false;
-//                }
-//            });
-
-            mAdapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
+            attention.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onItemClick(View view, int position) {
-
-
-                    PictureSelector.create((Activity) context)
-                            .themeStyle(R.style.picture_default_style) // xml设置主题
-                            .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)// 设置相册Activity方向，不设置默认使用系统
-                            .isNotPreviewDownload(true)// 预览图片长按是否可以下载
-                            .imageEngine(GlideEngine.createGlideEngine())// 外部传入图片加载引擎，必传项
-                            .openExternalPreview(position, list);
-
+                public void onClick(View view) {
+                    clickListener.attentionCallback(bean,p);
                 }
             });
+
+            if (bean.getIsLike()==1){
+                tvLike.setText("取消点赞");
+            }else{
+                tvLike.setText("点赞");
+            }
+
 
         }
     }
 
     public interface ItemClickListener {
-        void commentCallback(DynamicModel model, int position);
+        void commentCallback(DynamicModel.RecordsBean model, int position);
 
-        void transmitCallback(DynamicModel model, int position);
-        void likeCallback(DynamicModel model,int position);
-        void deleteCallback(DynamicModel model, int position);
-        void collectCallback(DynamicModel model,int position);
-        void playVideoCallback(DynamicModel model,int position);
+        void transmitCallback(DynamicModel.RecordsBean model, int position);
+        void likeCallback(DynamicModel.RecordsBean model,int position);
+        void deleteCallback(DynamicModel.RecordsBean model, int position);
+        void collectCallback(DynamicModel.RecordsBean model,int position);
+        void playVideoCallback(DynamicModel.RecordsBean model,int position);
+        void attentionCallback(DynamicModel.RecordsBean model,int position);
     }
 }
