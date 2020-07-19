@@ -137,6 +137,10 @@ public class VideoFragment extends BaseFragment {
 //            }
 //        }, this);
     }
+    public void refreshData(){
+        mRvList.setReqPage(1);
+        requestData(1);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

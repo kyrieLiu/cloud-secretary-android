@@ -129,7 +129,7 @@ public class AddVideoActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        setTitle("发布动态");
+        setTitle("发布视频");
         edPublishContent.setHint("想说点什么");
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -43,6 +44,9 @@ public class WitnessFragment extends BaseFragment {
 
     private List<GardenInfoBean.ItemsBean> gardenList;
 
+    private DynamicFragment dynamicFragment;
+    private VideoFragment videoFragment;
+
     private Context context;
 
     @Override
@@ -79,10 +83,10 @@ public class WitnessFragment extends BaseFragment {
                 int currentItem=mViewPager.getCurrentItem();
                 if (currentItem==0){
                     intent.setClass(Objects.requireNonNull(getActivity()), AddDynamicActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,100);
                 }else{
                     intent.setClass(Objects.requireNonNull(getActivity()), AddVideoActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,100);
                 }
                 break;
         }
@@ -128,8 +132,11 @@ public class WitnessFragment extends BaseFragment {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(new DynamicFragment());
-        fragmentList.add(new VideoFragment());
+        dynamicFragment=new DynamicFragment();
+        videoFragment=new VideoFragment();
+
+        fragmentList.add(dynamicFragment);
+        fragmentList.add(videoFragment);
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getContext(), getChildFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);
@@ -137,4 +144,15 @@ public class WitnessFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100){
+            if (resultCode==100){
+                dynamicFragment.refreshData();
+            }else if (resultCode==200){
+                videoFragment.refreshData();
+            }
+        }
+    }
 }

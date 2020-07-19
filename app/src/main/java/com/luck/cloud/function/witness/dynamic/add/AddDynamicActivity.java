@@ -7,13 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.IdRes;
@@ -29,6 +33,12 @@ import com.luck.cloud.FullyGridLayoutManager;
 import com.luck.cloud.GlideEngine;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
+import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.common.helper.FileCommitModel;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.JsonUtils;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.widget.dialog.PhotoItemSelectedDialog;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.animators.AnimationType;
@@ -48,11 +58,21 @@ import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.ValueOf;
 
+import org.apache.poi.poifs.crypt.cryptoapi.CryptoAPIDecryptor;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * @author：luck
@@ -61,6 +81,10 @@ import java.util.List;
  */
 
 public class AddDynamicActivity extends BaseActivity {
+
+    @Bind(R.id.publish_content)
+    EditText content;
+
     private final static String TAG = AddDynamicActivity.class.getSimpleName();
     private AddDynamicAdapter mAdapter;
     private int maxSelectNum = 9;
@@ -134,6 +158,113 @@ public class AddDynamicActivity extends BaseActivity {
     @Override
     protected void loadData() {
         setTitle("发布动态");
+    }
+
+    @OnClick({R.id.bt_initiate})
+    public void OnViewClick(View view){
+        switch (view.getId()){
+            case R.id.bt_initiate:
+                addDynamic();
+                break;
+        }
+    }
+    private void addDynamic() {
+        showRDialog();
+        List<LocalMedia> list = mAdapter.getData();
+        if (list!=null&&list.size()>0){
+            LocalMedia firstMedia=list.get(0);
+            boolean isVideo=PictureMimeType.isHasVideo(firstMedia.getMimeType());
+            if (isVideo){
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(firstMedia.getRealPath());
+                Bitmap bitmap = mmr.getFrameAtTime();
+                getFile(bitmap,firstMedia);
+                mmr.release();
+            }else{
+                ArrayList<String> fileList=new ArrayList<>();
+                for (LocalMedia media:list){
+                    fileList.add(media.getRealPath());
+                }
+                uploadFile(fileList,"");
+            }
+
+        }else{
+            commitData(null,null);
+        }
+    }
+
+    public File getFile(Bitmap bitmap,LocalMedia media) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        File file = new File(Environment.getExternalStorageDirectory() + "/temp.jpg");
+        try {
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream is = new ByteArrayInputStream(baos.toByteArray());
+            int x = 0;
+            byte[] b = new byte[1024 * 100];
+            while ((x = is.read(b)) != -1) {
+                fos.write(b, 0, x);
+            }
+            fos.close();
+            ArrayList<String> list=new ArrayList<>();
+            list.add(Environment.getExternalStorageDirectory() + "/temp.jpg");
+            uploadFile(list,media.getRealPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    private void uploadFile(ArrayList<String> list,String video) {
+        showRDialog();
+        FileCommitModel commitModel = FileCommitModel.getInstance();
+        commitModel.setOnModelCallbackListener(new FileCommitModel.OnModelCallbackListener() {
+            @Override
+            public void fileUploadFinish(List<String> imageList, String videoPath) {
+                String images= JsonUtils.listToJson(imageList);
+                commitData(images,videoPath);
+            }
+
+            @Override
+            public void fileUploadError() {
+                hideRDialog();
+                ToastUtil.toastShortCenter("上传失败");
+            }
+        });
+        commitModel.commitComplaintData(list, video);
+    }
+
+    private void commitData(String imagePath,String videoPath){
+        params.clear();
+        if (videoPath!=null){
+            params.put("dyFile",videoPath);
+            params.put("code",imagePath);
+        }else if (imagePath!=null){
+            params.put("dyFile",imagePath);
+        }
+        params.put("content",content.getText().toString());
+        params.put("dyType",0);
+        OKHttpManager.postJsonRequest(URLConstant.DYNAMIC_SAVE, params, new OKHttpManager.ResultCallback<BaseBean>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean response) {
+                hideRDialog();
+                if ("SUCCESS".equals(response.getCode())){
+                    ToastUtil.toastShortCenter("发布成功");
+                    setResult(100);
+                    finish();
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+
+            }
+        },this);
     }
 
 

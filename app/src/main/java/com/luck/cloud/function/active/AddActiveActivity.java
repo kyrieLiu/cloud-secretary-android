@@ -139,7 +139,6 @@ public class AddActiveActivity extends BaseActivity {
         }else{
             commitData(null);
         }
-
     }
 
     private void uploadFile(String path) {

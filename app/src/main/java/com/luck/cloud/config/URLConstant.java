@@ -44,12 +44,12 @@ public class URLConstant {
     public static final String NOTICE_LIST = BASE_URL + "/information/notice/page";
     //通知公告详情
     public static final String NOTICE_DETAIL = BASE_URL + "/information/notice/get";
+    //保存动态
+    public static final String DYNAMIC_SAVE = BASE_URL + "/information/dynamic/save";
 
 
     //园区列表
     public static final String PARK_LIST = BASE_URL + AS_ASSETSAPI + "/api/parkinfo/listParkInfo";
-    //待办任务更多列表
-    public static final String WAIT_DONE_MORE = BASE_URL + "/station/info/page/1/10";//物业服务标准列表
     public static final String GET_DOC_LIST = BASE_URL + "/cms/api/doc/getDocList";
 
     //上传文件
