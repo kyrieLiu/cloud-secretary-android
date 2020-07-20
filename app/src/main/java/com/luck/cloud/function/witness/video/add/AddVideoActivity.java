@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +27,11 @@ import com.luck.cloud.FullyGridLayoutManager;
 import com.luck.cloud.GlideEngine;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
+import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.common.helper.FileCommitModel;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.widget.dialog.PhotoItemSelectedDialog;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.animators.AnimationType;
@@ -41,11 +49,17 @@ import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.picture.lib.tools.ScreenUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * @author：luck
@@ -65,7 +79,7 @@ public class AddVideoActivity extends BaseActivity {
     private int animationMode = AnimationType.DEFAULT_ANIMATION;
 
     @Bind(R.id.publish_content)
-    EditText edPublishContent;
+    EditText content;
 
     @Override
     protected void back() {
@@ -130,7 +144,116 @@ public class AddVideoActivity extends BaseActivity {
     @Override
     protected void loadData() {
         setTitle("发布视频");
-        edPublishContent.setHint("想说点什么");
+        content.setHint("想说点什么");
+    }
+
+    @OnClick({R.id.bt_initiate})
+    public void OnViewClick(View view){
+        switch (view.getId()){
+            case R.id.bt_initiate:
+                addDynamic();
+                break;
+        }
+    }
+    private void addDynamic() {
+
+        List<LocalMedia> list = mAdapter.getData();
+        if (list!=null&&list.size()>0){
+            showRDialog();
+            LocalMedia firstMedia=list.get(0);
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(firstMedia.getRealPath());
+            Bitmap bitmap = mmr.getFrameAtTime();
+            getFile(bitmap,firstMedia);
+            mmr.release();
+
+        }else{
+            ToastUtil.toastShortCenter("请上传视频");
+            // commitData(null,null);
+        }
+    }
+
+    public File getFile(Bitmap bitmap, LocalMedia media) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        File file = new File(Environment.getExternalStorageDirectory() + "/temp.jpg");
+        try {
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream is = new ByteArrayInputStream(baos.toByteArray());
+            int x = 0;
+            byte[] b = new byte[1024 * 100];
+            while ((x = is.read(b)) != -1) {
+                fos.write(b, 0, x);
+            }
+            fos.close();
+            ArrayList<String> list=new ArrayList<>();
+            list.add(Environment.getExternalStorageDirectory() + "/temp.jpg");
+            uploadFile(list,media.getRealPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    private void uploadFile(ArrayList<String> list,String video) {
+        showRDialog();
+        FileCommitModel commitModel = FileCommitModel.getInstance();
+        commitModel.setOnModelCallbackListener(new FileCommitModel.OnModelCallbackListener() {
+            @Override
+            public void fileUploadFinish(List<String> imageList, String videoPath) {
+                StringBuffer buffer=new StringBuffer();
+                for (int i=0;i<imageList.size();i++){
+                    if (i<imageList.size()-1){
+                        buffer.append(imageList.get(i)+";");
+                    }else{
+                        buffer.append(imageList.get(i));
+                    }
+                }
+                commitData(buffer.toString(),videoPath);
+            }
+
+            @Override
+            public void fileUploadError() {
+                hideRDialog();
+                ToastUtil.toastShortCenter("上传失败");
+            }
+        });
+        commitModel.commitComplaintData(list, video);
+    }
+
+    private void commitData(String imagePath,String videoPath){
+        params.clear();
+        if (videoPath!=null){
+            params.put("dyFile",videoPath);
+            params.put("surfacePlot",imagePath);
+            params.put("fileType",2);
+        }else if (imagePath!=null){
+            params.put("dyFile",imagePath);
+            params.put("fileType",1);
+        }
+        params.put("content",content.getText().toString());
+        params.put("dyType",2);
+        OKHttpManager.postJsonRequest(URLConstant.DYNAMIC_SAVE, params, new OKHttpManager.ResultCallback<BaseBean>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean response) {
+                hideRDialog();
+                if ("SUCCESS".equals(response.getCode())){
+                    ToastUtil.toastShortCenter("发布成功");
+                    setResult(200);
+                    finish();
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+
+            }
+        },this);
     }
 
 

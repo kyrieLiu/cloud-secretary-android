@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
+import com.luck.cloud.function.mine.work.DateUtil;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
 import com.luck.cloud.function.witness.model.DynamicModel;
 import com.luck.cloud.utils.view.GlideUtils;
@@ -47,6 +49,14 @@ public class VideoAdapter<T extends DynamicModel.RecordsBean> extends BaseRecycl
 //        private ViewUtil util;
         @Bind(R.id.iv_video)
         ImageView imageView;
+        @Bind(R.id.tv_video_content)
+        TextView tvContent;
+        @Bind(R.id.tv_video_play_number)
+        TextView number;
+        @Bind(R.id.tv_video_time)
+        TextView time;
+        @Bind(R.id.head_image)
+        ImageView headImage;
         public ViewHolder(View itemView) {
             super(itemView);
             //util=ViewUtil.getViewUtil();
@@ -54,8 +64,10 @@ public class VideoAdapter<T extends DynamicModel.RecordsBean> extends BaseRecycl
 
         @Override
         protected void bind(T bean, int position) {
-            String url="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588528793769&di=ebef5b108b41960c01a2ad44060b7935&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20200403%2F5e2749e286b34b7da9e9197d19950728.jpeg";
-            GlideUtils.loadImage(context,imageView,url);
+            GlideUtils.loadImage(context,imageView,bean.getSurfacePlot());
+            tvContent.setText(bean.getContent());
+            time.setText(DateUtil.getUnderlineDay(bean.getCreateTime()));
+            GlideUtils.loadCircleImage(context,headImage,bean.getUserPhoto());
 //            mTvTitle.setText(bean.getMissionName());
 //            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
 //            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());

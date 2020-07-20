@@ -29,7 +29,7 @@
         android:src="?attr/picture.preview.leftBack.icon" />
 
     <TextView
-        android:id="@+id/tv_confirm"
+        android:id="@+id/tv_attention"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -38,7 +38,20 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/picture_send_button_bg"
-        android:text="+ 关注"
+        android:text="关注"
+        android:textColor="@color/picture_color_white"
+        android:textSize="14sp" />
+    <TextView
+        android:id="@+id/tv_collect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_150"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/picture_send_button_bg"
+        android:text="收藏"
         android:textColor="@color/picture_color_white"
         android:textSize="14sp" />
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.luck.cloud.common.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -9,7 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,6 +21,13 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.luck.cloud.R;
+import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.common.entity.Temporary;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.witness.model.DynamicModel;
+import com.luck.cloud.manager.ActivitiesManager;
+import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.ToastUtil;
 import com.luck.picture.lib.PictureBaseActivity;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -25,6 +35,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.SdkVersionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,9 +50,17 @@ public class PlayVideoActivity extends PictureBaseActivity implements
     private ImageButton ibLeftBack;
     private MediaController mMediaController;
     private VideoView mVideoView;
-    private TextView tvConfirm;
     private ImageView iv_play;
     private int mPositionWhenPaused = -1;
+
+    private Dialog loadingDialog;
+
+    private TextView tvAttention,tvCollect;
+
+    //1动态  2视频
+    private int type;
+    private DynamicModel.RecordsBean bean;
+    private boolean isUpdate=false;
 
     @Override
     public boolean isImmersive() {
@@ -76,7 +95,9 @@ public class PlayVideoActivity extends PictureBaseActivity implements
     @Override
     protected void initWidgets() {
         super.initWidgets();
-        videoPath = getIntent().getStringExtra(PictureConfig.EXTRA_VIDEO_PATH);
+
+        initView();
+
         boolean isExternalPreview = getIntent().getBooleanExtra
                 (PictureConfig.EXTRA_PREVIEW_VIDEO, false);
         if (TextUtils.isEmpty(videoPath)) {
@@ -93,7 +114,6 @@ public class PlayVideoActivity extends PictureBaseActivity implements
         }
         ibLeftBack = findViewById(R.id.pictureLeftBack);
         mVideoView = findViewById(R.id.video_view);
-        tvConfirm = findViewById(R.id.tv_confirm);
         mVideoView.setBackgroundColor(Color.BLACK);
         iv_play = findViewById(R.id.iv_play);
         mMediaController = new MediaController(this);
@@ -102,22 +122,139 @@ public class PlayVideoActivity extends PictureBaseActivity implements
         mVideoView.setMediaController(mMediaController);
         ibLeftBack.setOnClickListener(this);
         iv_play.setOnClickListener(this);
-        tvConfirm.setOnClickListener(this);
 
 //        tvConfirm.setVisibility(config.selectionMode
 //                == PictureConfig.SINGLE
 //                && config.enPreviewVideo && !isExternalPreview ? View.VISIBLE : View.GONE);
     }
 
+    private void initView(){
+        tvAttention=findViewById(R.id.tv_attention);
+        tvCollect=findViewById(R.id.tv_collect);
+
+        videoPath = getIntent().getStringExtra(PictureConfig.EXTRA_VIDEO_PATH);
+        type=getIntent().getIntExtra("type",1);
+        if (type==1){
+            tvAttention.setVisibility(View.GONE);
+            tvCollect.setVisibility(View.GONE);
+        }else{
+            bean= (DynamicModel.RecordsBean) Temporary.bean;
+            if (bean.getIsAttention()==1){
+                tvAttention.setText("取消关注");
+            }else{
+                tvAttention.setText("关注");
+            }
+            if (bean.getIsCollect()==1){
+                tvCollect.setText("取消收藏");
+            }else{
+                tvCollect.setText("收藏");
+            }
+
+            tvAttention.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleAttention();
+                }
+            });
+            tvCollect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleCollect();
+                }
+            });
+        }
+
+    }
+
+    private void handleCollect(){
+        HashMap<String,Object> params=new HashMap<>();
+        params.clear();
+        String url= URLConstant.COLLECT;
+        if (bean.getIsCollect()==1){
+            url=URLConstant.COLLECT_CANCEL;
+            params.put("id",bean.getDyId());
+        }else{
+            params.put("userId",bean.getUserId());
+        }
+        params.put("dyId",bean.getDyId());
+        showRDialog();
+        OKHttpManager.postJsonRequest(url, params, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<DynamicModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    if (bean.getIsCollect()==1){
+                        bean.setIsCollect(0);
+                        tvCollect.setText("收藏");
+                    }else{
+                        bean.setIsCollect(1);
+                        tvCollect.setText("取消收藏");
+                    }
+                    isUpdate=true;
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
+    private void handleAttention(){
+        HashMap<String,Object> params=new HashMap<>();
+        params.clear();
+        String url=URLConstant.ATTENTION;
+        if (bean.getIsAttention()==1){
+            url=URLConstant.ATTENTION_CANCEL;
+            params.put("id",bean.getUserId());
+        }else{
+            params.put("userId",bean.getUserId());
+        }
+        showRDialog();
+        OKHttpManager.postJsonRequest(url, params, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<DynamicModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    if (bean.getIsAttention()==1){
+                        bean.setIsAttention(0);
+                        tvAttention.setText("关注");
+                    }else{
+                        bean.setIsAttention(1);
+                        tvAttention.setText("取消关注");
+                    }
+                    isUpdate=true;
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
+
     @Override
     public void onStart() {
+        showRDialog();
         // Play Video
-        if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(videoPath)) {
-            mVideoView.setVideoURI(Uri.parse(videoPath));
-        } else {
-            mVideoView.setVideoPath(videoPath);
-        }
+        mMediaController.setAnchorView(mVideoView);
+//        if (SdkVersionUtils.checkedAndroid_Q() && PictureMimeType.isContent(videoPath)) {
+//            //mVideoView.setVideoURI(Uri.parse(videoPath));
+//        } else {
+//            //mVideoView.setVideoPath(videoPath);
+//            mVideoView.setVideoURI(Uri.parse(videoPath));
+//        }
+        mVideoView.setVideoURI(Uri.parse(videoPath));
+
         mVideoView.start();
+        // mVideoView.requestFocus();
         super.onStart();
     }
 
@@ -135,6 +272,16 @@ public class PlayVideoActivity extends PictureBaseActivity implements
         mMediaController = null;
         mVideoView = null;
         iv_play = null;
+
+        if (loadingDialog != null) {
+            if (loadingDialog.isShowing()) {
+                loadingDialog.dismiss();
+            }
+            loadingDialog = null;
+        }
+
+        OKHttpManager.cancelTag(this);
+
         super.onDestroy();
     }
 
@@ -170,14 +317,6 @@ public class PlayVideoActivity extends PictureBaseActivity implements
         } else if (id == R.id.iv_play) {
             mVideoView.start();
             iv_play.setVisibility(View.INVISIBLE);
-        } else if (id == R.id.tv_confirm) {
-//            List<LocalMedia> result = new ArrayList<>();
-//            result.add(getIntent().getParcelableExtra(PictureConfig.EXTRA_MEDIA_KEY));
-//            setResult(RESULT_OK, new Intent()
-//                    .putParcelableArrayListExtra(PictureConfig.EXTRA_SELECT_LIST,
-//                            (ArrayList<? extends Parcelable>) result));
-//            onBackPressed();
-            tvConfirm.setText("已关注");
         }
     }
 
@@ -185,6 +324,10 @@ public class PlayVideoActivity extends PictureBaseActivity implements
     public void onBackPressed() {
         if (config.windowAnimationStyle != null
                 && config.windowAnimationStyle.activityPreviewExitAnimation != 0) {
+            if (isUpdate){
+                Temporary.bean=bean;
+                setResult(200);
+            }
             finish();
             overridePendingTransition(0, config.windowAnimationStyle != null
                     && config.windowAnimationStyle.activityPreviewExitAnimation != 0 ?
@@ -211,6 +354,7 @@ public class PlayVideoActivity extends PictureBaseActivity implements
     public void onPrepared(MediaPlayer mp) {
         mp.setOnInfoListener((mp1, what, extra) -> {
             if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                hideRDialog();
                 // video started
                 mVideoView.setBackgroundColor(Color.TRANSPARENT);
                 return true;
@@ -218,4 +362,26 @@ public class PlayVideoActivity extends PictureBaseActivity implements
             return false;
         });
     }
+    public void showRDialog() {
+
+        if (loadingDialog == null) {
+            loadingDialog = new Dialog(this, R.style.custom_dialog_style);
+            View dialogView = View.inflate(this, R.layout.common_waiting_dialog, (ViewGroup) null);
+            loadingDialog.setContentView(dialogView);
+            loadingDialog.setCanceledOnTouchOutside(false);//点击空白是否消失
+        }
+        if (!isFinishing() && !loadingDialog.isShowing()) {
+            loadingDialog.show();
+        }
+    }
+
+    public void hideRDialog() {
+        if (loadingDialog != null) {
+            if (!isFinishing() && loadingDialog.isShowing()) {
+                loadingDialog.dismiss();
+            }
+        }
+        loadingDialog = null;
+    }
+
 }

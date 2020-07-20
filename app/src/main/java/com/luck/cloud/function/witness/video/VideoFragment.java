@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -16,7 +17,9 @@ import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
+import com.luck.cloud.common.activity.PlayVideoActivity;
 import com.luck.cloud.common.activity.WebActivity;
+import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.witness.ScienceAdapter;
 import com.luck.cloud.function.witness.SuperviseHandleBean;
@@ -27,6 +30,7 @@ import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +49,7 @@ public class VideoFragment extends BaseFragment {
 
     private int type;
 
-
+    private int currentPosition=0;
 
     public static VideoFragment getInstance(int type) {
         VideoFragment fragment = new VideoFragment();
@@ -85,10 +89,20 @@ public class VideoFragment extends BaseFragment {
         adapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String videoUrl="http://124.70.179.180/group1/M00/00/00/wKgAHl8JWpKAR-9DATvtgCPh_mk436.mp4";
-                PictureSelector.create(getActivity())
-                        .themeStyle(R.style.picture_default_style)
-                        .externalPictureVideo(videoUrl);
+//                PictureSelector.create(getActivity())
+//                        .themeStyle(R.style.picture_default_style)
+//                        .externalPictureVideo(videoUrl);
+
+                currentPosition=position;
+
+                DynamicModel.RecordsBean bean =adapter.getList().get(position);
+                String videoUrl =bean.getDyFile();
+                Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+                intent.putExtra(PictureConfig.EXTRA_VIDEO_PATH, videoUrl);
+                intent.putExtra("type",2);
+                intent.putExtra(PictureConfig.EXTRA_PREVIEW_VIDEO, true);
+                Temporary.bean=bean;
+                startActivityForResult(intent,100);
             }
         });
         mRvList.setLoadingListener(new OnRecyclerLoadingListener() {
@@ -108,7 +122,7 @@ public class VideoFragment extends BaseFragment {
 
     private void requestData(final int page) {
         showRDialog();
-        params.put("dyType",1);
+        params.put("dyType",2);
         OKHttpManager.getJoint(URLConstant.DYNAMIC_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
             @Override
             public void onError(int code, String result, String message) {
@@ -130,10 +144,6 @@ public class VideoFragment extends BaseFragment {
         }, this);
     }
 
-    public void refreshData(String key){
-        mRvList.setReqPage(1);
-        requestData(1);
-    }
     public void refreshData(){
         mRvList.setReqPage(1);
         requestData(1);
@@ -141,5 +151,18 @@ public class VideoFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100&&resultCode==200){
+            List<DynamicModel.RecordsBean> list= adapter.getList();
+            DynamicModel.RecordsBean recordsBean=list.get(currentPosition);
+            DynamicModel.RecordsBean updateBean= (DynamicModel.RecordsBean) Temporary.bean;
+            recordsBean.setIsCollect(updateBean.getIsCollect());
+            recordsBean.setIsAttention(updateBean.getIsAttention());
+            adapter.notifyItemChanged(currentPosition+1);
+        }
     }
 }
