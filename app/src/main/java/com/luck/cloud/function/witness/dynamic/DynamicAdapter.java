@@ -141,6 +141,8 @@ public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecy
         TextView username;
         @Bind(R.id.tv_dynamic_time)
         TextView time;
+        @Bind(R.id.view_divider)
+        View divider;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -351,6 +353,11 @@ public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecy
 //                tvLike.setText("点赞");
 //            }
 
+            if (p==list.size()-1){
+                divider.setVisibility(View.GONE);
+            }else{
+                divider.setVisibility(View.VISIBLE);
+            }
 
         }
     }
