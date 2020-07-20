@@ -120,8 +120,8 @@ public class DynamicActivity extends BaseActivity {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(new DynamicFragment());
-        fragmentList.add(new VideoFragment());
+        fragmentList.add(DynamicFragment.getInstance(5));
+        fragmentList.add(VideoFragment.getInstance(5));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

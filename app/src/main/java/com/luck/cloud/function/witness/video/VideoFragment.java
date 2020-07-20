@@ -47,7 +47,7 @@ public class VideoFragment extends BaseFragment {
     private VideoAdapter<DynamicModel.RecordsBean> adapter;
     private Context context;
 
-    //1小云见证  2我的收藏  3我的发布  4根据人员ID
+    //1小云见证  2我的收藏  3我的发布  4根据人员ID  5动态
     private int type;
 
     private int currentPosition=0;
