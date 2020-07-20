@@ -156,13 +156,19 @@ public class VideoFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==100&&resultCode==200){
-            List<DynamicModel.RecordsBean> list= adapter.getList();
-            DynamicModel.RecordsBean recordsBean=list.get(currentPosition);
-            DynamicModel.RecordsBean updateBean= (DynamicModel.RecordsBean) Temporary.bean;
-            recordsBean.setIsCollect(updateBean.getIsCollect());
-            recordsBean.setIsAttention(updateBean.getIsAttention());
-            adapter.notifyItemChanged(currentPosition+1);
+        if (requestCode==100){
+            if (resultCode==200){
+                List<DynamicModel.RecordsBean> list= adapter.getList();
+                DynamicModel.RecordsBean recordsBean=list.get(currentPosition);
+                DynamicModel.RecordsBean updateBean= (DynamicModel.RecordsBean) Temporary.bean;
+                recordsBean.setIsCollect(updateBean.getIsCollect());
+                recordsBean.setIsAttention(updateBean.getIsAttention());
+                adapter.notifyItemChanged(currentPosition+1);
+            }else if (resultCode==300){
+                List<DynamicModel.RecordsBean> list= adapter.getList();
+                list.remove(currentPosition);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }

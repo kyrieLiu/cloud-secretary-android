@@ -27,7 +27,9 @@ import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.witness.model.DynamicModel;
 import com.luck.cloud.manager.ActivitiesManager;
 import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.ToastUtil;
+import com.luck.cloud.widget.dialog.SelectMenuDialog;
 import com.luck.picture.lib.PictureBaseActivity;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -55,7 +57,7 @@ public class PlayVideoActivity extends PictureBaseActivity implements
 
     private Dialog loadingDialog;
 
-    private TextView tvAttention,tvCollect;
+    private TextView tvAttention,tvCollect,tvDelete;
 
     //1动态  2视频
     private int type;
@@ -131,14 +133,22 @@ public class PlayVideoActivity extends PictureBaseActivity implements
     private void initView(){
         tvAttention=findViewById(R.id.tv_attention);
         tvCollect=findViewById(R.id.tv_collect);
+        tvDelete=findViewById(R.id.tv_delete);
 
         videoPath = getIntent().getStringExtra(PictureConfig.EXTRA_VIDEO_PATH);
         type=getIntent().getIntExtra("type",1);
         if (type==1){
             tvAttention.setVisibility(View.GONE);
             tvCollect.setVisibility(View.GONE);
+            tvDelete.setVisibility(View.GONE);
         }else{
             bean= (DynamicModel.RecordsBean) Temporary.bean;
+            if (bean.getUserId()== SpUtil.getUerId()){
+                tvAttention.setVisibility(View.GONE);
+                tvCollect.setVisibility(View.GONE);
+            }else{
+                tvDelete.setVisibility(View.GONE);
+            }
             if (bean.getIsAttention()==1){
                 tvAttention.setText("取消关注");
             }else{
@@ -162,8 +172,49 @@ public class PlayVideoActivity extends PictureBaseActivity implements
                     handleCollect();
                 }
             });
+            tvDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SelectMenuDialog dialog = new SelectMenuDialog(getContext());
+                    dialog.setListener(new SelectMenuDialog.OnMenuSelectListener() {
+                        @Override
+                        public void callback() {
+                            dialog.dismiss();
+                            handleDelete();
+                        }
+                    });
+                    dialog.show();
+                    dialog.setTitle("提醒");
+                    dialog.setContent("是否删除该信息");
+                }
+            });
         }
+    }
+    //删除
+    private void handleDelete(){
+        HashMap<String,Object> params=new HashMap<>();
+        params.clear();
+        params.put("id",bean.getDyId());
+        showRDialog();
+        OKHttpManager.postJsonRequest(URLConstant.DYNAMIC_REMOVE, params, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
 
+            @Override
+            public void onResponse(BaseBean<DynamicModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    ToastUtil.toastShortCenter("删除成功");
+                    setResult(300);
+                    finish();
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
     }
 
     private void handleCollect(){

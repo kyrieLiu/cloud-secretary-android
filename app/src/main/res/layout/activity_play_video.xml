@@ -28,30 +28,41 @@
         android:scaleType="centerInside"
         android:src="?attr/picture.preview.leftBack.icon" />
 
-    <TextView
-        android:id="@+id/tv_attention"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_100"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="@dimen/dp_200"
         android:layout_marginRight="16dp"
-        android:background="@drawable/picture_send_button_bg"
-        android:text="关注"
-        android:textColor="@color/picture_color_white"
-        android:textSize="14sp" />
-    <TextView
-        android:id="@+id/tv_collect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_150"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/picture_send_button_bg"
-        android:text="收藏"
-        android:textColor="@color/picture_color_white"
-        android:textSize="14sp" />
+        android:gravity="right"
+        >
+        <TextView
+            android:id="@+id/tv_attention"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/picture_send_button_bg"
+            android:text="关注"
+            android:textColor="@color/picture_color_white"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_collect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/picture_send_button_bg"
+            android:text="收藏"
+            android:textColor="@color/picture_color_white"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/picture_send_button_bg"
+            android:text="删除"
+            android:textColor="@color/picture_color_white"
+            android:textSize="14sp" />
+    </LinearLayout>
 </RelativeLayout>

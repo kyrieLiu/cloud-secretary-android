@@ -49,6 +49,8 @@ public class URLConstant {
     public static final String DYNAMIC_SAVE = BASE_URL + "/information/dynamic/save";
     //动态列表
     public static final String DYNAMIC_LIST = BASE_URL + "/information/dynamic/page";
+    //删除动态
+    public static final String DYNAMIC_REMOVE = BASE_URL + "/information/dynamic/remove";
     //关注
     public static final String ATTENTION = BASE_URL + "/sys/attention/save";
     //取消关注

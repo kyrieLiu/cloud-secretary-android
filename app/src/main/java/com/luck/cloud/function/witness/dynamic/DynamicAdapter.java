@@ -243,12 +243,7 @@ public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecy
             rlCommentList.setLayoutManager(layoutManager);
             rlCommentList.setAdapter(commentsAdapter);
 
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setGradientType(GradientDrawable.RECTANGLE);
-            drawable.setCornerRadius(5);
-            drawable.setStroke(1, Color.parseColor("#FFCB02"));
-            attention.setBackground(drawable);
+
 
             mLlLike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -329,29 +324,36 @@ public class DynamicAdapter<T extends DynamicModel.RecordsBean> extends BaseRecy
             username.setText(bean.getUserName());
             time.setText(DateUtil.getUnderlineDay(bean.getCreateTime()));
 
+            //关注和删除用同一个按钮
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setShape(GradientDrawable.RECTANGLE);
+            drawable.setGradientType(GradientDrawable.RECTANGLE);
+            drawable.setCornerRadius(5);
+            String color="#FFCB02";
             if (SpUtil.getUerId()==bean.getUserId()){
-                attention.setVisibility(View.GONE);
+                color="#FF0000";
+                attention.setText("删除");
             }else{
-                attention.setVisibility(View.VISIBLE);
+                if (bean.getIsAttention()==1){
+                    attention.setText("取消关注");
+                }else{
+                    attention.setText("关注");
+                }
             }
-            if (bean.getIsAttention()==1){
-                attention.setText("取消关注");
-            }else{
-                attention.setText("关注");
-            }
+            attention.setTextColor(Color.parseColor(color));
+            drawable.setStroke(1, Color.parseColor(color));
+            attention.setBackground(drawable);
 
             attention.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clickListener.attentionCallback(bean,p);
+                    if (SpUtil.getUerId()==bean.getUserId()){
+                        clickListener.deleteCallback(bean,p);
+                    }else{
+                        clickListener.attentionCallback(bean,p);
+                    }
                 }
             });
-
-//            if (bean.getIsLike()==1){
-//                tvLike.setText("取消点赞");
-//            }else{
-//                tvLike.setText("点赞");
-//            }
 
             if (p==list.size()-1){
                 divider.setVisibility(View.GONE);

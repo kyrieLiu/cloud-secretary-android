@@ -135,7 +135,8 @@ public class DynamicFragment extends BaseFragment {
                 dialog.setListener(new SelectMenuDialog.OnMenuSelectListener() {
                     @Override
                     public void callback() {
-
+                        dialog.dismiss();
+                        handleDelete(model,position);
                     }
                 });
                 dialog.show();
@@ -163,7 +164,7 @@ public class DynamicFragment extends BaseFragment {
             }
         });
     }
-
+    //关注
     private void handleAttention(DynamicModel.RecordsBean bean,int position){
         params.clear();
         String url=URLConstant.ATTENTION;
@@ -199,7 +200,7 @@ public class DynamicFragment extends BaseFragment {
             }
         }, this);
     }
-
+    //点赞
     private void handleLike(DynamicModel.RecordsBean bean,int position){
         params.clear();
         String url=URLConstant.LIKE;
@@ -236,7 +237,7 @@ public class DynamicFragment extends BaseFragment {
             }
         }, this);
     }
-
+    //收藏
     private void handleCollect(DynamicModel.RecordsBean bean,int position){
         params.clear();
         String url=URLConstant.COLLECT;
@@ -272,7 +273,7 @@ public class DynamicFragment extends BaseFragment {
         }, this);
     }
 
-
+    //评论
     private void handleComment(DynamicModel.RecordsBean bean,int position,String message){
         params.clear();
         params.put("dyId",bean.getDyId());
@@ -304,6 +305,33 @@ public class DynamicFragment extends BaseFragment {
             }
         }, this);
     }
+    //删除
+    private void handleDelete(DynamicModel.RecordsBean bean,int position){
+        params.clear();
+        params.put("id",bean.getDyId());
+        showRDialog();
+        OKHttpManager.postJsonRequest(URLConstant.DYNAMIC_REMOVE, params, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<DynamicModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    ToastUtil.toastShortCenter("删除成功");
+                    List<DynamicModel.RecordsBean> list=adapter.getList();
+                    list.remove(position);
+                    adapter.notifyDataSetChanged();
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
+
 
     private void requestData(final int page) {
         showRDialog();
