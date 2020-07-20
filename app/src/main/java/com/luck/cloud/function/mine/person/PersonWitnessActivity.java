@@ -120,8 +120,8 @@ public class PersonWitnessActivity extends BaseActivity {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(new DynamicFragment());
-        fragmentList.add(new VideoFragment());
+        fragmentList.add(DynamicFragment.getInstance(4));
+        fragmentList.add(VideoFragment.getInstance(4));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

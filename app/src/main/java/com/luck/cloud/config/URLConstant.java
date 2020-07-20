@@ -65,6 +65,12 @@ public class URLConstant {
     public static final String COLLECT_CANCEL = BASE_URL + "/information/collect/remove";
     //评论
     public static final String COMMENT = BASE_URL + "/information/message/save";
+    //我的关注
+    public static final String MY_ATTENTION = BASE_URL + "/sys/attention/pageAttention";
+    //我的粉丝
+    public static final String MY_FANS = BASE_URL + "/sys/attention/pageFans";
+    //我的收藏
+    public static final String MY_COLLECT = BASE_URL + "/information/dynamic/pageMyCollect";
 
 
     //园区列表

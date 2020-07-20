@@ -12,6 +12,7 @@ import com.google.gson.internal.$Gson$Types;
 import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.base.BaseListBean;
+import com.luck.cloud.base.BaseRecordBean;
 import com.luck.cloud.config.AppConstants;
 import com.luck.cloud.function.login.LoginActivity;
 import com.luck.cloud.utils.JsonUtils;
@@ -297,6 +298,10 @@ public class OKHttpManager {
                                         message = baseBean.getMsg()==null?baseBean.getMessage():baseBean.getMsg();
                                     } else if (object instanceof BaseListBean) {
                                         BaseListBean baseListBean = (BaseListBean) object;
+                                        code = baseListBean.getCode();
+                                        message = baseListBean.getMsg()==null?baseListBean.getMessage():baseListBean.getMsg();
+                                    }else if (object instanceof BaseRecordBean) {
+                                        BaseRecordBean baseListBean = (BaseRecordBean) object;
                                         code = baseListBean.getCode();
                                         message = baseListBean.getMsg()==null?baseListBean.getMessage():baseListBean.getMsg();
                                     }

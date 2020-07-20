@@ -10,20 +10,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.base.BaseRecordBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.callback.OnRecyclerLoadingListener;
-import com.luck.cloud.common.activity.WebActivity;
-import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
-import com.luck.cloud.function.study.StudyAdapter;
-import com.luck.cloud.function.study.model.StudyDetailModel;
-import com.luck.cloud.function.study.model.StudyScienceModel;
-import com.luck.cloud.function.study.model.StudyTabModel;
+import com.luck.cloud.function.witness.model.DynamicModel;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
+
+import org.apache.poi.util.ArrayUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +37,6 @@ public class PersonListActivity extends BaseActivity {
     XRecyclerView mRvList;
     private PersonAdapter<PersonModel> adapter;
 
-    private StudyTabModel dict;
     //1关注  2粉丝
     private int type;
 
@@ -66,7 +63,7 @@ public class PersonListActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        adapter = new PersonAdapter(this);
+        adapter = new PersonAdapter(this,type);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRvList.setLayoutManager(layoutManager);
         mRvList.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
@@ -85,27 +82,41 @@ public class PersonListActivity extends BaseActivity {
         adapter.setListener(new PersonAdapter.OnPersonClickListener() {
             @Override
             public void attentionCallback(PersonModel bean,int position) {
-                bean.setStatus(2);
-                adapter.notifyItemChanged(position+1);
+//                if (bean.getIsAttention()==1){
+//                    bean.setIsAttention(0);
+//                }else{
+//                    bean.setIsAttention(1);
+//                }
+//                adapter.notifyItemChanged(position+1);
+                handleAttention(bean,position);
             }
         });
         mRvList.setLoadingListener(new OnRecyclerLoadingListener() {
             @Override
             public void onRefresh() {
-                requestData(1,null);
+                requestData(1);
             }
 
             @Override
             public void onLoadMore(int reqPage) {
-                requestData(reqPage,null);
+                requestData(reqPage);
             }
         });
         mRvList.refresh();
     }
 
-    private void getDetailData(StudyScienceModel.RecordsBean bean){
+    //关注
+    private void handleAttention(PersonModel bean, int position){
+        params.clear();
+        String url=URLConstant.ATTENTION;
+        if (bean.getIsAttention()==1){
+            url=URLConstant.ATTENTION_CANCEL;
+            params.put("id",type==1?bean.getUserId():bean.getFansId());
+        }else{
+            params.put("userId",type==1?bean.getUserId():bean.getFansId());
+        }
         showRDialog();
-        OKHttpManager.getJoint(URLConstant.STUDY_DETAIL, null,new int[]{bean.getInid()}, new OKHttpManager.ResultCallback<BaseBean<StudyDetailModel>>() {
+        OKHttpManager.postJsonRequest(url, params, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
             @Override
             public void onError(int code, String result, String message) {
                 hideRDialog();
@@ -113,16 +124,15 @@ public class PersonListActivity extends BaseActivity {
             }
 
             @Override
-            public void onResponse(BaseBean<StudyDetailModel> response) {
+            public void onResponse(BaseBean<DynamicModel> response) {
                 hideRDialog();
                 if (response.getCode().equals("SUCCESS")){
-
-                    Temporary.webContent=response.getData().getContent();
-
-                    Intent intent=new Intent(PersonListActivity.this,WebActivity.class);
-                    startActivity(intent);
-
-
+                    if (bean.getIsAttention()==1){
+                        bean.setIsAttention(0);
+                    }else{
+                        bean.setIsAttention(1);
+                    }
+                    adapter.notifyItemChanged(position + 1);
                 }else{
                     ToastUtil.toastShortCenter(response.getMsg());
                 }
@@ -136,38 +146,42 @@ public class PersonListActivity extends BaseActivity {
      *
      * @param page
      */
-    private void requestData(final int page,String keyWord) {
-        List<PersonModel> list=new ArrayList<>();
-        for (int i=0;i<6;i++){
-            PersonModel model=new PersonModel();
-            model.setStatus(1);
-            list.add(model);
+    private void requestData(final int page) {
+        showRDialog();
+//        params.put("inotype",dict.getAtCode());
+//        params.put("contentType",type);
+        params.clear();
+        String url=URLConstant.MY_ATTENTION;
+        if (type==2){
+            url=URLConstant.MY_FANS;
         }
-        adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
-//        showRDialog();
-//        OKHttpManager.getJoint(URLConstant.STUDY_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                hideRDialog();
-//                ToastUtil.toastShortCenter(message);
-//                adapter.setErrorReqList(message, mRvList);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean<StudyScienceModel> response) {
-//                hideRDialog();
-//                if (response.getCode().equals("SUCCESS")){
-//                    List<StudyScienceModel.RecordsBean> list=response.getData().getRecords();
-//                    adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
-//                }else{
-//                    ToastUtil.toastShortCenter(response.getMsg());
-//                }
-//            }
-//        }, this);
-    }
+        OKHttpManager.getJoint(url, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseRecordBean<PersonModel>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+                adapter.setErrorReqList(message, mRvList);
+            }
 
-    public void searchData(String keyWord){
-        requestData(1,keyWord);
+            @Override
+            public void onResponse(BaseRecordBean<PersonModel> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")){
+                    ArrayList<PersonModel> list=response.getData().getRecords();
+
+                    for (int i=0;i<list.size();i++){
+                        PersonModel model=list.get(i);
+                        if (type==1){
+                            model.setIsAttention(1);
+                        }
+                    }
+
+                   adapter.setSuccessReqList(list, 10, page, mRvList, "暂无内容");
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
     }
 
     @Override

@@ -132,8 +132,8 @@ public class WitnessFragment extends BaseFragment {
         titleList.add("动态");
         titleList.add("视频");
 
-        dynamicFragment=new DynamicFragment();
-        videoFragment=new VideoFragment();
+        dynamicFragment=DynamicFragment.getInstance(1);
+        videoFragment=VideoFragment.getInstance(1);
 
         fragmentList.add(dynamicFragment);
         fragmentList.add(videoFragment);

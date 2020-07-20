@@ -53,6 +53,8 @@ public class DynamicFragment extends BaseFragment {
     XRecyclerView mRvList;
     private DynamicAdapter<DynamicModel.RecordsBean> adapter;
     private Context context;
+
+    //1小云见证  2我的收藏  3我的发布  4根据人员ID
     private int type;
 
 
@@ -77,7 +79,7 @@ public class DynamicFragment extends BaseFragment {
 
     @Override
     protected void initView(Bundle bundle) {
-        //type = getArguments().getInt("type");
+        type = getArguments().getInt("type");
     }
 
     @Override
@@ -336,8 +338,13 @@ public class DynamicFragment extends BaseFragment {
     private void requestData(final int page) {
         showRDialog();
         params.clear();
+        String url=URLConstant.DYNAMIC_LIST;
+        if (type==2){
+            //我的收藏
+            url=URLConstant.MY_COLLECT;
+        }
         params.put("dyType",1);
-        OKHttpManager.getJoint(URLConstant.DYNAMIC_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
+        OKHttpManager.getJoint(url, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
             @Override
             public void onError(int code, String result, String message) {
                 hideRDialog();

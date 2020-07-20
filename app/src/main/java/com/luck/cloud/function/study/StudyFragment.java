@@ -144,7 +144,7 @@ public class StudyFragment extends BaseFragment {
 
 
     /**
-     * 请求督查督办列表数据
+     * 请求列表数据
      *
      * @param page
      */

@@ -128,8 +128,8 @@ public class MyPublishActivity extends BaseActivity {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(new DynamicFragment());
-        fragmentList.add(new VideoFragment());
+        fragmentList.add(DynamicFragment.getInstance(3));
+        fragmentList.add(VideoFragment.getInstance(3));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

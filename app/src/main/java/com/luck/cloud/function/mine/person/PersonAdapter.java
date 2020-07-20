@@ -25,9 +25,11 @@ import butterknife.Bind;
  */
 public class PersonAdapter<T extends PersonModel> extends BaseRecyclerViewAdapter<T> {
 
+    private int type;
 
-    public PersonAdapter(Context context) {
+    public PersonAdapter(Context context,int type) {
         super(context);
+        this.type=type;
     }
 
     @Override
@@ -37,21 +39,14 @@ public class PersonAdapter<T extends PersonModel> extends BaseRecyclerViewAdapte
     }
 
     class ViewHolder extends BaseViewHolder<T> {
-//        @Bind(R.id.iv_item_study)
-//        ImageView imageView;
-//        @Bind(R.id.rv_study_pictures)
-//        RecyclerView mRecyclerView;
-//        @Bind(R.id.tv_study_title)
-//        TextView title;
-//        @Bind(R.id.tv_study_source)
-//        TextView source;
-//        @Bind(R.id.tv_study_time)
-//        TextView time;
-//        @Bind(R.id.tv_study_watch_num)
-//        TextView clickNum;
 
         @Bind(R.id.tv_attention_status)
         TextView status;
+        @Bind(R.id.tv_person_name)
+        TextView tvName;
+        @Bind(R.id.tv_person_num)
+        TextView tvTime;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,21 +54,8 @@ public class PersonAdapter<T extends PersonModel> extends BaseRecyclerViewAdapte
 
         @Override
         protected void bind(T bean, int position) {
-            // List<LocalMedia> list = bean.getPictureList();
-//            imageView.setVisibility(View.GONE);
-//            mRecyclerView.setVisibility(View.GONE);
-//            if (bean.getTitlePicture() != null) {
-//                imageView.setVisibility(View.VISIBLE);
-//                String url = bean.getTitlePicture();
-//                GlideUtils.loadRoundedCorners(context, imageView, url, 10, RoundedCornersTransformation.CornerType.ALL);
-//            }
-//
-//            title.setText(bean.getInotitle());
-//            source.setText(bean.getLinkurl());
-//            time.setText(DateUtil.getMinuteTime(bean.getPublishtime()));
-//            clickNum.setText(String.valueOf(bean.getClicks()));
 
-            if (bean.getStatus()==1){
+            if (bean.getIsAttention()==1){
                 status.setText("取消关注");
             }else{
                 status.setText("关注");
@@ -84,6 +66,9 @@ public class PersonAdapter<T extends PersonModel> extends BaseRecyclerViewAdapte
                     listener.attentionCallback(bean,position);
                 }
             });
+
+            tvName.setText(type==1?bean.getUserName():bean.getFansName());
+            tvTime.setText(DateUtil.getUnderlineDay(bean.getCreateTime()));
 
         }
     }
