@@ -57,11 +57,14 @@ public class DynamicFragment extends BaseFragment {
     //1小云见证  2我的收藏  3我的发布  4根据人员ID  5动态
     private int type;
 
+    private int userId;
 
-    public static DynamicFragment getInstance(int type) {
+
+    public static DynamicFragment getInstance(int type,int userId) {
         DynamicFragment fragment = new DynamicFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
+        bundle.putInt("userId", userId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -80,6 +83,7 @@ public class DynamicFragment extends BaseFragment {
     @Override
     protected void initView(Bundle bundle) {
         type = getArguments().getInt("type");
+        userId = getArguments().getInt("userId");
     }
 
     @Override
@@ -344,6 +348,9 @@ public class DynamicFragment extends BaseFragment {
             url=URLConstant.MY_COLLECT;
         }
         params.put("dyType",1);
+        if (userId!=0){
+            params.put("userId",userId);
+        }
         OKHttpManager.getJoint(url, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
             @Override
             public void onError(int code, String result, String message) {

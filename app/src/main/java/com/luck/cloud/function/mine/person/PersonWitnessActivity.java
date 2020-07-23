@@ -38,6 +38,8 @@ public class PersonWitnessActivity extends BaseActivity {
 
     private Context context;
 
+    private int userId;
+
     @Override
     protected void back() {
         finish();
@@ -55,7 +57,7 @@ public class PersonWitnessActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-
+        userId=getIntent().getIntExtra("userId",0);
         setPageData(1);
     }
 
@@ -120,8 +122,8 @@ public class PersonWitnessActivity extends BaseActivity {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(DynamicFragment.getInstance(4));
-        fragmentList.add(VideoFragment.getInstance(4));
+        fragmentList.add(DynamicFragment.getInstance(4,userId));
+        fragmentList.add(VideoFragment.getInstance(4,userId));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

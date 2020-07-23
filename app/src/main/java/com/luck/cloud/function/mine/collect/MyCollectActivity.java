@@ -120,8 +120,8 @@ public class MyCollectActivity extends BaseActivity {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(DynamicFragment.getInstance(2));
-        fragmentList.add(VideoFragment.getInstance(2));
+        fragmentList.add(DynamicFragment.getInstance(2,0));
+        fragmentList.add(VideoFragment.getInstance(2,0));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

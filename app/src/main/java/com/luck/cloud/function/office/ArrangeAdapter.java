@@ -46,8 +46,8 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
     }
 
     class ViewHolder extends BaseViewHolder<T> {
-        @Bind(R.id.arrange_level)
-        RelativeLayout rlLevel;
+        @Bind(R.id.tv_level)
+        TextView tvLevel;
 //        @Bind(R.id.tv_item_supervise_handle_belongProject)
 //        TextView mTvBelongProject;
 //        @Bind(R.id.tv_item_supervise_handle_operationUnit)
@@ -69,8 +69,9 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
             drawable.setShape(GradientDrawable.RECTANGLE);
             drawable.setGradientType(GradientDrawable.RECTANGLE);
             drawable.setCornerRadius(5);
-            drawable.setColor(Color.parseColor("#1FA2DB"));
-            rlLevel.setBackground(drawable);
+            drawable.setStroke(1,Color.parseColor("#1FA2DB"));
+            tvLevel.setBackground(drawable);
+            tvLevel.setTextColor(Color.parseColor("#1FA2DB"));
 
 //            mTvTitle.setText(bean.getMissionName());
 //            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());

@@ -125,7 +125,6 @@ public class OfficeActivity extends BaseActivity {
 //                    file.mkdirs();
 //                }
 //                File targetFile = new File(file, "新元社区APP隐私政策1.docx");
-                Log.d("tag",file.getName());
                 openFile(this,file);
                 break;
             case R.id.ll_office_notice:

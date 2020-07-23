@@ -33,6 +33,7 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -52,10 +53,13 @@ public class VideoFragment extends BaseFragment {
 
     private int currentPosition=0;
 
-    public static VideoFragment getInstance(int type) {
+    private int userId;
+
+    public static VideoFragment getInstance(int type,int userId) {
         VideoFragment fragment = new VideoFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
+        bundle.putInt("userId", userId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -74,6 +78,7 @@ public class VideoFragment extends BaseFragment {
     @Override
     protected void initView(Bundle bundle) {
         type = getArguments().getInt("type");
+        userId = getArguments().getInt("userId");
     }
 
     @Override
@@ -90,9 +95,6 @@ public class VideoFragment extends BaseFragment {
         adapter.setOnItemClickRecyclerAdapter(new OnItemClickRecyclerListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                PictureSelector.create(getActivity())
-//                        .themeStyle(R.style.picture_default_style)
-//                        .externalPictureVideo(videoUrl);
 
                 currentPosition=position;
 
@@ -129,6 +131,9 @@ public class VideoFragment extends BaseFragment {
             url=URLConstant.MY_COLLECT;
         }
         params.put("dyType",2);
+        if (userId!=0){
+            params.put("userId",userId);
+        }
         OKHttpManager.getJoint(url, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<DynamicModel>>() {
             @Override
             public void onError(int code, String result, String message) {

@@ -39,20 +39,19 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="15分钟前" />
     </LinearLayout>
-    <RelativeLayout
-        android:id="@+id/arrange_level"
-        android:layout_width="@dimen/dp_50"
-        android:layout_height="@dimen/dp_25"
+    <TextView
+        android:id="@+id/tv_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_10"
-        android:background="@color/main_color">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:text="重要">
-        </TextView>
-    </RelativeLayout>
+        android:textColor="@color/white"
+        android:paddingLeft="@dimen/dp_8"
+        android:paddingRight="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_2"
+        android:paddingBottom="@dimen/dp_2"
+        android:textSize="13sp"
+        android:text="重要">
+    </TextView>
 </LinearLayout>
 
 

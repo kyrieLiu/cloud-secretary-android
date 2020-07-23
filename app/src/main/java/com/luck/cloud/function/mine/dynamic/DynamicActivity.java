@@ -59,56 +59,6 @@ public class DynamicActivity extends BaseActivity {
         setPageData(1);
     }
 
-//    @OnClick({R.id.science_keyWords,R.id.iv_right})
-//    public void onClick(View view) {
-//        Intent intent=new Intent();
-//        switch (view.getId()) {
-//            case R.id.science_keyWords:
-//                intent.setClass(this, PropertyServiceStandardSearchActivity.class);
-//                startActivity(intent);
-//                break;
-//            case R.id.iv_right:
-//                int currentItem=mViewPager.getCurrentItem();
-//                if (currentItem==0){
-//                    intent.setClass(this, AddDynamicActivity.class);
-//                    startActivity(intent);
-//                }else{
-//                    intent.setClass(this, AddVideoActivity.class);
-//                    startActivity(intent);
-//                }
-//                break;
-//        }
-//    }
-
-
-    /**
-     * 获取园区列表
-     */
-    private void getParkData() {
-        params.clear();
-        showRDialog();
-        OKHttpManager.postJsonRequest(URLConstant.PARK_LIST, params, new OKHttpManager.ResultCallback<BaseBean<GardenInfoBean>>() {
-            @Override
-            public void onError(int code, String result, String message) {
-                hideRDialog();
-                ToastUtil.toastShortCenter(message);
-            }
-
-            @Override
-            public void onResponse(BaseBean<GardenInfoBean> response) {
-                hideRDialog();
-
-                gardenList = response.getData().getItems();
-                GardenInfoBean.ItemsBean itemsBean = gardenList.get(0);
-                itemsBean.setIsChecked(1);
-
-
-                setPageData(itemsBean.getId());
-
-            }
-        }, this);
-    }
-
     /**
      * 加载Fragment
      *
@@ -120,8 +70,8 @@ public class DynamicActivity extends BaseActivity {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(DynamicFragment.getInstance(5));
-        fragmentList.add(VideoFragment.getInstance(5));
+        fragmentList.add(DynamicFragment.getInstance(5,0));
+        fragmentList.add(VideoFragment.getInstance(5,0));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

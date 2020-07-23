@@ -24,6 +24,7 @@ import com.luck.cloud.widget.xrecycler.XRecyclerView;
 import org.apache.poi.util.ArrayUtil;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -75,6 +76,11 @@ public class PersonListActivity extends BaseActivity {
                 PersonModel itemsBean = adapter.getList().get(position);
 
                 Intent intent=new Intent(PersonListActivity.this,PersonWitnessActivity.class);
+                if (type==1){
+                    intent.putExtra("userId",itemsBean.getUserId());
+                }else{
+                    intent.putExtra("userId",itemsBean.getFansId());
+                }
                 startActivity(intent);
 
             }
