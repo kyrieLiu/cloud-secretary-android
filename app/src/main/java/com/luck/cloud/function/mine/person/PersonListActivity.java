@@ -41,9 +41,14 @@ public class PersonListActivity extends BaseActivity {
     //1关注  2粉丝
     private int type;
 
+    private boolean isUpdate=false;
+
 
     @Override
     protected void back() {
+        if (isUpdate){
+            setResult(200);
+        }
         finish();
     }
 
@@ -138,6 +143,7 @@ public class PersonListActivity extends BaseActivity {
                     }else{
                         bean.setIsAttention(1);
                     }
+                    isUpdate=true;
                     adapter.notifyItemChanged(position + 1);
                 }else{
                     ToastUtil.toastShortCenter(response.getMsg());

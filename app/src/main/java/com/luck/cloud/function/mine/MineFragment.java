@@ -257,12 +257,12 @@ public class MineFragment extends BaseFragment {
             case R.id.ll_attention:
                 intent.setClass(getContext(), PersonListActivity.class);
                 intent.putExtra("type",1);
-                startActivity(intent);
+                startActivityForResult(intent,100);
                 break;
             case R.id.ll_fans:
                 intent.setClass(getContext(), PersonListActivity.class);
                 intent.putExtra("type",2);
-                startActivity(intent);
+                startActivityForResult(intent,100);
                 break;
         }
     }

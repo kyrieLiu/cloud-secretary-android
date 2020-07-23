@@ -57,6 +57,8 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
 //        @Bind(R.id.tv_item_supervise_handle_status)
 //        TextView mTvStatus;
 //        private ViewUtil util;
+        @Bind(R.id.tv_delete)
+        TextView tvDelete;
         public ViewHolder(View itemView) {
             super(itemView);
             //util=ViewUtil.getViewUtil();
@@ -73,11 +75,28 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
             tvLevel.setBackground(drawable);
             tvLevel.setTextColor(Color.parseColor("#1FA2DB"));
 
+            tvDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.deleteCallback(bean,position);
+                }
+            });
+
 //            mTvTitle.setText(bean.getMissionName());
 //            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
 //            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());
 //            util.setTextMessage(mTvChargePerson,"责任人",bean.getChargeInfo());
 //            mTvStatus.setText(bean.getSupervisoryStatusTitle());
         }
+    }
+
+    private ArrangeClickListener listener;
+
+    public void setListener(ArrangeClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ArrangeClickListener{
+        void deleteCallback(SuperviseHandleBean.ItemsBean bean,int position);
     }
 }

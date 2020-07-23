@@ -29,12 +29,12 @@
             ></ImageView>-->
     </RelativeLayout>
 
-    <DatePicker
+    <TimePicker
         android:id="@+id/date_select"
         android:layout_width="wrap_content"
         android:layout_marginTop="@dimen/dp_20"
-        android:datePickerMode="calendar"
-        android:layout_height="wrap_content"></DatePicker>
+        android:timePickerMode="clock"
+        android:layout_height="wrap_content"></TimePicker>
 
     <LinearLayout
         android:layout_width="match_parent"

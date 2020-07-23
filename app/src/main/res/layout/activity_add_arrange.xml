@@ -7,10 +7,10 @@
 
     <include layout="@layout/layout_title"></include>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
+        android:orientation="vertical"
         >
 
         <LinearLayout
@@ -22,95 +22,59 @@
             android:layout_marginEnd="@dimen/dp_10"
             >
             <EditText
-                android:id="@+id/activity_name"
+                android:id="@+id/arrange_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_15"
                 android:textSize="14sp"
                 android:paddingBottom="@dimen/dp_10"
                 android:background="@drawable/shape_fill_white_only_bottom_gray"
-                android:hint="活动名称"
+                android:hint="计划内容"
                 ></EditText>
-            <EditText
-                android:id="@+id/activity_unit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:textSize="14sp"
-                android:hint="举办单位"
-                android:paddingBottom="@dimen/dp_10"
-                android:background="@drawable/shape_fill_white_only_bottom_gray"
-                ></EditText>
-            <EditText
-                android:id="@+id/activity_principle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:textSize="14sp"
-                android:hint="负责人"
-                android:paddingBottom="@dimen/dp_10"
-                android:background="@drawable/shape_fill_white_only_bottom_gray"
-                ></EditText>
-            <EditText
-                android:id="@+id/activity_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:textSize="14sp"
-                android:inputType="phone"
-                android:hint="负责人电话"
-                android:paddingBottom="@dimen/dp_10"
-                android:background="@drawable/shape_fill_white_only_bottom_gray"
-                ></EditText>
-            <EditText
-                android:id="@+id/activity_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:textSize="14sp"
-                android:hint="活动地点"
-                android:paddingBottom="@dimen/dp_10"
-                android:background="@drawable/shape_fill_white_only_bottom_gray"
-                ></EditText>
-            <EditText
-                android:id="@+id/activity_initiator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:textSize="14sp"
-                android:hint="发起人"
-                android:paddingBottom="@dimen/dp_10"
-                android:background="@drawable/shape_fill_white_only_bottom_gray"
-                ></EditText>
-            <EditText
-                android:id="@+id/activity_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:textSize="14sp"
-                android:hint="活动内容"
-                android:paddingBottom="@dimen/dp_10"
-                android:background="@drawable/shape_fill_white_only_bottom_gray"
-                ></EditText>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
                 android:layout_marginTop="@dimen/dp_20"
                 >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="开始时间:"
+                    android:text="日期:"
+                    android:textColor="@color/black"
+                    ></TextView>
+                <TextView
+                    android:id="@+id/arrange_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="请选择日期"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    ></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
+                android:layout_marginTop="@dimen/dp_20"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="时间:"
                     android:textColor="@color/black"
                     ></TextView>
                 <TextView
                     android:id="@+id/startTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="请选择开始时间"
+                    android:hint="请选择时间"
                     android:textColor="@color/black"
                     android:layout_marginLeft="@dimen/dp_10"
                     ></TextView>
@@ -120,41 +84,37 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dp_25"
+                android:paddingBottom="@dimen/dp_10"
+                android:background="@drawable/shape_fill_white_only_bottom_gray"
+                android:layout_marginTop="@dimen/dp_20"
                 >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="结束时间:"
+                    android:text="重要性:"
                     android:textColor="@color/black"
                     ></TextView>
                 <TextView
-                    android:id="@+id/endTime"
+                    android:id="@+id/arrange_level"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="请选择结束时间"
-                    android:layout_marginLeft="@dimen/dp_10"
+                    android:hint="请选择重要性"
                     android:textColor="@color/black"
+                    android:layout_marginLeft="@dimen/dp_10"
                     ></TextView>
             </LinearLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="@dimen/dp_20"
-                android:overScrollMode="never" />
-            <Button
-                android:id="@+id/bt_initiate"
-                style="@style/button_style"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_42"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_20"
-                android:layout_marginBottom="@dimen/dp_20"
-                android:text="提交" />
+
         </LinearLayout>
-    </ScrollView>
+        <Button
+            android:id="@+id/bt_initiate"
+            style="@style/button_style"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_42"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="提交" />
+    </LinearLayout>
 
 </LinearLayout>

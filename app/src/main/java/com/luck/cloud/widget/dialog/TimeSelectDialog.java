@@ -4,10 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
 
@@ -21,37 +20,37 @@ import butterknife.OnClick;
  * Created by liuyin on 2019/6/11 13:34
  * Description:  确定提示弹框
  */
-public class DateSelectDialog extends Dialog {
+public class TimeSelectDialog extends Dialog {
 
     @Bind(R.id.date_select)
-    DatePicker datePicker;
+    TimePicker datePicker;
 
-    public DateSelectDialog(Context context) {
+    public TimeSelectDialog(Context context) {
         super(context, R.style.ThemeCustomDialog);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_date_picker);
+        setContentView(R.layout.dialog_time_picker);
         ButterKnife.bind(this);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @OnClick({R.id.close, R.id.confirm})
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @OnClick({R.id.close,R.id.confirm})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.close:
                 dismiss();
                 break;
             case R.id.confirm:
-                int year = datePicker.getYear();
-                int week=datePicker.getFirstDayOfWeek();
-                Log.d("tag","week=="+week);
-                int month = datePicker.getMonth() + 1;
-                int day = datePicker.getDayOfMonth();
-                if (listener != null) {
-                    listener.callback(year + "-" + (month < 10 ? "0" + month : month) + "-" + (day < 10 ? "0" + day : day));
+                int hour=datePicker.getHour();
+                int minute=datePicker.getMinute();
+//                int year=datePicker.getYear();
+//                int month=datePicker.getMonth()+1;
+//                int day=datePicker.getDayOfMonth();
+                if (listener!=null){
+                    listener.callback((hour<10?"0"+hour:hour)+":"+(minute<10?"0"+minute:minute));
                     dismiss();
                 }
                 break;
@@ -64,7 +63,6 @@ public class DateSelectDialog extends Dialog {
     }
 
     private OnSelectListener listener;
-
     public void setListener(OnSelectListener listener) {
         this.listener = listener;
     }

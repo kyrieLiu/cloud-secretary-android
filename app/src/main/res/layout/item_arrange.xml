@@ -39,19 +39,35 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="15分钟前" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/tv_level"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
-        android:textColor="@color/white"
-        android:paddingLeft="@dimen/dp_8"
-        android:paddingRight="@dimen/dp_8"
-        android:paddingTop="@dimen/dp_2"
-        android:paddingBottom="@dimen/dp_2"
-        android:textSize="13sp"
-        android:text="重要">
-    </TextView>
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dp_10">
+        <TextView
+            android:id="@+id/tv_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingBottom="@dimen/dp_2"
+            android:textSize="13sp"
+            android:text="重要">
+        </TextView>
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp_10"
+            android:textColor="@color/app_color_red"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:textSize="13sp"
+            android:text="删除">
+        </TextView>
+    </RelativeLayout>
+
 </LinearLayout>
 
 

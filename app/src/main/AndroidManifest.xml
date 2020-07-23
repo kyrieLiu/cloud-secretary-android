@@ -47,6 +47,9 @@
         <activity android:name=".function.mine.person.PersonListActivity">
 
         </activity>
+        <activity android:name=".function.office.AddArrangeActivity">
+
+        </activity>
         <activity android:name=".function.mine.person.PersonWitnessActivity"></activity>
         <activity android:name=".common.activity.PlayVideoActivity"></activity>
         <activity android:name=".function.mine.collect.MyCollectActivity"></activity>
