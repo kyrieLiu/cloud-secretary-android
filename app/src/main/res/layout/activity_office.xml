@@ -39,6 +39,7 @@
                     android:layout_marginTop="@dimen/dp_15"
                     android:text="张云书记"
                     android:textColor="@color/white"
+                    android:layout_marginBottom="@dimen/dp_20"
                     android:textSize="@dimen/sp_17" />
 
                 <TextView
@@ -46,6 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_10"
+                    android:visibility="gone"
                     android:text="您已经在第一书记岗位上奋战121天,让5个贫困户脱贫,小云向您致敬!"
                     android:textColor="@color/white" />
             </LinearLayout>
@@ -259,23 +261,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_5"
                 android:background="@color/line_block_color"/>
-            <com.luck.cloud.widget.view.CustomTopView
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_55"
+                android:layout_height="@dimen/dp_50"
+                android:layout_marginLeft="@dimen/dp_18"
                 android:background="@drawable/shape_fill_white_only_bottom_gray"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp_10"
-                android:paddingRight="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_20"
-                app:title="建档立卡贫困户" />
+                android:layout_marginRight="@dimen/dp_20">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_18"
+                    android:textColor="@color/main_text_color"
+                    android:text="建档立卡贫困户"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    ></TextView>
+
+                <TextView
+                    android:id="@+id/add_low_income"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_2"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:text="添加"
+                    android:textColor="@color/main_color"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    ></TextView>
+                <TextView
+                    android:id="@+id/add_low_remove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp_2"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:layout_toLeftOf="@id/add_low_income"
+                    android:text="脱贫"
+                    android:textColor="@color/main_color"
+                    android:layout_centerVertical="true"
+                    ></TextView>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_office_poverty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
-                android:text="李东" />
+                android:layout_marginTop="@dimen/dp_10" />
         </LinearLayout>
     </com.luck.cloud.widget.MyScrollView>
 

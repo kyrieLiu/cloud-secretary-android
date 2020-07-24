@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_item_wait_done_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/selector_fill_rectangle_white_press"
+    android:paddingLeft="@dimen/dp_20"
+    android:paddingRight="@dimen/dp_20"
+    android:paddingTop="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_15">
+
+    <CheckBox
+        android:id="@+id/cb_choose_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="李桂芳"
+        android:paddingLeft="@dimen/dp_10"
+        android:textColor="@color/app_color_53575e"
+        android:textSize="14sp" />
+
+</LinearLayout>

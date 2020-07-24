@@ -18,9 +18,13 @@ import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
+import com.luck.cloud.common.activity.ModifyActivity;
+import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.home.SuperviseHandleBean;
 import com.luck.cloud.function.mine.bean.PersonInfoBean;
+import com.luck.cloud.function.office.beans.LowIncomePerson;
+import com.luck.cloud.function.office.lowincome.RemoveLowIncomeActivity;
 import com.luck.cloud.function.office.notice.NoticeActivity;
 import com.luck.cloud.function.office.clock.ClockInActivity;
 import com.luck.cloud.function.office.files.MySharedFilesActivity;
@@ -60,6 +64,8 @@ public class OfficeActivity extends BaseActivity {
     TextView tvVillage;
     @Bind(R.id.tv_office_poverty)
     TextView tvPoverty;
+
+    private List<LowIncomePerson> personList = new ArrayList<>();
 
     private ArrangeAdapter<SuperviseHandleBean.ItemsBean> arrangeAdapter;
 
@@ -104,7 +110,7 @@ public class OfficeActivity extends BaseActivity {
                     @Override
                     public void callback() {
                         dialog.dismiss();
-                        List<SuperviseHandleBean.ItemsBean> list=arrangeAdapter.getList();
+                        List<SuperviseHandleBean.ItemsBean> list = arrangeAdapter.getList();
                         list.remove(position);
                         arrangeAdapter.notifyDataSetChanged();
                     }
@@ -125,7 +131,8 @@ public class OfficeActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.ll_office_clock, R.id.ll_office_form, R.id.ll_office_notice, R.id.ll_office_document, R.id.add_arrange})
+    @OnClick({R.id.ll_office_clock, R.id.ll_office_form, R.id.ll_office_notice, R.id.ll_office_document, R.id.add_arrange,
+            R.id.edit_village, R.id.add_low_income, R.id.add_low_remove})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -152,6 +159,23 @@ public class OfficeActivity extends BaseActivity {
             case R.id.add_arrange:
                 intent.setClass(this, AddArrangeActivity.class);
                 startActivityForResult(intent, 100);
+                break;
+            case R.id.edit_village:
+                intent.setClass(this, ModifyActivity.class);
+                intent.putExtra("title", "编辑驻村情况");
+                intent.putExtra("content", "请输入驻村情况");
+                startActivityForResult(intent, 200);
+                break;
+            case R.id.add_low_income:
+                intent.setClass(this, ModifyActivity.class);
+                intent.putExtra("title", "添加贫困户");
+                intent.putExtra("content", "请输入贫苦户");
+                startActivityForResult(intent, 300);
+                break;
+            case R.id.add_low_remove:
+                intent.setClass(this, RemoveLowIncomeActivity.class);
+                Temporary.list = personList;
+                startActivityForResult(intent, 400);
                 break;
         }
     }
@@ -201,5 +225,33 @@ public class OfficeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 100) {
+            if (requestCode == 200) {
+                //编辑驻村情况
+                String content = data.getStringExtra("content");
+                tvVillage.setText(content);
+            } else if (requestCode == 300) {
+                //添加贫困户
+                String content = data.getStringExtra("content");
+                LowIncomePerson person = new LowIncomePerson();
+                person.setUsername(content);
+                personList.add(person);
+               refreshLowIncome(personList);
+            } else if (requestCode == 400) {
+                refreshLowIncome(personList);
+            }
+        }
+    }
+    private void refreshLowIncome(List<LowIncomePerson> list){
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < personList.size(); i++) {
+            LowIncomePerson item = personList.get(i);
+            if (i < personList.size() - 1) {
+                buffer.append(item.getUsername() + ",");
+            } else {
+                buffer.append(item.getUsername());
+            }
+        }
+        tvPoverty.setText(buffer.toString());
     }
 }
