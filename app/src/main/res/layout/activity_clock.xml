@@ -4,29 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <include layout="@layout/layout_title" />
 
-  <!--  <TextView
-        android:id="@+id/current_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="当前位置:定位中..."
-        android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginStart="@dimen/dp_20"
-        android:textSize="@dimen/sp_20"
-        />-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dp_50">
+        android:layout_height="@dimen/dp_160">
         <RelativeLayout
             android:id="@+id/rl_clock_in"
-            android:layout_width="@dimen/dp_150"
-            android:layout_height="@dimen/dp_150"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="@dimen/dp_100"
             android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/dp_60"
             android:clickable="true"
             android:background="@drawable/selector_circle_blue"
             android:focusable="true">
@@ -57,12 +47,20 @@
                 android:id="@+id/clock_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="打开时间 2020-06-20"
+                android:text="打开时间 2020-06-20 09:00:00"
                 android:layout_marginTop="20px"
                 android:textSize="@dimen/sp_20"
                 ></TextView>
         </LinearLayout>
     </RelativeLayout>
+
+    <DatePicker
+        android:id="@+id/date_select"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/dp_30"
+        android:datePickerMode="calendar"
+        android:layout_height="wrap_content"></DatePicker>
+
 
 
 </LinearLayout>

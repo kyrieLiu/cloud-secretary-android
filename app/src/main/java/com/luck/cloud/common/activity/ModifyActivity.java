@@ -48,13 +48,14 @@ public class ModifyActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-//        InputFilter[] addressFilter = {new InputFilter.LengthFilter(20)};
-//        mEtContent.setFilters(addressFilter);
-//        mEtContent.setHint("请输入手机号");
         title=getIntent().getStringExtra("title");
         content=getIntent().getStringExtra("content");
         setTitle(title);
         mEtContent.setHint(content);
+        String originalContent=getIntent().getStringExtra("originalContent");
+        if (originalContent!=null){
+            mEtContent.setText(originalContent);
+        }
     }
 
     @OnClick({R.id.tv_right, R.id.iv_modify_delete})

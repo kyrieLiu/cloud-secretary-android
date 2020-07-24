@@ -47,6 +47,9 @@
         <activity android:name=".function.mine.person.PersonListActivity">
 
         </activity>
+        <activity android:name=".function.mine.footprint.FootPrintActivity">
+
+        </activity>
         <activity android:name=".function.office.lowincome.RemoveLowIncomeActivity">
 
         </activity>

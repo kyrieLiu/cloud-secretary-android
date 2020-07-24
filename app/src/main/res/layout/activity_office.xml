@@ -256,6 +256,7 @@
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:text="甘旗卡真隶属于内蒙古自治区通辽市科尔沁左翼后旗,是旗" />
             <View
                 android:layout_width="match_parent"

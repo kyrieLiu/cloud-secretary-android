@@ -164,6 +164,7 @@ public class OfficeActivity extends BaseActivity {
                 intent.setClass(this, ModifyActivity.class);
                 intent.putExtra("title", "编辑驻村情况");
                 intent.putExtra("content", "请输入驻村情况");
+                intent.putExtra("originalContent", tvVillage.getText().toString());
                 startActivityForResult(intent, 200);
                 break;
             case R.id.add_low_income:

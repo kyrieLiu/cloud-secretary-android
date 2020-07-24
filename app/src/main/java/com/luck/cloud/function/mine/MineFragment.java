@@ -29,6 +29,7 @@ import com.luck.cloud.function.login.LoginActivity;
 import com.luck.cloud.function.mine.bean.PersonInfoBean;
 import com.luck.cloud.function.mine.collect.MyCollectActivity;
 import com.luck.cloud.function.mine.dynamic.DynamicActivity;
+import com.luck.cloud.function.mine.footprint.FootPrintActivity;
 import com.luck.cloud.function.mine.person.PersonListActivity;
 import com.luck.cloud.function.mine.publish.MyPublishActivity;
 import com.luck.cloud.function.mine.work.CalendarDesignateActivity;
@@ -172,7 +173,7 @@ public class MineFragment extends BaseFragment {
                         startActivity(intent);
                         break;
                     case "我的足迹":
-                        intent.setClass(Objects.requireNonNull(getContext()), StudyActivity.class);
+                        intent.setClass(Objects.requireNonNull(getContext()), FootPrintActivity.class);
                         startActivity(intent);
                         break;
                     case "我的名片":
