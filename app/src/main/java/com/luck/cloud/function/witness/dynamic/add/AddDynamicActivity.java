@@ -58,8 +58,6 @@ import com.luck.picture.lib.tools.SdkVersionUtils;
 import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.ValueOf;
 
-import org.apache.poi.poifs.crypt.cryptoapi.CryptoAPIDecryptor;
-import org.apache.poi.util.ArrayUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

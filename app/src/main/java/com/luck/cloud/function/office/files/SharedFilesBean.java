@@ -1,119 +1,72 @@
 package com.luck.cloud.function.office.files;
 
-import java.util.List;
-
 /**
  * created by YQ on 2019-05-24 16:13
  */
 public class SharedFilesBean {
 
+
     /**
-     * items : [{"editor":"CS终审","fileName":"1111.jpg","fileAddr":"http://pocketbook.document.jingcaiwang.cn/group1/M00/00/35/rBMBLFzQ_e-ALqn5AACu-JzvUxQ634.jpg","creator":"CS终审","gmtModified":"2019-05-07 11:39:38","id":10,"gmtCreate":"2019-05-07 11:39:38","fileSharingTypeTitle":"集团会议纪要"}]
-     * total : 1
+     * fileId : 1
+     * fileName : sdf
+     * filePath : http://121.36.144.200/group1/M00/00/17/wKgAnF8ac9iAH14zAAAhUja_n_g901.jpg
+     * userId : 300
+     * createTime : 2020-07-24T13:57:15
+     * createUser : liuyin
      */
 
-    private int total;
-    private List<ItemsBean> items;
+    private int fileId;
+    private String fileName;
+    private String filePath;
+    private int userId;
+    private String createTime;
+    private String createUser;
 
-    public int getTotal() {
-        return total;
+    public int getFileId() {
+        return fileId;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
     }
 
-    public List<ItemsBean> getItems() {
-        return items;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setItems(List<ItemsBean> items) {
-        this.items = items;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
-    public static class ItemsBean {
-        /**
-         * editor : CS终审
-         * fileName : 1111.jpg
-         * fileAddr : http://pocketbook.document.jingcaiwang.cn/group1/M00/00/35/rBMBLFzQ_e-ALqn5AACu-JzvUxQ634.jpg
-         * creator : CS终审
-         * gmtModified : 2019-05-07 11:39:38
-         * id : 10
-         * gmtCreate : 2019-05-07 11:39:38
-         * fileSharingTypeTitle : 集团会议纪要
-         */
+    public String getFilePath() {
+        return filePath;
+    }
 
-        private String editor;
-        private String fileName;
-        private String fileAddr;
-        private String creator;
-        private String gmtModified;
-        private int id;
-        private String gmtCreate;
-        private String fileSharingTypeTitle;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
-        public String getEditor() {
-            return editor;
-        }
+    public int getUserId() {
+        return userId;
+    }
 
-        public void setEditor(String editor) {
-            this.editor = editor;
-        }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-        public String getFileName() {
-            return fileName;
-        }
+    public String getCreateTime() {
+        return createTime;
+    }
 
-        public void setFileName(String fileName) {
-            this.fileName = fileName;
-        }
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
-        public String getFileAddr() {
-            return fileAddr;
-        }
+    public String getCreateUser() {
+        return createUser;
+    }
 
-        public void setFileAddr(String fileAddr) {
-            this.fileAddr = fileAddr;
-        }
-
-        public String getCreator() {
-            return creator;
-        }
-
-        public void setCreator(String creator) {
-            this.creator = creator;
-        }
-
-        public String getGmtModified() {
-            return gmtModified;
-        }
-
-        public void setGmtModified(String gmtModified) {
-            this.gmtModified = gmtModified;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getGmtCreate() {
-            return gmtCreate;
-        }
-
-        public void setGmtCreate(String gmtCreate) {
-            this.gmtCreate = gmtCreate;
-        }
-
-        public String getFileSharingTypeTitle() {
-            return fileSharingTypeTitle;
-        }
-
-        public void setFileSharingTypeTitle(String fileSharingTypeTitle) {
-            this.fileSharingTypeTitle = fileSharingTypeTitle;
-        }
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
     }
 }

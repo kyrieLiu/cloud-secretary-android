@@ -20,6 +20,8 @@ import com.luck.cloud.adapter.GridImageAdapter;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
 import com.luck.cloud.function.home.SuperviseHandleBean;
+import com.luck.cloud.function.mine.work.DateUtil;
+import com.luck.cloud.function.office.beans.ArrangeBean;
 import com.luck.cloud.utils.view.GlideUtils;
 import com.luck.cloud.utils.view.RoundedCornersTransformation;
 import com.luck.cloud.widget.MeasureRecyclerView;
@@ -32,7 +34,7 @@ import butterknife.Bind;
  * Created by liuyin on 2019/4/16 10:15
  * Description:安排列表适配器
  */
-public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
+public class ArrangeAdapter<T extends ArrangeBean> extends BaseRecyclerViewAdapter<T> {
 
 
     public ArrangeAdapter(Context context) {
@@ -48,17 +50,14 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
     class ViewHolder extends BaseViewHolder<T> {
         @Bind(R.id.tv_level)
         TextView tvLevel;
-//        @Bind(R.id.tv_item_supervise_handle_belongProject)
-//        TextView mTvBelongProject;
-//        @Bind(R.id.tv_item_supervise_handle_operationUnit)
-//        TextView mTvOperationUnit;
-//        @Bind(R.id.tv_item_supervise_charge_person)
-//        TextView mTvChargePerson;
-//        @Bind(R.id.tv_item_supervise_handle_status)
-//        TextView mTvStatus;
-//        private ViewUtil util;
         @Bind(R.id.tv_delete)
         TextView tvDelete;
+        @Bind(R.id.tv_arrange_title)
+        TextView title;
+        @Bind(R.id.tv_arrange_content)
+        TextView content;
+        @Bind(R.id.tv_item_time)
+        TextView time;
         public ViewHolder(View itemView) {
             super(itemView);
             //util=ViewUtil.getViewUtil();
@@ -71,9 +70,19 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
             drawable.setShape(GradientDrawable.RECTANGLE);
             drawable.setGradientType(GradientDrawable.RECTANGLE);
             drawable.setCornerRadius(5);
-            drawable.setStroke(1,Color.parseColor("#1FA2DB"));
+
+            String color="#1FA2DB";
+            if ("一般".equals(bean.getPlanDetails())){
+                color="#7D7DFF";
+            }else if ("重要".equals(bean.getPlanDetails())){
+                color="#43c117";
+            }else{
+                color="#1FA2DB";
+            }
+            drawable.setStroke(1,Color.parseColor(color));
             tvLevel.setBackground(drawable);
-            tvLevel.setTextColor(Color.parseColor("#1FA2DB"));
+            tvLevel.setTextColor(Color.parseColor(color));
+            tvLevel.setText(bean.getPlanDetails());
 
             tvDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,11 +91,9 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
                 }
             });
 
-//            mTvTitle.setText(bean.getMissionName());
-//            util.setTextMessage(mTvBelongProject,"所属项目",bean.getNameAcPark());
-//            util.setTextMessage(mTvOperationUnit,"经营单位",bean.getNameRbacDepartment());
-//            util.setTextMessage(mTvChargePerson,"责任人",bean.getChargeInfo());
-//            mTvStatus.setText(bean.getSupervisoryStatusTitle());
+            title.setText(bean.getPlanName());
+            content.setText(bean.getPlanDay()+"   "+ bean.getPlanTime());
+            time.setText(DateUtil.getStandardDate(bean.getCreateTime()));
         }
     }
 
@@ -97,6 +104,6 @@ public class ArrangeAdapter<T extends SuperviseHandleBean.ItemsBean> extends Bas
     }
 
     public interface ArrangeClickListener{
-        void deleteCallback(SuperviseHandleBean.ItemsBean bean,int position);
+        void deleteCallback(ArrangeBean bean,int position);
     }
 }

@@ -1,34 +1,34 @@
 package com.luck.cloud.function.office.beans;
 
-public class LowIncomePerson {
+public class VillageBean {
     /**
-     * familyId : 1
-     * familyName : 我五一
+     * villageId : 1
+     * villageDetails : 推荐
      * userId : 300
-     * createTime : 2020-07-24T16:13:50
+     * createTime : 2020-07-24T15:54:06
      * createUser : liuyin
      */
 
-    private int familyId;
-    private String familyName;
+    private int villageId;
+    private String villageDetails;
     private int userId;
     private String createTime;
     private String createUser;
 
-    public int getFamilyId() {
-        return familyId;
+    public int getVillageId() {
+        return villageId;
     }
 
-    public void setFamilyId(int familyId) {
-        this.familyId = familyId;
+    public void setVillageId(int villageId) {
+        this.villageId = villageId;
     }
 
-    public String getFamilyName() {
-        return familyName;
+    public String getVillageDetails() {
+        return villageDetails;
     }
 
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
+    public void setVillageDetails(String villageDetails) {
+        this.villageDetails = villageDetails;
     }
 
     public int getUserId() {

@@ -74,15 +74,6 @@ public class TypeSelectDialog extends Dialog {
         }
     }
     private void initView(){
-//        ArrayList day=new ArrayList<>();
-//        day.add("公务员");
-//        day.add("事业单位");
-//        day.add("国有企业");
-//        day.add("民营企业");
-//        day.add("自主创业");
-//        day.add("传媒企业");
-//        day.add("学生");
-//        day.add("其他");
         pickerView.setOnSelectListener(new PickerView.onSelectListener() {
             @Override
             public void onSelect(String text) {
@@ -90,10 +81,10 @@ public class TypeSelectDialog extends Dialog {
 
             }
         });
-//        pickerView.setData(day);
 
     }
     public void setData(ArrayList<String> list){
+        this.selectType=list.get(0);
         pickerView.setData(list);
     }
     public interface OnTypeSelector{

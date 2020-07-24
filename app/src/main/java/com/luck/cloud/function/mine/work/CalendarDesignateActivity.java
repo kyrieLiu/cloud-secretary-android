@@ -1,5 +1,8 @@
 package com.luck.cloud.function.mine.work;
 
+import android.annotation.SuppressLint;
+import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,17 +13,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import androidx.annotation.RequiresApi;
+
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.base.BaseRecordBean;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.office.beans.ArrangeBean;
+import com.luck.cloud.function.office.clock.ClockBean;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.widget.MyListView;
 import com.luck.cloud.widget.dialog.DateSelectDialog;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -75,6 +86,7 @@ public class CalendarDesignateActivity extends BaseActivity {
         setTitle("工作日志");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void loadData() {
 
@@ -86,6 +98,8 @@ public class CalendarDesignateActivity extends BaseActivity {
 
 
         initCalendarGridView();//初始化日历列表
+
+        getClockRecord(new Date());
 
     }
 
@@ -123,20 +137,38 @@ public class CalendarDesignateActivity extends BaseActivity {
         personsAdapter = new MaintenanceDesignateOrderAdapter(this);
         mLvPersons.setAdapter(personsAdapter);
         getData(year_c, month_c,day_c);
-       // testAdapter();
     }
 
-    private void testAdapter(){
-        childList = new ArrayList<>();
-        for (int i=0;i<10;i++){
-            WorkerOrderListBean.DateWorkOrderListDTOListBean bean=new WorkerOrderListBean.DateWorkOrderListDTOListBean();
-            childList.add(bean);
-        }
-        adapter = new PersonWorkAdapter(this, childList);
-        adapter.setShowCount(childList.size());
-        mLvPersons.setAdapter(adapter);
-    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getClockRecord(Date date){
+        showRDialog();
+        params.clear();
+        SimpleDateFormat format=new SimpleDateFormat("yyyyMM");
+        params.put("clockMonth",format.format(date));
+        OKHttpManager.getJoint(URLConstant.CLOCK_RECORD, params,new int[]{1,100}, new OKHttpManager.ResultCallback<BaseRecordBean<ClockBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
 
+            @Override
+            public void onResponse(BaseRecordBean<ClockBean> response) {
+                hideRDialog();
+                List<ClockBean> list=response.getData().getRecords();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                ArrayList<String> dateList=new ArrayList<>();
+                for (int i=0;i<list.size();i++){
+                    ClockBean bean=list.get(i);
+                    dateList.add(bean.getClockDate());
+                }
+                reloadData(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH)+1,cal.get(Calendar.DAY_OF_MONTH),dateList);
+
+
+            }
+        },this);
+    }
 
     /**
      * 重新计算加载数据
@@ -151,8 +183,8 @@ public class CalendarDesignateActivity extends BaseActivity {
         if (lastClickPosition < beanArr.length) {
             if (lastClickPosition != -1) {
                 WorkerRepairCalendarBean scheduleDay = beanArr[lastClickPosition]; // 这一天的阳历
-                String schedule = scheduleDay.getDate();
-                getOrderData(schedule);
+                //String schedule = scheduleDay.getDate();
+                //getOrderData(schedule);
             }
         }
     }
@@ -162,17 +194,21 @@ public class CalendarDesignateActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_repair_designate_time_parent:
-//                if (adapter.getShowCount()==1){
-//                    adapter.setShowCount(childList.size());
-//                    adapter.notifyDataSetChanged();
-//                }else{
-//                    adapter.setShowCount(1);
-//                    adapter.notifyDataSetChanged();
-//                }
                 DateSelectDialog dialog = new DateSelectDialog(this);
                 dialog.setListener(new DateSelectDialog.OnSelectListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void callback(String date) {
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                        try {
+                            Date d=format.parse(date);
+                            getClockRecord(d);
+                        } catch (ParseException e) {
+
+                        }
+
+
                         mTvTime.setText(date);
                     }
                 });

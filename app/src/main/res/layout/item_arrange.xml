@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
-    android:paddingTop="@dimen/dp_10"
-    android:paddingBottom="@dimen/dp_10"
+    android:layout_height="@dimen/dp_140"
+    android:paddingTop="@dimen/dp_15"
+    android:paddingBottom="@dimen/dp_15"
     android:paddingStart="@dimen/dp_15"
     android:paddingEnd="@dimen/dp_10"
     android:background="@drawable/selector_fill_rectangle_white_press"
@@ -34,14 +34,16 @@
             android:textColor="@color/main_text_color"
             android:textSize="@dimen/sp_14" />
         <TextView
-            android:id="@+id/tv_item_science_content"
+            android:id="@+id/tv_item_time"
             style="@style/text_14_wrap_gray"
             android:layout_marginTop="@dimen/dp_10"
             android:text="15分钟前" />
     </LinearLayout>
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="right"
         android:layout_marginStart="@dimen/dp_10">
         <TextView
             android:id="@+id/tv_level"
@@ -61,12 +63,11 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dp_10"
             android:textColor="@color/app_color_red"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/dp_5"
             android:textSize="13sp"
+            android:layout_marginTop="@dimen/dp_50"
             android:text="删除">
         </TextView>
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
 

@@ -6,10 +6,10 @@
 
     <include layout="@layout/layout_title"></include>
 
-    <com.jingkai.asset.widget.X5WebView
+    <com.luck.cloud.widget.X5WebView
         android:id="@+id/full_web_webview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scrollbars="horizontal"></com.jingkai.asset.widget.X5WebView>>
+        android:scrollbars="horizontal"></com.luck.cloud.widget.X5WebView>>
 
 </LinearLayout>

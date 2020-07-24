@@ -6,8 +6,8 @@ package com.luck.cloud.config;
  */
 public class URLConstant {
 
-    //public static final String BASE_URL = "http://192.168.0.113:8066";//生产环境
-    public static final String BASE_URL = "http://121.36.144.200:8066";//生产环境
+    public static final String BASE_URL = "http://10.17.7.103:8066";//生产环境
+    //public static final String BASE_URL = "http://121.36.144.200:8066";//生产环境
     public static final String BASE_HTML_URL = "http://ic.jingcaiwang.cn:18080/assetH5/index.html#/";//生产环境 H5页面地址
 
     public static final boolean DEBUG = true;
@@ -20,6 +20,7 @@ public class URLConstant {
     public static final String STUDY_SCIENCE_TAB = BASE_URL + "/sys/domain/list";
     //学习列表
     public static final String STUDY_LIST = BASE_URL + "/information/info/page";
+    public static final String FOOT_LIST = BASE_URL + "/sys/track/page";
     //学习详情
     public static final String STUDY_DETAIL = BASE_URL + "/information/info/door/getDetail";
     //活动列表
@@ -79,6 +80,21 @@ public class URLConstant {
 
     //上传文件
     public static final String UPLOAD_FILE = BASE_URL + "/uploadFiles";
+    //文件列表
+    public static final String FILE_LIST = BASE_URL + "/work/file/page";
+    //打卡
+    public static final String SAVE_CLOCK = BASE_URL + "/system/clock/save";
+    //打卡记录
+    public static final String CLOCK_RECORD = BASE_URL + "/system/clock/page";
+    //保存日程
+    public static final String SAVE_ARRANGE = BASE_URL + "/work/weekly/save";
+    public static final String ARRANGE_LIST = BASE_URL + "/work/weekly/page";
+    public static final String DELETE_ARRANGE = BASE_URL + "/work/weekly/remove";
+    public static final String VILLAGE_INFO = BASE_URL + "/work/village/page";
+    public static final String UPDATE_VILLAGE = BASE_URL + "/work/village/save";
+    public static final String LOW_LIST = BASE_URL + "/work/low/page";
+    public static final String LOW_SAVE = BASE_URL + "/work/low/save";
+    public static final String LOW_DELETE = BASE_URL + "/work/low/remove";
 
 
 }

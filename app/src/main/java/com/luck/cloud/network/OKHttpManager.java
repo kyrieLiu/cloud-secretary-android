@@ -178,7 +178,7 @@ public class OKHttpManager {
             }
         }
 
-        Log.d("tag","请求URL=="+url);
+        Log.e("tag","请求URL=="+url);
 
         getInstance().getGetDelegate().getAsyn(url, callback, tag);
     }

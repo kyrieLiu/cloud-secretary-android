@@ -21,7 +21,6 @@ import com.luck.cloud.utils.view.ViewUtil;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 
-import org.apache.poi.util.ArrayUtil;
 
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;

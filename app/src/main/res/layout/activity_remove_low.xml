@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         />
-
+<!--
     <Button
         android:id="@+id/bt_confirm"
         style="@style/button_style"
@@ -25,7 +25,7 @@
         android:layout_marginRight="@dimen/dp_20"
         android:layout_marginBottom="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_20"
-        android:text="脱贫" />
+        android:text="脱贫" />-->
 
 
 </LinearLayout>

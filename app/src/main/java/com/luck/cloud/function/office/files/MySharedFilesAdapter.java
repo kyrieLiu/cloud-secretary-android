@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
+import com.luck.cloud.function.mine.work.DateUtil;
 import com.luck.cloud.utils.TimeUtils;
 
 import java.text.SimpleDateFormat;
@@ -21,7 +22,7 @@ import butterknife.Bind;
 /**
  * 共享文件
  */
-public class MySharedFilesAdapter<T extends SharedFilesBean.ItemsBean> extends BaseRecyclerViewAdapter<T> {
+public class MySharedFilesAdapter<T extends SharedFilesBean> extends BaseRecyclerViewAdapter<T> {
 
 
 
@@ -56,13 +57,17 @@ public class MySharedFilesAdapter<T extends SharedFilesBean.ItemsBean> extends B
 //            mTvSharedFileName.setText(bean.getFileSharingTypeTitle());
 //            String time= TimeUtils.changeTimeFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm"),new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"),bean.getGmtCreate());
 //            mTvSharedFileTime.setText(time);
-//            String url=bean.getFileAddr();
-//            if (!TextUtils.isEmpty(url)){
-//                int dotIndex = url.lastIndexOf(".");
-//                /* 获取文件的后缀名 */
-//                String end = url.substring(dotIndex).toLowerCase();
-//                mTvType.setText(end);
-//            }
+            String url=bean.getFilePath();
+            if (!TextUtils.isEmpty(url)){
+                int dotIndex = url.lastIndexOf(".");
+                /* 获取文件的后缀名 */
+                String end = url.substring(dotIndex).toLowerCase();
+                mTvType.setText(end);
+            }
+
+            mTvSharedFileName.setText(bean.getFileName());
+            String time= DateUtil.getUnderlineDay(bean.getCreateTime());
+            mTvSharedFileTime.setText(time);
         }
 
 

@@ -12,7 +12,18 @@ import androidx.annotation.NonNull;
 
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
+import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.base.BaseRecordBean;
+import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.mine.work.DateUtil;
+import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.PermissionHelper;
+import com.luck.cloud.utils.ToastUtil;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,7 +57,7 @@ public class ClockInActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        requestPermission();
+        clockRecord();
     }
 
 
@@ -75,12 +86,64 @@ public class ClockInActivity extends BaseActivity {
             mHelper.handleRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    private void clockRecord(){
+        showRDialog();
+        params.clear();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date=format.format(new Date());
+        params.put("clockDate",date);
+        OKHttpManager.getJoint(URLConstant.CLOCK_RECORD, params,new int[]{1,100}, new OKHttpManager.ResultCallback<BaseRecordBean<ClockBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseRecordBean<ClockBean> response) {
+                hideRDialog();
+                List<ClockBean> list=response.getData().getRecords();
+                if (list!=null&&list.size()>0){
+                    ClockBean bean=list.get(0);
+                    rlClockIn.setVisibility(View.GONE);
+                    llClockRecord.setVisibility(View.VISIBLE);
+                    clockTime.setText("打卡时间:  "+DateUtil.getStandardDate(bean.getClockTime()));
+                }
+
+            }
+        },this);
+    }
 
 
     @OnClick(R.id.rl_clock_in)
     public void onViewClicked() {
-        rlClockIn.setVisibility(View.GONE);
-        llClockRecord.setVisibility(View.VISIBLE);
-        clockTime.setText("打卡时间:  2020-06-25");
+        handleClock();
+    }
+    private void handleClock(){
+        showRDialog();
+        params.clear();
+//        Date date=new Date();
+//        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//        DateFormat monthFormat = new SimpleDateFormat("yyyy-MM");
+//        String day=format.format(date);
+//        params.put("clockDate",day);
+//        params.put("clockMonth",monthFormat.format(date));
+        // params.put("clockTime",day);
+        OKHttpManager.postJsonRequest(URLConstant.SAVE_CLOCK, params, new OKHttpManager.ResultCallback<BaseBean>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean response) {
+                hideRDialog();
+                rlClockIn.setVisibility(View.GONE);
+                llClockRecord.setVisibility(View.VISIBLE);
+                DateFormat formatTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                clockTime.setText("打卡时间:  "+formatTime.format(new Date()));
+            }
+        },this);
     }
 }

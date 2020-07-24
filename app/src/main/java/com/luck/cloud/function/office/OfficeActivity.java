@@ -17,13 +17,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
+import com.luck.cloud.base.BaseRecordBean;
 import com.luck.cloud.callback.OnItemClickRecyclerListener;
 import com.luck.cloud.common.activity.ModifyActivity;
 import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.home.SuperviseHandleBean;
 import com.luck.cloud.function.mine.bean.PersonInfoBean;
+import com.luck.cloud.function.office.beans.ArrangeBean;
 import com.luck.cloud.function.office.beans.LowIncomePerson;
+import com.luck.cloud.function.office.beans.VillageBean;
 import com.luck.cloud.function.office.lowincome.RemoveLowIncomeActivity;
 import com.luck.cloud.function.office.notice.NoticeActivity;
 import com.luck.cloud.function.office.clock.ClockInActivity;
@@ -67,7 +70,10 @@ public class OfficeActivity extends BaseActivity {
 
     private List<LowIncomePerson> personList = new ArrayList<>();
 
-    private ArrangeAdapter<SuperviseHandleBean.ItemsBean> arrangeAdapter;
+    private ArrangeAdapter<ArrangeBean> arrangeAdapter;
+
+    //驻村情况ID
+    private int villageId;
 
     @Override
     protected void back() {
@@ -89,8 +95,14 @@ public class OfficeActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+        //获取个人信息
         getUserInfo();
+        //获取周计划安排
         initArrange();
+        //获取驻村情况
+        getVillageInfo();
+        //获取建档立卡贫苦户
+        getLowIncome();
     }
 
     /**
@@ -104,15 +116,13 @@ public class OfficeActivity extends BaseActivity {
         rlWaitDone.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
         arrangeAdapter.setListener(new ArrangeAdapter.ArrangeClickListener() {
             @Override
-            public void deleteCallback(SuperviseHandleBean.ItemsBean bean, int position) {
+            public void deleteCallback(ArrangeBean bean, int position) {
                 SelectMenuDialog dialog = new SelectMenuDialog(OfficeActivity.this);
                 dialog.setListener(new SelectMenuDialog.OnMenuSelectListener() {
                     @Override
                     public void callback() {
                         dialog.dismiss();
-                        List<SuperviseHandleBean.ItemsBean> list = arrangeAdapter.getList();
-                        list.remove(position);
-                        arrangeAdapter.notifyDataSetChanged();
+                        deleteArrange(bean,position);
                     }
                 });
                 dialog.show();
@@ -120,16 +130,40 @@ public class OfficeActivity extends BaseActivity {
                 dialog.setContent("是否删除该数据");
             }
         });
-
-        // requestWaitDone();
-        List<SuperviseHandleBean.ItemsBean> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            SuperviseHandleBean.ItemsBean bean = new SuperviseHandleBean.ItemsBean();
-            list.add(bean);
-        }
-        arrangeAdapter.setList(list);
+        getArrangeList();
 
     }
+
+
+    private void deleteArrange(ArrangeBean bean,int position) {
+        showRDialog();
+        params.clear();
+        params.put("id",bean.getPlanId());
+        OKHttpManager.postJsonRequest(URLConstant.DELETE_ARRANGE, params, new OKHttpManager.ResultCallback<BaseBean<PersonInfoBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseBean<PersonInfoBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")) {
+                    ToastUtil.toastShortCenter("删除成功");
+                    List<ArrangeBean> list = arrangeAdapter.getList();
+                    list.remove(position);
+                    arrangeAdapter.notifyDataSetChanged();
+
+                } else {
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+            }
+        }, this);
+    }
+
+
 
     @OnClick({R.id.ll_office_clock, R.id.ll_office_form, R.id.ll_office_notice, R.id.ll_office_document, R.id.add_arrange,
             R.id.edit_village, R.id.add_low_income, R.id.add_low_remove})
@@ -206,6 +240,71 @@ public class OfficeActivity extends BaseActivity {
         }, this);
     }
 
+    //获取日程信息
+    private void getArrangeList() {
+        params.clear();
+        OKHttpManager.getJoint(URLConstant.ARRANGE_LIST, null, new int[]{1,100}, new OKHttpManager.ResultCallback<BaseRecordBean<ArrangeBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseRecordBean<ArrangeBean> response) {
+                if (response.getCode().equals("SUCCESS")) {
+                    List<ArrangeBean> list=response.getData().getRecords();
+                    arrangeAdapter.setList(list);
+                }
+            }
+        }, this);
+    }
+    //获取村庄信息
+    private void getVillageInfo() {
+        params.clear();
+        OKHttpManager.getJoint(URLConstant.VILLAGE_INFO, null, new int[]{1,100}, new OKHttpManager.ResultCallback<BaseRecordBean<VillageBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseRecordBean<VillageBean> response) {
+                if (response.getCode().equals("SUCCESS")) {
+                    List<VillageBean> list=response.getData().getRecords();
+                    if (list!=null&&list.size()>0){
+                        VillageBean bean=list.get(0);
+                        tvVillage.setText(bean.getVillageDetails());
+                        villageId=bean.getVillageId();
+                    }
+                }
+            }
+        }, this);
+    }
+    //获取收入低用户
+    private void getLowIncome() {
+        params.clear();
+        OKHttpManager.getJoint(URLConstant.LOW_LIST, null, new int[]{1,100}, new OKHttpManager.ResultCallback<BaseRecordBean<LowIncomePerson>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseRecordBean<LowIncomePerson> response) {
+                if (response.getCode().equals("SUCCESS")) {
+                    List<LowIncomePerson> list=response.getData().getRecords();
+                    if (list!=null&&list.size()>0){
+                      personList=list;
+                      refreshLowIncome(list);
+                    }
+                }
+            }
+        }, this);
+    }
+
     public static void openFile(Context context, File file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -227,17 +326,22 @@ public class OfficeActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
-            if (requestCode == 200) {
+            if (requestCode==100){
+                //添加日程
+                getArrangeList();
+            } else if (requestCode == 200) {
                 //编辑驻村情况
                 String content = data.getStringExtra("content");
                 tvVillage.setText(content);
+                updateVillageInfo(content);
             } else if (requestCode == 300) {
                 //添加贫困户
                 String content = data.getStringExtra("content");
                 LowIncomePerson person = new LowIncomePerson();
-                person.setUsername(content);
+                person.setFamilyName(content);
                 personList.add(person);
                refreshLowIncome(personList);
+                addLowIncome(content);
             } else if (requestCode == 400) {
                 refreshLowIncome(personList);
             }
@@ -248,11 +352,49 @@ public class OfficeActivity extends BaseActivity {
         for (int i = 0; i < personList.size(); i++) {
             LowIncomePerson item = personList.get(i);
             if (i < personList.size() - 1) {
-                buffer.append(item.getUsername() + ",");
+                buffer.append(item.getFamilyName() + ",");
             } else {
-                buffer.append(item.getUsername());
+                buffer.append(item.getFamilyName());
             }
         }
         tvPoverty.setText(buffer.toString());
+    }
+    //新增编辑驻村信息
+    private void updateVillageInfo(String content) {
+        params.clear();
+        params.put("familyName",content);
+        OKHttpManager.postJsonRequest(URLConstant.UPDATE_VILLAGE, params , new OKHttpManager.ResultCallback<BaseRecordBean<ArrangeBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseRecordBean<ArrangeBean> response) {
+                if (response.getCode().equals("SUCCESS")) {
+
+                }
+            }
+        }, this);
+    }
+    //新增编辑驻村信息
+    private void addLowIncome(String content) {
+        params.clear();
+        params.put("familyName",content);
+        OKHttpManager.postJsonRequest(URLConstant.LOW_SAVE, params , new OKHttpManager.ResultCallback<BaseRecordBean<ArrangeBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseRecordBean<ArrangeBean> response) {
+                if (response.getCode().equals("SUCCESS")) {
+
+                }
+            }
+        }, this);
     }
 }

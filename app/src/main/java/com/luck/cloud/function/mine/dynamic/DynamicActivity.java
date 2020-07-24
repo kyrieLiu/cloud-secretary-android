@@ -16,6 +16,7 @@ import com.luck.cloud.function.witness.GardenInfoBean;
 import com.luck.cloud.function.witness.dynamic.DynamicFragment;
 import com.luck.cloud.function.witness.video.VideoFragment;
 import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -70,8 +71,8 @@ public class DynamicActivity extends BaseActivity {
         titleList.add("动态");
         titleList.add("视频");
 
-        fragmentList.add(DynamicFragment.getInstance(5,0));
-        fragmentList.add(VideoFragment.getInstance(5,0));
+        fragmentList.add(DynamicFragment.getInstance(5, SpUtil.getUerId()));
+        fragmentList.add(VideoFragment.getInstance(5,SpUtil.getUerId()));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

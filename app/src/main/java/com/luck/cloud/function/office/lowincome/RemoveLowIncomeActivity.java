@@ -1,5 +1,6 @@
 package com.luck.cloud.function.office.lowincome;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,9 @@ import com.luck.cloud.callback.OnRecyclerLoadingListener;
 import com.luck.cloud.common.activity.WebActivity;
 import com.luck.cloud.common.entity.Temporary;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.mine.bean.PersonInfoBean;
+import com.luck.cloud.function.office.OfficeActivity;
+import com.luck.cloud.function.office.beans.LowIncomePerson;
 import com.luck.cloud.function.office.beans.LowIncomePerson;
 import com.luck.cloud.function.office.notice.NoticeAdapter;
 import com.luck.cloud.function.office.notice.NoticeBean;
@@ -25,6 +29,7 @@ import com.luck.cloud.manager.RxManager;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.ToastUtil;
 import com.luck.cloud.utils.view.ViewUtil;
+import com.luck.cloud.widget.dialog.SelectMenuDialog;
 import com.luck.cloud.widget.xrecycler.ItemLinearDivider;
 import com.luck.cloud.widget.xrecycler.XRecyclerView;
 
@@ -40,8 +45,13 @@ public class RemoveLowIncomeActivity extends BaseActivity {
 
     private LowIncomeAdapter<LowIncomePerson> mAdapter;
 
+    private boolean isUpdate;
+
     @Override
     protected void back() {
+        if (isUpdate){
+            setResult(100);
+        }
         finish();
     }
 
@@ -69,26 +79,51 @@ public class RemoveLowIncomeActivity extends BaseActivity {
         mRvList.setLayoutManager(layoutManager);
         mRvList.setAdapter(mAdapter);
        mRvList.addItemDecoration(new ItemLinearDivider(1, ViewUtil.dp2px(10), ViewUtil.dp2px(10), getResources().getColor(R.color.gray_color)));
-//
+       mAdapter.setListener(new LowIncomeAdapter.ItemClickListener() {
+           @Override
+           public void deleteCallback(LowIncomePerson bean, int position) {
+               SelectMenuDialog dialog = new SelectMenuDialog(RemoveLowIncomeActivity.this);
+               dialog.setListener(new SelectMenuDialog.OnMenuSelectListener() {
+                   @Override
+                   public void callback() {
+                       dialog.dismiss();
+                       deleteArrange(bean,position);
+                   }
+               });
+               dialog.show();
+               dialog.setTitle("提醒");
+               dialog.setContent("是否脱贫");
+           }
+       });
     }
 
-    @OnClick({R.id.bt_confirm})
-    public void onClick(View view){
-        switch (view.getId()){
-            case R.id.bt_confirm:
-                List<LowIncomePerson> person=mAdapter.getList();
-                for (int i=0;i<person.size();i++){
-                    LowIncomePerson item=person.get(i);
-                    if (item.isSelect()){
-                        person.remove(i);
-                        i--;
-                    }
+    private void deleteArrange(LowIncomePerson bean,int position) {
+        showRDialog();
+        params.clear();
+        params.put("id",bean.getFamilyId());
+        OKHttpManager.postJsonRequest(URLConstant.LOW_DELETE, params, new OKHttpManager.ResultCallback<BaseBean<PersonInfoBean>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(BaseBean<PersonInfoBean> response) {
+                hideRDialog();
+                if (response.getCode().equals("SUCCESS")) {
+                    ToastUtil.toastShortCenter("脱贫成功");
+                    List<LowIncomePerson> list = mAdapter.getList();
+                    list.remove(position);
+                    mAdapter.notifyDataSetChanged();
+                    isUpdate=true;
+
+                } else {
+                    ToastUtil.toastShortCenter(response.getMsg());
                 }
-                Temporary.list=person;
-                setResult(100);
-                finish();
-                break;
-        }
+            }
+        }, this);
     }
 
 //    private void requestData(final int page) {

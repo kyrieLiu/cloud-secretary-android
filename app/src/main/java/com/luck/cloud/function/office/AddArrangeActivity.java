@@ -38,6 +38,7 @@ public class AddArrangeActivity extends BaseActivity {
     TextView tvDate;
     @Bind(R.id.arrange_level)
     TextView arrangeLevel;
+    private String day;
 
 
     @Override
@@ -68,6 +69,7 @@ public class AddArrangeActivity extends BaseActivity {
                 dateDialog.setListener(new DateSelectDialog.OnSelectListener() {
                     @Override
                     public void callback(String date) {
+                        AddArrangeActivity.this.day=date;
                         String week=Week(date);
                         tvDate.setText(week);
                     }
@@ -147,30 +149,34 @@ public class AddArrangeActivity extends BaseActivity {
 
 
     private void addArrange(){
-        setResult(200);
-        finish();
-//        params.clear();
-//        params.put("activityContent",content.getText().toString());
-//        OKHttpManager.postJsonRequest(URLConstant.ACTIVE_CREATE, params, new OKHttpManager.ResultCallback<BaseBean>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                hideRDialog();
-//                ToastUtil.toastShortCenter(message);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean response) {
-//                hideRDialog();
-//                if ("SUCCESS".equals(response.getCode())){
-//                    ToastUtil.toastShortCenter("发布成功");
-//                    setResult(100);
-//                    finish();
-//                }else{
-//                    ToastUtil.toastShortCenter(response.getMsg());
-//                }
-//
-//            }
-//        },this);
+
+        params.clear();
+        params.put("planName",content.getText().toString());
+        params.put("planDate",day);
+        params.put("planDay",tvDate.getText().toString());
+        params.put("planTime",tvTime.getText().toString());
+        params.put("planDetails",arrangeLevel.getText().toString());
+
+        OKHttpManager.postJsonRequest(URLConstant.SAVE_ARRANGE, params, new OKHttpManager.ResultCallback<BaseBean>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean response) {
+                hideRDialog();
+                if ("SUCCESS".equals(response.getCode())){
+                    ToastUtil.toastShortCenter("添加成功");
+                    setResult(100);
+                    finish();
+                }else{
+                    ToastUtil.toastShortCenter(response.getMsg());
+                }
+
+            }
+        },this);
     }
 
     @Override

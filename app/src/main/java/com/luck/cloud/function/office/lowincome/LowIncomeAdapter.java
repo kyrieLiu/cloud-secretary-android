@@ -13,6 +13,8 @@ import com.luck.cloud.R;
 import com.luck.cloud.base.BaseRecyclerViewAdapter;
 import com.luck.cloud.base.BaseViewHolder;
 import com.luck.cloud.function.mine.work.DateUtil;
+import com.luck.cloud.function.office.ArrangeAdapter;
+import com.luck.cloud.function.office.beans.ArrangeBean;
 import com.luck.cloud.function.office.beans.LowIncomePerson;
 import com.luck.cloud.function.office.notice.NoticeBean;
 
@@ -42,8 +44,10 @@ public class LowIncomeAdapter<T extends LowIncomePerson> extends BaseRecyclerVie
 
     class ViewHolder extends BaseViewHolder<T> {
 
-        @Bind(R.id.cb_choose_mode)
-        CheckBox checkBox;
+        @Bind(R.id.tv_name)
+        TextView name;
+        @Bind(R.id.tv_delete)
+        TextView delete;
         public ViewHolder(View itemView) {
             super(itemView);
         }
@@ -51,21 +55,23 @@ public class LowIncomeAdapter<T extends LowIncomePerson> extends BaseRecyclerVie
         @Override
         protected void bind(T bean, int position) {
 
-            checkBox.setText(bean.getUsername());
+            name.setText(bean.getFamilyName());
 
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b){
-                        bean.setSelect(true);
-                    }else{
-                        bean.setSelect(false);
-                    }
+                public void onClick(View view) {
+                    listener.deleteCallback(bean,position);
                 }
             });
-
         }
+    }
+    private ItemClickListener listener;
 
+    public void setListener(ItemClickListener listener) {
+        this.listener = listener;
+    }
 
+    public interface ItemClickListener{
+        void deleteCallback(LowIncomePerson bean, int position);
     }
 }

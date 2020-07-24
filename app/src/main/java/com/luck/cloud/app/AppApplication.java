@@ -14,6 +14,7 @@ import com.luck.picture.lib.app.IApp;
 import com.luck.picture.lib.app.PictureAppMaster;
 import com.luck.picture.lib.crash.PictureSelectorCrashUtils;
 import com.luck.picture.lib.engine.PictureSelectorEngine;
+import com.tencent.smtt.sdk.QbSdk;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -32,18 +33,24 @@ public class AppApplication extends Application implements IApp, CameraXConfig.P
         super.onCreate();
         instance = this;
         // closeAndroidPDialog();
-        // PictureSelector 绑定监听用户获取全局上下文或其他...
-//        PictureAppMaster.getInstance().setApp(this);
-//        // PictureSelector Crash日志监听
-//        PictureSelectorCrashUtils.init((t, e) -> {
-//            // Crash之后的一些操作可再此处理，没有就忽略...
-//
-//        });
-//        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
-//        SDKInitializer.initialize(this);
-//        //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
-//        //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
-//        SDKInitializer.setCoordType(CoordType.BD09LL);
+
+
+        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+
+            @Override
+            public void onViewInitFinished(boolean arg0) {
+                // TODO Auto-generated method stub
+                //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+                Log.d("tag", " onViewInitFinished is " + arg0);
+            }
+
+            @Override
+            public void onCoreInitFinished() {
+                Log.d("tag","finsih");
+            }
+        };
+        //x5内核初始化接口
+        QbSdk.initX5Environment(getApplicationContext(),  cb);
 
     }
 

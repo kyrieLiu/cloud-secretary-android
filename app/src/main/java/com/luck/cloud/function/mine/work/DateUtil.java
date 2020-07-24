@@ -90,15 +90,15 @@ public class DateUtil {
      * @param dateTime
      * @return
      */
-    public static Date getStandardDate(String dateTime) {
+    public static String getStandardDate(String dateTime) {
         try {
 
-            Date date = secondFormat.parse(dateTime);
-            return date;
+            Date date = dateTFormat.parse(dateTime);
+            return secondFormat.format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new Date();
+        return "";
     }
 
     /**

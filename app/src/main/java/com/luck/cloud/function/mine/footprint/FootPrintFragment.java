@@ -141,10 +141,9 @@ public class FootPrintFragment extends BaseFragment {
      */
     private void requestData(final int page) {
         showRDialog();
-//        params.put("inotype",dict.getAtCode());
-//        params.put("keyWords",keyWord);
-        params.put("contentType",type);
-        OKHttpManager.getJoint(URLConstant.STUDY_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
+        params.clear();
+        params.put("inFrom",type);
+        OKHttpManager.getJoint(URLConstant.FOOT_LIST, params,new int[]{page,10}, new OKHttpManager.ResultCallback<BaseBean<StudyScienceModel>>() {
             @Override
             public void onError(int code, String result, String message) {
                 hideRDialog();
