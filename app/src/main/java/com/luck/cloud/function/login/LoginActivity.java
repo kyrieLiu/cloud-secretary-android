@@ -130,7 +130,6 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onResponse(LoginBean response) {
-                Log.d("tag","返回数据"+response);
                 hideRDialog();
                 if (response.getCode().equals("SUCCESS")) {
 
