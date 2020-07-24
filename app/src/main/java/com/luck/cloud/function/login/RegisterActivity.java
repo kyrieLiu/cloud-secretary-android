@@ -125,6 +125,7 @@ public class RegisterActivity extends BaseActivity {
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);
+        mMtlManagement.setTabMode(TabLayout.MODE_SCROLLABLE);
         mMtlManagement.setupWithViewPager(mViewPager);
 
     }
