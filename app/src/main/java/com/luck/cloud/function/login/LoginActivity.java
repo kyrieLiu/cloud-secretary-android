@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -22,6 +24,7 @@ import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.function.main.MainActivity;
 import com.luck.cloud.manager.ActivitiesManager;
 import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.AccountValidatorUtil;
 import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.ToastUtil;
 
@@ -45,11 +48,22 @@ public class LoginActivity extends BaseActivity {
     Button mBtLogin;
     @Bind(R.id.tv_register)
     TextView tvRegister;
+    @Bind(R.id.ll_phone)
+    LinearLayout llPhone;
+    @Bind(R.id.rl_password)
+    RelativeLayout rlPassword;
+    @Bind(R.id.tv_change_type)
+    TextView tvChange;
+    @Bind(R.id.et_message_code)
+    EditText etCode;
+    @Bind(R.id.tv_send_message)
+    TextView tvSendMessage;
 
-    private String account;
-    private String password;
-    //是否为手机号的表达式
-    private String REGEX_MOBILE = "^1\\d{10}$";
+    //登录方式  0账号密码  1手机验证码
+    private int loginType=0;
+
+
+    private CountDownViewModel countDownViewModel; //定时器model
 
     /**
      * 调用该方法是应用内因token或主动退出登录,需要将栈内页面都销毁
@@ -91,7 +105,7 @@ public class LoginActivity extends BaseActivity {
 
 
 
-    @OnClick({R.id.bt_login_enter,R.id.tv_register})
+    @OnClick({R.id.bt_login_enter,R.id.tv_register,R.id.tv_change_type,R.id.tv_send_message})
     public void onViewClicked(View view) {
         switch (view.getId()){
             case R.id.bt_login_enter:
@@ -101,8 +115,35 @@ public class LoginActivity extends BaseActivity {
                 Intent intent=new Intent(this,RegisterActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.tv_change_type:
+                if (loginType==0){
+                    rlPassword.setVisibility(View.GONE);
+                    llPhone.setVisibility(View.VISIBLE);
+                    loginType=1;
+                }else{
+                    rlPassword.setVisibility(View.VISIBLE);
+                    llPhone.setVisibility(View.GONE);
+                    loginType=0;
+                }
+                break;
+            case R.id.tv_send_message:
+                sendSMS();
+                break;
         }
 
+    }
+
+    /**
+     * 做定时器发送短信
+     */
+    private void sendSMS() {
+        String phone = mEtAccount.getText().toString();
+        if (!AccountValidatorUtil.isMobile(phone)) {
+            ToastUtil.toastShortCenter("请输入正确的手机号");
+            return;
+        }
+        countDownViewModel = CountDownViewModel.getInstance();
+        countDownViewModel.waitSMS(this, tvSendMessage, phone);
     }
 
     private void startLogin(){

@@ -95,5 +95,8 @@ public class URLConstant {
     public static final String LOW_SAVE = BASE_URL + "/work/low/save";
     public static final String LOW_DELETE = BASE_URL + "/work/low/remove";
 
+    //发送验证码
+    public static final String SEND_MESSAGE_CODE = BASE_URL + "/user/open/sendPhoneShortMsgCode";
+
 
 }
