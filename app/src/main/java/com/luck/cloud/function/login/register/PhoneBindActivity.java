@@ -108,6 +108,10 @@ public class PhoneBindActivity extends BaseActivity {
      * @param code
      */
     private void validateCode(final String phone,String code) {
+//        if (!AccountValidatorUtil.isMobile(phone)) {
+//            ToastUtil.toastShortCenter("请输入正确的手机号");
+//            return;
+//        }
         Intent intent=new Intent(PhoneBindActivity.this, RegisterActivity.class);
         intent.putExtra("phone",phone);
         startActivity(intent);

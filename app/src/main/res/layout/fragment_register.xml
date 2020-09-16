@@ -59,12 +59,12 @@
             style="@style/register_edit"
             android:hint="真实姓名"
             />
-        <EditText
+      <!--  <EditText
             android:id="@+id/et_register_phone"
             style="@style/register_edit"
             android:hint="手机号码"
             android:inputType="phone"
-            />
+            />-->
         <EditText
             android:id="@+id/et_register_password"
             style="@style/register_edit"

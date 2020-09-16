@@ -35,8 +35,6 @@ public class FirstSecretaryFragment extends BaseFragment {
     EditText etIdNum;
     @Bind(R.id.et_register_realName)
     EditText etRealName;
-    @Bind(R.id.et_register_phone)
-    EditText etPhone;
     @Bind(R.id.et_register_password)
     EditText etPassword;
     @Bind(R.id.et_register_confirm_pass)
@@ -47,13 +45,14 @@ public class FirstSecretaryFragment extends BaseFragment {
     Button btRegister;
 
     private int type;
+    private String phone;
 
     @Override
     protected int getContentId() {
         return R.layout.fragment_register;
     }
 
-    public static FirstSecretaryFragment getInstance(int type,String phone) {
+    public static FirstSecretaryFragment getInstance(int type, String phone) {
         FirstSecretaryFragment fragment = new FirstSecretaryFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
@@ -66,7 +65,8 @@ public class FirstSecretaryFragment extends BaseFragment {
     protected void initView(Bundle bundle) {
         //1第一书记  2大学生及高校  3驻地村民  4其他人员
         type = getArguments().getInt("type");
-        switch (type){
+        phone = getArguments().getString("phone");
+        switch (type) {
             case 1:
                 etUnit.setVisibility(View.VISIBLE);
                 break;
@@ -87,32 +87,32 @@ public class FirstSecretaryFragment extends BaseFragment {
 
     }
 
-    private void register(){
+    private void register() {
 
-        String password=etPassword.getText().toString();
-        String confirmPassword=etConfirmPass.getText().toString();
-        if (!password.equals(confirmPassword)){
+        String password = etPassword.getText().toString();
+        String confirmPassword = etConfirmPass.getText().toString();
+        if (!password.equals(confirmPassword)) {
             ToastUtil.toastShortCenter("密码不一致,请重新输入");
             return;
         }
 
 
         params.clear();
-        params.put("userType",type);
-        params.put("peopleLoginname",etUsername.getText().toString());
-        params.put("idCard",etIdNum.getText().toString());
-        params.put("peopleName",etRealName.getText().toString());
-        params.put("peopleMobile",etPhone.getText().toString());
-        params.put("peoplePassword",etConfirmPass.getText().toString());
-        params.put("nickname",etNickname.getText().toString());
+        params.put("userType", type);
+        params.put("peopleLoginname", etUsername.getText().toString());
+        params.put("idCard", etIdNum.getText().toString());
+        params.put("peopleName", etRealName.getText().toString());
+        params.put("peopleMobile", phone);
+        params.put("peoplePassword", etConfirmPass.getText().toString());
+        params.put("nickname", etNickname.getText().toString());
 
-        params.put("affiliatedUnit",etUnit.getText().toString());
-        params.put("school",etSchool.getText().toString());
-        params.put("village",etVillage.getText().toString());
-        params.put("industry",tvIndustry.getText().toString());
+        params.put("affiliatedUnit", etUnit.getText().toString());
+        params.put("school", etSchool.getText().toString());
+        params.put("village", etVillage.getText().toString());
+        params.put("industry", tvIndustry.getText().toString());
 
         showRDialog();
-        OKHttpManager.postJsonRequest(URLConstant.REGISTER,params, new OKHttpManager.ResultCallback<LoginBean>() {
+        OKHttpManager.postJsonRequest(URLConstant.REGISTER, params, new OKHttpManager.ResultCallback<LoginBean>() {
             @Override
             public void onError(int code, String result, String message) {
                 hideRDialog();
@@ -124,10 +124,10 @@ public class FirstSecretaryFragment extends BaseFragment {
                 hideRDialog();
                 if ("SUCCESS".equals(response.getCode())) {
 
-                  ToastUtil.toastShortCenter("注册成功");
+                    ToastUtil.toastShortCenter("注册成功");
                     LoginActivity.start(getActivity());
 
-                }else{
+                } else {
                     ToastUtil.toastShortCenter(response.getMsg());
                 }
             }
@@ -139,7 +139,7 @@ public class FirstSecretaryFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_register_industry:
-                RepairsTypeDialog dialog=new RepairsTypeDialog(getActivity());
+                RepairsTypeDialog dialog = new RepairsTypeDialog(getActivity());
                 dialog.setTypeSelector(new RepairsTypeDialog.OnTypeSelector() {
                     @Override
                     public void typeSeletor(String string) {
