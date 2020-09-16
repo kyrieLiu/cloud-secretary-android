@@ -182,6 +182,28 @@ public class OKHttpManager {
 
         getInstance().getGetDelegate().getAsyn(url, callback, tag);
     }
+    public static void getJointObj(String url, HashMap<String, Object> map,Object[] joint, ResultCallback callback, Object tag) {
+        if (joint!=null&&joint.length>0){
+            for (int i=0;i<joint.length;i++){
+                Object value=joint[i];
+                url=url.concat("/"+value);
+            }
+        }
+
+        if (map!=null&&map.size()>0){
+            url=url.concat("?");
+            for(String key:map.keySet()) {
+                if (map.get(key)!=null){
+                    String value= Objects.requireNonNull(map.get(key)).toString();
+                    url=url.concat(key+"="+value+"&");
+                }
+            }
+        }
+
+        Log.e("tag","请求URL=="+url);
+
+        getInstance().getGetDelegate().getAsyn(url, callback, tag);
+    }
 
 
     /**

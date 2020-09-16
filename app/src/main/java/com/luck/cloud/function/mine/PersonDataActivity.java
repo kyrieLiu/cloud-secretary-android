@@ -175,9 +175,9 @@ public class PersonDataActivity extends BaseActivity {
                 selectPicture();
                 break;
             case R.id.tv_personal_phone:
-                intent.setClass(this, PhoneBindActivity.class);
-                intent.putExtra("type",2);
-                startActivityForResult(intent,CODE_PHONE);
+//                intent.setClass(this, PhoneBindActivity.class);
+//                intent.putExtra("type",2);
+//                startActivityForResult(intent,CODE_PHONE);
                 break;
             case R.id.rl_real_name:
                 intent.setClass(this,ModifyActivity.class);

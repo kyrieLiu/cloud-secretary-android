@@ -7,7 +7,9 @@ import android.widget.TextView;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.config.URLConstant;
 import com.luck.cloud.network.OKHttpManager;
+import com.luck.cloud.utils.SpUtil;
 import com.luck.cloud.utils.ToastUtil;
+import com.luck.picture.lib.tools.SPUtils;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -57,31 +59,25 @@ public class CountDownViewModel {
      * @param textView
      * @param phone       手机号
      */
-    public void waitSMS(Context context, final TextView textView, String phone) {
-        HashMap hashMap = new HashMap();
-        hashMap.put("phone", phone);
-        countDownStart(textView);
-//        Utils.getUtils().showProgressDialog(context);
-//        OKHttpManager.postJsonNoToken(URLConstant.SEND_MESSAGE_CODE, hashMap, new OKHttpManager.ResultCallback<BaseBean>() {
-//
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                Utils.getUtils().dismissDialog();
-//                ToastUtil.toastShortCenter(message);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean response) {
-//                Utils.getUtils().dismissDialog();
-//                if (response.getCode() == "SUCCESS") {
-//                    ToastUtil.toastShortCenter("验证码已发送,请注意查收");
-//                    countDownStart(textView);
-//                } else {
-//                    ToastUtil.toastShortCenter(response.getMessage());
-//                }
-//
-//            }
-//        }, this);
+    public void waitSMS(Context context, final TextView textView, String phone,String type) {
+        Utils.getUtils().showProgressDialog(context);
+        OKHttpManager.getJointObj(URLConstant.SEND_MESSAGE_CODE, null,new String[]{phone,type}, new OKHttpManager.ResultCallback<BaseBean<String>>() {
+
+            @Override
+            public void onError(int code, String result, String message) {
+                Utils.getUtils().dismissDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<String> response) {
+                Utils.getUtils().dismissDialog();
+               SpUtil.setMessageCode(response.getData());
+                ToastUtil.toastShortCenter("验证码已发送,请注意查收");
+                countDownStart(textView);
+
+            }
+        }, this);
     }
 
     private void countDownStart(final TextView textView) {

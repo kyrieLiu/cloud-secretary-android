@@ -120,9 +120,7 @@
                     style="@style/text_16_wrap_gray"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:drawableRight="@mipmap/icon_right"
-                    android:drawablePadding="6dp"
-                    android:text="绑定手机号" />
+                    android:drawablePadding="6dp" />
             </RelativeLayout>
 
             <RelativeLayout

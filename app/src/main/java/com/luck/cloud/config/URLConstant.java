@@ -6,8 +6,8 @@ package com.luck.cloud.config;
  */
 public class URLConstant {
 
-    //public static final String BASE_URL = "http://10.17.7.103:8066";//生产环境
-    public static final String BASE_URL = "http://121.36.144.200:8066";//生产环境
+    public static final String BASE_URL = "http://10.17.7.103:8066";//生产环境
+    // public static final String BASE_URL = "http://121.36.144.200:8066";//生产环境
 
     public static final boolean DEBUG = true;
     public static final String AS_ASSETSAPI = "/ac";
@@ -96,7 +96,10 @@ public class URLConstant {
     public static final String LOW_DELETE = BASE_URL + "/work/low/remove";
 
     //发送验证码
-    public static final String SEND_MESSAGE_CODE = BASE_URL + "/user/open/sendPhoneShortMsgCode";
+    public static final String SEND_MESSAGE_CODE = BASE_URL + "/login/sendNote";
+    //校验短信验证码
+    public static final String CHECK_CODE = BASE_URL + "/login/checkCode";
+    public static final String NOTE_LOGIN = BASE_URL + "/login/noteLogin";
 
 
 }

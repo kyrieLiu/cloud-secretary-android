@@ -30,7 +30,7 @@ public class SpUtil {
     public static final String USER_HEAD_IMAGE = "USER_HEAD_IMAGE";// 用户头像地址
     public static final String KEY_DEVICE_TOKEN = "KEY_DEVICE_TOKEN";// 友盟推送token
     public static final String KEY_UMENG_ALIAS = "KEY_UMENG_ALIAS";// 友盟推送Alias
-    public static final String KEY_PARK_NAME = "KEY_PARK_NAME";// 所属园区
+    public static final String KEY_MESSAGE_CODE = "KEY_MESSAGE_CODE";// 所属园区
     public static final String KEY_PARK_ID= "KEY_PARK_ID";// 所属园区ID
     public static final String KEY_FIRST_INSTALL = "KEY_FIRST_INSTALL";// 第一次安装
     public static final String KEY_PERMISSION_CODE = "KEY_PERMISSION_CODE";//权限CODE
@@ -232,21 +232,21 @@ public class SpUtil {
 
 
     /**
-     * 获取所属园区
+     * 获取手机验证码
      */
-    public static String getParkName() {
+    public static String getMessageCode() {
         if (getPreferences() != null) {
-            return getPreferences().getString(KEY_PARK_NAME, "");
+            return getPreferences().getString(KEY_MESSAGE_CODE, "");
         }
         return "";
     }
 
     /**
-     * 存储所属园区
+     * 存储手机验证码
      */
-    public static boolean setParkName(String parkName) {
+    public static boolean setMessageCode(String parkName) {
         if (getPreferences() != null) {
-            return getPreferences().edit().putString(KEY_PARK_NAME, parkName).commit();
+            return getPreferences().edit().putString(KEY_MESSAGE_CODE, parkName).commit();
         }
         return false;
     }

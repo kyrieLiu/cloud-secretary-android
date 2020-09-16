@@ -110,7 +110,11 @@ public class LoginActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()){
             case R.id.bt_login_enter:
-                startLogin();
+                if (loginType==1){
+                    messageCodeLogin(mEtAccount.getText().toString());
+                }else{
+                    startLogin();
+                }
                 break;
             case R.id.tv_register:
                 Intent intent=new Intent(this, PhoneBindActivity.class);
@@ -123,13 +127,13 @@ public class LoginActivity extends BaseActivity {
                     llPhone.setVisibility(View.VISIBLE);
                     loginType=1;
                     mEtAccount.setHint("请输入手机号");
-                    mEtAccount.setText("15001121167");
+                    mEtAccount.setText("");
                 }else{
                     rlPassword.setVisibility(View.VISIBLE);
                     llPhone.setVisibility(View.GONE);
                     loginType=0;
                     mEtAccount.setHint("请输入手机号");
-                    mEtAccount.setText("15001121167");
+                    mEtAccount.setText("");
                 }
                 break;
             case R.id.tv_send_message:
@@ -150,7 +154,43 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         countDownViewModel = CountDownViewModel.getInstance();
-        countDownViewModel.waitSMS(this, tvSendMessage, phone);
+        countDownViewModel.waitSMS(this, tvSendMessage, phone,"1");
+    }
+
+    /**
+     * 验证码登录
+     *
+     */
+    private void messageCodeLogin(final String phone) {
+        if (!AccountValidatorUtil.isMobile(phone)) {
+            ToastUtil.toastShortCenter("请输入正确的手机号");
+            return;
+        }
+        String code=etCode.getText().toString();
+        if (TextUtils.isEmpty(code)){
+            ToastUtil.toastShortCenter("请输入验证码");
+            return;
+        }
+        showRDialog();
+        String uuid=SpUtil.getMessageCode();
+        OKHttpManager.getJointObj(URLConstant.NOTE_LOGIN, null,new String[]{phone,uuid,code}, new OKHttpManager.ResultCallback<LoginBean>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(LoginBean response) {
+                if (response.getCode().equals("SUCCESS")) {
+
+                    operateLoginData(response,"","");
+
+                }else{
+                    ToastUtil.toastShortCenter(response.getMessage());
+                }
+            }
+        },this);
     }
 
     private void startLogin(){
@@ -171,7 +211,6 @@ public class LoginActivity extends BaseActivity {
         OKHttpManager.postAsyn(URLConstant.LOGIN,params, new OKHttpManager.ResultCallback<LoginBean>() {
             @Override
             public void onError(int code, String result, String message) {
-                Log.d("tag","message"+message);
                 hideRDialog();
                 ToastUtil.toastShortCenter(message);
             }

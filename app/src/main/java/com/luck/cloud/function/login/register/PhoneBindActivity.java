@@ -2,6 +2,7 @@ package com.luck.cloud.function.login.register;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,7 +79,7 @@ public class PhoneBindActivity extends BaseActivity {
                 break;
             case R.id.bt_phone_confirm:
                if (type==1){
-                   validateCode(mEtContent.getText().toString(),etCode.getText().toString());
+                   validateCode(mEtContent.getText().toString());
                }else{
                    Intent intent=new Intent();
                    intent.putExtra("content",mEtContent.getText().toString());
@@ -99,39 +100,38 @@ public class PhoneBindActivity extends BaseActivity {
             return;
         }
         countDownViewModel = CountDownViewModel.getInstance();
-        countDownViewModel.waitSMS(this, tvSend, phone);
+        countDownViewModel.waitSMS(this, tvSend, phone,"2");
     }
 
     /**
      * 校验验证码
      *
-     * @param code
      */
-    private void validateCode(final String phone,String code) {
-//        if (!AccountValidatorUtil.isMobile(phone)) {
-//            ToastUtil.toastShortCenter("请输入正确的手机号");
-//            return;
-//        }
-        Intent intent=new Intent(PhoneBindActivity.this, RegisterActivity.class);
-        intent.putExtra("phone",phone);
-        startActivity(intent);
-//        params.clear();
-//        params.put("phone", phone);
-//        params.put("code", code);
-//        showRDialog();
-//        OKHttpManager.postJsonRequest(URLConstant.UPDATE_USER_INFO, params, new OKHttpManager.ResultCallback<BaseBean>() {
-//            @Override
-//            public void onError(int code, String result, String message) {
-//                hideRDialog();
-//                ToastUtil.toastShortCenter(message);
-//            }
-//
-//            @Override
-//            public void onResponse(BaseBean response) {
-//                Intent intent=new Intent(PhoneBindActivity.this, RegisterActivity.class);
-//                intent.putExtra("phone",phone);
-//                startActivity(intent);
-//            }
-//        }, this);
+    private void validateCode(final String phone) {
+        if (!AccountValidatorUtil.isMobile(phone)) {
+            ToastUtil.toastShortCenter("请输入正确的手机号");
+            return;
+        }
+        String code=etCode.getText().toString();
+        if (TextUtils.isEmpty(code)){
+            ToastUtil.toastShortCenter("请输入验证码");
+            return;
+        }
+        showRDialog();
+        String uuid=SpUtil.getMessageCode();
+        OKHttpManager.getJointObj(URLConstant.CHECK_CODE, null,new String[]{phone,uuid,code}, new OKHttpManager.ResultCallback<BaseBean<String>>() {
+            @Override
+            public void onError(int code, String result, String message) {
+                hideRDialog();
+                ToastUtil.toastShortCenter(message);
+            }
+
+            @Override
+            public void onResponse(BaseBean<String> response) {
+                Intent intent=new Intent(PhoneBindActivity.this, RegisterActivity.class);
+                intent.putExtra("phone",phone);
+                startActivity(intent);
+            }
+        },this);
     }
 }
