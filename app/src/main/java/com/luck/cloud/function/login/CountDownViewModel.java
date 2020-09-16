@@ -60,27 +60,28 @@ public class CountDownViewModel {
     public void waitSMS(Context context, final TextView textView, String phone) {
         HashMap hashMap = new HashMap();
         hashMap.put("phone", phone);
-        Utils.getUtils().showProgressDialog(context);
-        OKHttpManager.postJsonNoToken(URLConstant.SEND_MESSAGE_CODE, hashMap, new OKHttpManager.ResultCallback<BaseBean>() {
-
-            @Override
-            public void onError(int code, String result, String message) {
-                Utils.getUtils().dismissDialog();
-                ToastUtil.toastShortCenter(message);
-            }
-
-            @Override
-            public void onResponse(BaseBean response) {
-                Utils.getUtils().dismissDialog();
-                if (response.getCode() == "SUCCESS") {
-                    ToastUtil.toastShortCenter("验证码已发送,请注意查收");
-                    countDownStart(textView);
-                } else {
-                    ToastUtil.toastShortCenter(response.getMessage());
-                }
-
-            }
-        }, this);
+        countDownStart(textView);
+//        Utils.getUtils().showProgressDialog(context);
+//        OKHttpManager.postJsonNoToken(URLConstant.SEND_MESSAGE_CODE, hashMap, new OKHttpManager.ResultCallback<BaseBean>() {
+//
+//            @Override
+//            public void onError(int code, String result, String message) {
+//                Utils.getUtils().dismissDialog();
+//                ToastUtil.toastShortCenter(message);
+//            }
+//
+//            @Override
+//            public void onResponse(BaseBean response) {
+//                Utils.getUtils().dismissDialog();
+//                if (response.getCode() == "SUCCESS") {
+//                    ToastUtil.toastShortCenter("验证码已发送,请注意查收");
+//                    countDownStart(textView);
+//                } else {
+//                    ToastUtil.toastShortCenter(response.getMessage());
+//                }
+//
+//            }
+//        }, this);
     }
 
     private void countDownStart(final TextView textView) {

@@ -25,6 +25,7 @@ import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.common.activity.ModifyActivity;
 import com.luck.cloud.common.helper.FileCommitModel;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.login.register.PhoneBindActivity;
 import com.luck.cloud.function.mine.bean.PersonInfoBean;
 import com.luck.cloud.network.OKHttpManager;
 import com.luck.cloud.utils.SpUtil;
@@ -174,9 +175,8 @@ public class PersonDataActivity extends BaseActivity {
                 selectPicture();
                 break;
             case R.id.tv_personal_phone:
-                intent.setClass(this,ModifyActivity.class);
-                intent.putExtra("title","修改手机号");
-                intent.putExtra("content","请输入手机号");
+                intent.setClass(this, PhoneBindActivity.class);
+                intent.putExtra("type",2);
                 startActivityForResult(intent,CODE_PHONE);
                 break;
             case R.id.rl_real_name:

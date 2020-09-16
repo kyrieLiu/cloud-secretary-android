@@ -33,6 +33,7 @@ public class RegisterActivity extends BaseActivity {
     private List<GardenInfoBean.ItemsBean> gardenList;
 
     private Context context;
+    private String phone="";
 
     @Override
     protected void back() {
@@ -51,6 +52,8 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+
+        phone=getIntent().getStringExtra("phone");
 
         setPageData(1);
     }
@@ -118,10 +121,10 @@ public class RegisterActivity extends BaseActivity {
         titleList.add("驻地村民");
         titleList.add("其他人员");
 
-        fragmentList.add(FirstSecretaryFragment.getInstance(1));
-        fragmentList.add(FirstSecretaryFragment.getInstance(2));
-        fragmentList.add(FirstSecretaryFragment.getInstance(3));
-        fragmentList.add(FirstSecretaryFragment.getInstance(4));
+        fragmentList.add(FirstSecretaryFragment.getInstance(1,phone));
+        fragmentList.add(FirstSecretaryFragment.getInstance(2,phone));
+        fragmentList.add(FirstSecretaryFragment.getInstance(3,phone));
+        fragmentList.add(FirstSecretaryFragment.getInstance(4,phone));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);
         mViewPager.setAdapter(adapter);

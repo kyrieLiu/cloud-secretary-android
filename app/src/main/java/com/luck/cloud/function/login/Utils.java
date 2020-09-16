@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.luck.cloud.R;
+
 
 public class Utils {
     private Dialog dialog;
@@ -62,8 +64,8 @@ public class Utils {
 
         if (context != null) {
             if (this.dialog == null ) {
-                this.dialog = new Dialog(context, this.custom_dialog_style);
-                View dialogView = View.inflate(context, this.common_waiting_dialog, (ViewGroup) null);
+                this.dialog = new Dialog(context, R.style.custom_dialog_style);
+                View dialogView = View.inflate(context, R.layout.common_waiting_dialog, (ViewGroup) null);
 
                 this.dialog.setContentView(dialogView);
                 //this.dialog.setCancelable(false);

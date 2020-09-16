@@ -21,6 +21,7 @@ import com.luck.cloud.app.AppApplication;
 import com.luck.cloud.base.BaseActivity;
 import com.luck.cloud.base.BaseBean;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.login.register.PhoneBindActivity;
 import com.luck.cloud.function.main.MainActivity;
 import com.luck.cloud.manager.ActivitiesManager;
 import com.luck.cloud.network.OKHttpManager;
@@ -112,7 +113,8 @@ public class LoginActivity extends BaseActivity {
                 startLogin();
                 break;
             case R.id.tv_register:
-                Intent intent=new Intent(this,RegisterActivity.class);
+                Intent intent=new Intent(this, PhoneBindActivity.class);
+                intent.putExtra("type",1);
                 startActivity(intent);
                 break;
             case R.id.tv_change_type:
@@ -120,13 +122,18 @@ public class LoginActivity extends BaseActivity {
                     rlPassword.setVisibility(View.GONE);
                     llPhone.setVisibility(View.VISIBLE);
                     loginType=1;
+                    mEtAccount.setHint("请输入手机号");
+                    mEtAccount.setText("15001121167");
                 }else{
                     rlPassword.setVisibility(View.VISIBLE);
                     llPhone.setVisibility(View.GONE);
                     loginType=0;
+                    mEtAccount.setHint("请输入手机号");
+                    mEtAccount.setText("15001121167");
                 }
                 break;
             case R.id.tv_send_message:
+
                 sendSMS();
                 break;
         }

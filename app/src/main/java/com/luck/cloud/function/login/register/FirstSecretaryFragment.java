@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.luck.cloud.R;
 import com.luck.cloud.base.BaseFragment;
 import com.luck.cloud.config.URLConstant;
+import com.luck.cloud.function.login.LoginActivity;
 import com.luck.cloud.function.login.LoginBean;
 import com.luck.cloud.function.witness.dynamic.DynamicFragment;
 import com.luck.cloud.network.OKHttpManager;
@@ -52,10 +53,11 @@ public class FirstSecretaryFragment extends BaseFragment {
         return R.layout.fragment_register;
     }
 
-    public static FirstSecretaryFragment getInstance(int type) {
+    public static FirstSecretaryFragment getInstance(int type,String phone) {
         FirstSecretaryFragment fragment = new FirstSecretaryFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("type", type);
+        bundle.putString("phone", phone);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -123,10 +125,10 @@ public class FirstSecretaryFragment extends BaseFragment {
                 if ("SUCCESS".equals(response.getCode())) {
 
                   ToastUtil.toastShortCenter("注册成功");
-                  getActivity().finish();
+                    LoginActivity.start(getActivity());
 
                 }else{
-                    ToastUtil.toastShortCenter(response.getMessage());
+                    ToastUtil.toastShortCenter(response.getMsg());
                 }
             }
         }, this);
