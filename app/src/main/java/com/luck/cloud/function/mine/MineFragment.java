@@ -114,18 +114,25 @@ public class MineFragment extends BaseFragment {
                     tvAttention.setText(String.valueOf(bean.getAttentionCount()));
                     tvFans.setText(String.valueOf(bean.getFansCount()));
 
-                    switch (bean.getPeopleType()){
-                        case "1":
+                    switch (bean.getUserType()){
+                        case 1:
                             tvMineIdentity.setText(bean.getAffiliatedUnit()==null?"":bean.getAffiliatedUnit()+"   第一书记");
                             break;
-                        case "2":
+
+                        case 2:
                             tvMineIdentity.setText(bean.getSchool()+"   大学生及高校");
                             break;
-                        case "3":
+                        case 3:
                             tvMineIdentity.setText(bean.getVillage()+"   驻地村民");
                             break;
-                        case "4":
+                        case 4:
                             tvMineIdentity.setText(bean.getIndustry());
+                            break;
+                        case 5:
+                            tvMineIdentity.setText(bean.getSchool()+"   高校教师");
+                            break;
+                        case 6:
+                            tvMineIdentity.setText(bean.getAffiliatedUnit()==null?"":bean.getAffiliatedUnit()+"   扶贫干部");
                             break;
                     }
 

@@ -63,14 +63,16 @@ public class FirstSecretaryFragment extends BaseFragment {
 
     @Override
     protected void initView(Bundle bundle) {
-        //1第一书记  2大学生及高校  3驻地村民  4其他人员
+        //1第一书记  2大学生及高校  3驻地村民  4其他人员  5高校教师  6扶贫干部
         type = getArguments().getInt("type");
         phone = getArguments().getString("phone");
         switch (type) {
             case 1:
+            case 6:
                 etUnit.setVisibility(View.VISIBLE);
                 break;
             case 2:
+            case 5:
                 etSchool.setVisibility(View.VISIBLE);
                 break;
             case 3:

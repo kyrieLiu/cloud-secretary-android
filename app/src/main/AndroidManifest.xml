@@ -40,7 +40,7 @@
         <activity android:name=".function.login.RegisterActivity">
 
         </activity>
-        <activity android:name=".function.mine.dynamic.DynamicActivity"></activity>
+        <activity android:name=".function.mine.dynamic.DynamicActivity" />
 
         <activity android:name="com.luck.cloud.function.main.MainActivity">
             <intent-filter>

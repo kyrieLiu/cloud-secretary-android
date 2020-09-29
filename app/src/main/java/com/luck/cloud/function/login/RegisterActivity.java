@@ -119,11 +119,16 @@ public class RegisterActivity extends BaseActivity {
         titleList.add("第一书记");
         titleList.add("大学生及高校");
         titleList.add("驻地村民");
+        titleList.add("高校教师");
+        titleList.add("扶贫干部");
         titleList.add("其他人员");
+
 
         fragmentList.add(FirstSecretaryFragment.getInstance(1,phone));
         fragmentList.add(FirstSecretaryFragment.getInstance(2,phone));
         fragmentList.add(FirstSecretaryFragment.getInstance(3,phone));
+        fragmentList.add(FirstSecretaryFragment.getInstance(5,phone));
+        fragmentList.add(FirstSecretaryFragment.getInstance(6,phone));
         fragmentList.add(FirstSecretaryFragment.getInstance(4,phone));
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(this, getSupportFragmentManager(), fragmentList, titleList);

@@ -80,15 +80,15 @@ public class PersonDataActivity extends BaseActivity {
     private PictureParameterStyle mPictureParameterStyle;
     private PictureCropParameterStyle mCropParameterStyle;
 
-    private final static int CODE_PHONE=101;
-    private final static int CODE_REAL_NAME=102;
-    private final static int CODE_NICKNAME=103;
-    private final static int CODE_ID_NUM=104;
+    private final static int CODE_PHONE = 101;
+    private final static int CODE_REAL_NAME = 102;
+    private final static int CODE_NICKNAME = 103;
+    private final static int CODE_ID_NUM = 104;
 
 
     @Override
     protected void back() {
-        if (isModify){
+        if (isModify) {
             setResult(200);
         }
         finish();
@@ -109,7 +109,7 @@ public class PersonDataActivity extends BaseActivity {
 
         if (Build.VERSION.SDK_INT >= 23) {
             int REQUEST_CODE_CONTACT = 101;
-            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
             //验证是否许可权限
             for (String str : permissions) {
                 if (this.checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
@@ -124,9 +124,9 @@ public class PersonDataActivity extends BaseActivity {
         getUserInfo();
     }
 
-    private void getUserInfo(){
-        int id= SpUtil.getUerId();
-        OKHttpManager.getJoint(URLConstant.USER_INFO, null,new int[]{id}, new OKHttpManager.ResultCallback<BaseBean<PersonInfoBean>>() {
+    private void getUserInfo() {
+        int id = SpUtil.getUerId();
+        OKHttpManager.getJoint(URLConstant.USER_INFO, null, new int[]{id}, new OKHttpManager.ResultCallback<BaseBean<PersonInfoBean>>() {
             @Override
             public void onError(int code, String result, String message) {
                 hideRDialog();
@@ -136,40 +136,46 @@ public class PersonDataActivity extends BaseActivity {
             @Override
             public void onResponse(BaseBean<PersonInfoBean> response) {
                 hideRDialog();
-                if (response.getCode().equals("SUCCESS")){
-                    PersonInfoBean bean=response.getData();
+                if (response.getCode().equals("SUCCESS")) {
+                    PersonInfoBean bean = response.getData();
                     tvAccount.setText(bean.getPeopleLoginname());
-                    GlideUtils.loadCircleImage(getContext(),mIvAvatar,bean.getPhotoLogo());
+                    GlideUtils.loadCircleImage(getContext(), mIvAvatar, bean.getPhotoLogo());
                     mTvPhone.setText(bean.getPeopleMobile());
                     tvReadName.setText(bean.getPeopleName());
                     tvIdNum.setText(bean.getIdCard());
 
-                    switch (bean.getPeopleType()){
-                        case "1":
+                    switch (bean.getUserType()) {
+                        case 1:
                             tvIdentity.setText("第一书记");
                             break;
-                        case "2":
+                        case 2:
                             tvIdentity.setText("大学生及高校");
                             break;
-                        case "3":
+                        case 3:
                             tvIdentity.setText("驻地村民");
                             break;
-                        case "4":
+                        case 4:
                             tvIdentity.setText("其他");
+                            break;
+                        case 5:
+                            tvIdentity.setText("高校教师");
+                            break;
+                        case 6:
+                            tvIdentity.setText("扶贫干部");
                             break;
                     }
 
 
-                }else{
+                } else {
                     ToastUtil.toastShortCenter(response.getMsg());
                 }
             }
         }, this);
     }
 
-    @OnClick({R.id.ll_avatar,R.id.tv_personal_phone,R.id.rl_real_name,R.id.tv_nick_name,R.id.tv_id_num})
+    @OnClick({R.id.ll_avatar, R.id.tv_personal_phone, R.id.rl_real_name, R.id.tv_nick_name, R.id.tv_id_num})
     public void click(View view) {
-        Intent intent=new Intent();
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.ll_avatar:
                 selectPicture();
@@ -180,26 +186,27 @@ public class PersonDataActivity extends BaseActivity {
 //                startActivityForResult(intent,CODE_PHONE);
                 break;
             case R.id.rl_real_name:
-                intent.setClass(this,ModifyActivity.class);
-                intent.putExtra("title","修改姓名");
-                intent.putExtra("content","请输入姓名");
-                startActivityForResult(intent,CODE_REAL_NAME);
+                intent.setClass(this, ModifyActivity.class);
+                intent.putExtra("title", "修改姓名");
+                intent.putExtra("content", "请输入姓名");
+                startActivityForResult(intent, CODE_REAL_NAME);
                 break;
             case R.id.tv_nick_name:
-                intent.setClass(this,ModifyActivity.class);
-                intent.putExtra("title","修改昵称");
-                intent.putExtra("content","请输入昵称");
-                startActivityForResult(intent,CODE_NICKNAME);
+                intent.setClass(this, ModifyActivity.class);
+                intent.putExtra("title", "修改昵称");
+                intent.putExtra("content", "请输入昵称");
+                startActivityForResult(intent, CODE_NICKNAME);
                 break;
             case R.id.tv_id_num:
-                intent.setClass(this,ModifyActivity.class);
-                intent.putExtra("title","修改身份证号");
-                intent.putExtra("content","请输入身份证号");
-                startActivityForResult(intent,CODE_ID_NUM);
+                intent.setClass(this, ModifyActivity.class);
+                intent.putExtra("title", "修改身份证号");
+                intent.putExtra("content", "请输入身份证号");
+                startActivityForResult(intent, CODE_ID_NUM);
                 break;
         }
     }
-    private void selectPicture(){
+
+    private void selectPicture() {
         // 进入相册 以下是例子：不需要的api可以不写
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
@@ -266,8 +273,9 @@ public class PersonDataActivity extends BaseActivity {
                 //.scaleEnabled(false)// 裁剪是否可放大缩小图片
                 //.videoQuality()// 视频录制质量 0 or 1
                 //.forResult(PictureConfig.CHOOSE_REQUEST);//结果回调onActivityResult code
-                .forResult(new MyResultCallback(mIvAvatar,this));
+                .forResult(new MyResultCallback(mIvAvatar, this));
     }
+
     private void getDefaultStyle() {
         // 相册主题
         mPictureParameterStyle = new PictureParameterStyle();
@@ -330,9 +338,11 @@ public class PersonDataActivity extends BaseActivity {
                 ContextCompat.getColor(getContext(), R.color.app_color_white),
                 mPictureParameterStyle.isChangeStatusBarFontColor);
     }
+
     public Context getContext() {
         return this;
     }
+
     /**
      * 返回结果回调
      */
@@ -340,10 +350,10 @@ public class PersonDataActivity extends BaseActivity {
         private WeakReference<ImageView> mAdapterWeakReference;
         private Context context;
 
-        public MyResultCallback(ImageView imageView,Context context) {
+        public MyResultCallback(ImageView imageView, Context context) {
             super();
             this.mAdapterWeakReference = new WeakReference<>(imageView);
-            this.context=context;
+            this.context = context;
         }
 
         @Override
@@ -352,17 +362,17 @@ public class PersonDataActivity extends BaseActivity {
 //                mAdapterWeakReference.get().setList(result);
 //                mAdapterWeakReference.get().notifyDataSetChanged();
             }
-            GlideUtils.loadCircleImage(context,mAdapterWeakReference.get(),result.get(0).getPath());
+            GlideUtils.loadCircleImage(context, mAdapterWeakReference.get(), result.get(0).getPath());
             FileCommitModel commitModel = FileCommitModel.getInstance();
-            String path=result.get(0).getRealPath();
-            ArrayList<String> list=new ArrayList<>();
+            String path = result.get(0).getRealPath();
+            ArrayList<String> list = new ArrayList<>();
             list.add(path);
             commitModel.setOnModelCallbackListener(new FileCommitModel.OnModelCallbackListener() {
                 @Override
                 public void fileUploadFinish(List<String> imageList, String voicePath) {
-                    String url=imageList.get(0);
-                    PersonDataActivity activity= (PersonDataActivity) context;
-                    activity.updateUserInfo("photoLogo",url);
+                    String url = imageList.get(0);
+                    PersonDataActivity activity = (PersonDataActivity) context;
+                    activity.updateUserInfo("photoLogo", url);
                 }
 
                 @Override
@@ -370,7 +380,7 @@ public class PersonDataActivity extends BaseActivity {
 
                 }
             });
-            commitModel.commitComplaintData(list,"");
+            commitModel.commitComplaintData(list, "");
         }
 
         @Override
@@ -381,16 +391,16 @@ public class PersonDataActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==100){
-            String content=data.getStringExtra("content");
-            switch (requestCode){
+        if (resultCode == 100) {
+            String content = data.getStringExtra("content");
+            switch (requestCode) {
                 case CODE_PHONE:
                     mTvPhone.setText(content);
-                    updateUserInfo("peopleMobile",content);
+                    updateUserInfo("peopleMobile", content);
                     break;
                 case CODE_REAL_NAME:
                     tvReadName.setText(content);
-                    updateUserInfo("peopleName",content);
+                    updateUserInfo("peopleName", content);
                     break;
 //                case CODE_NICKNAME:
 //                    tvNickName.setText(content);
@@ -402,10 +412,10 @@ public class PersonDataActivity extends BaseActivity {
         }
     }
 
-    private void updateUserInfo(String key,final String value) {
+    private void updateUserInfo(String key, final String value) {
         params.clear();
         params.put(key, value);
-        params.put("peopleId",SpUtil.getUerId());
+        params.put("peopleId", SpUtil.getUerId());
         showRDialog();
         OKHttpManager.postJsonRequest(URLConstant.UPDATE_USER_INFO, params, new OKHttpManager.ResultCallback<BaseBean>() {
             @Override
@@ -417,9 +427,9 @@ public class PersonDataActivity extends BaseActivity {
             @Override
             public void onResponse(BaseBean response) {
                 hideRDialog();
-                if ("SUCCESS".equals(response.getCode())){
+                if ("SUCCESS".equals(response.getCode())) {
                     ToastUtil.toastShortCenter("修改成功");
-                    isModify=true;
+                    isModify = true;
                 }
             }
         }, this);
