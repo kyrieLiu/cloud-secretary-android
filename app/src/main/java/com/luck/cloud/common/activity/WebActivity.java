@@ -90,7 +90,7 @@ public class WebActivity extends BaseActivity {
             webView.loadUrl(webUrl);
         }else{
             String html = ViewUtil.getViewUtil().getHtmlData(Temporary.webContent);
-            webView.loadData(html, "text/html;charset=utf-8","utf-8");
+            webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
         }
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();
